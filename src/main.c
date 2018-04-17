@@ -61,14 +61,12 @@
 
 #include "bluenrg_l2cap_aci.h"
 
-/* USER CODE END Includes */
+// Private variables ---------------------------------------------------------
+volatile uint32_t HCI_ProcessEvent                       = 0;
+uint8_t joydata[8]                                       = {0, 0, 0, 0, 0, 0, 0, 0};
 
-/* Private variables ---------------------------------------------------------*/
-volatile uint32_t HCI_ProcessEvent=0;
-uint8_t joydata[8] = {0,0,0,0,0,0,0,0};
-
-uint32_t uhCCR4_Val = 500;
-uint32_t uhCCR1_Val = 5000;
+uint32_t uhCCR4_Val                                      = 500;
+uint32_t uhCCR1_Val                                      = 5000;
 
 
 ADC_HandleTypeDef hadc1;
@@ -82,31 +80,33 @@ TIM_HandleTypeDef htim9;
 
 UART_HandleTypeDef huart1;
 
-static void *LSM6DSL_X_0_handle = NULL;
-static void *LSM6DSL_G_0_handle = NULL;
-static void *LIS2MDL_M_0_handle = NULL;
-static void *LPS22HB_P_0_handle = NULL;
-static void *LPS22HB_T_0_handle = NULL; 
+static void *LSM6DSL_X_0_handle                          = NULL;
+static void *LSM6DSL_G_0_handle                          = NULL;
+static void *LIS2MDL_M_0_handle                          = NULL;
+static void *LPS22HB_P_0_handle                          = NULL;
+static void *LPS22HB_T_0_handle                          = NULL; 
 
 //extern Queue_TypeDef que;
 extern volatile tUserTimer tim;
 extern char rc_connection_flag;
 extern int16_t gAIL, gELE, gTHR, gRUD;
 int16_t gJoystick_status;
-int32_t rc_cal_flag = 0;
-int32_t rc_enable_motor = 0;
-int32_t rc_cal_cnt = 0;
-int32_t fly_ready = 0;
+int32_t rc_cal_flag                                      = 0;
+int32_t rc_enable_motor                                  = 0;
+int32_t rc_cal_cnt                                       = 0;
+int32_t fly_ready                                        = 0;
 unsigned char ch, ch_flag;
 
-uint32_t tim9_event_flag = 0, tim9_cnt = 0, tim9_cnt2 = 0;
-float tmp_euler_z = 0;
+uint32_t tim9_event_flag                                 = 0;
+uint32_t tim9_cnt                                        = 0;
+uint32_t tim9_cnt2                                       = 0;
+float tmp_euler_z                                        = 0;
 
 
 /* BLE module */
-DrvStatusTypeDef testStatus = COMPONENT_OK;
-uint8_t test_res_global = 0;
-uint8_t testEvent = 0;
+DrvStatusTypeDef testStatus                              = COMPONENT_OK;
+uint8_t test_res_global                                  = 0;
+uint8_t testEvent                                        = 0;
 uint8_t bdaddr[6];
 //static uint16_t ConfigServW2STHandle;
 //static uint16_t ConfigCharHandle;
@@ -116,33 +116,28 @@ uint8_t bdaddr[6];
 extern int connected;
 //int8_t RSSI_level;
 
-
-
-/* Private function prototypes -----------------------------------------------*/
+// Private function prototypes -----------------------------------------------
 void SystemClock_Config(void);
 static void MX_GPIO_Init(void);
 static void MX_ADC1_Init(void);
-//static void MX_SPI1_Init(void);
-//static void MX_SPI2_Init(void);
+// static void MX_SPI1_Init(void);
+// static void MX_SPI2_Init(void);
 static void MX_TIM2_Init(void);
 static void MX_TIM4_Init(void);
 static void MX_TIM9_Init(void);
 static void MX_USART1_UART_Init(void);
 
-static void initializeAllSensors( void );
-void enableAllSensors( void );
+static void initializeAllSensors(void);
+void enableAllSensors(void);
 
 void BlueNRG_Init(void);
-//tBleStatus Add_ConsoleW2ST_Service(void);
-//tBleStatus Add_ConfigW2ST_Service(void);
+// tBleStatus Add_ConsoleW2ST_Service(void);
+// tBleStatus Add_ConfigW2ST_Service(void);
 static void Init_BlueNRG_Custom_Services(void);
 static void SendMotionData(void);
 static void SendBattEnvData(void);
 static void SendArmingData(void);
 
-
-
-/* USER CODE BEGIN 0 */
 P_PI_PIDControlTypeDef pid;
 EulerAngleTypeDef euler_rc, euler_ahrs, euler_rc_fil, euler_rc_y_pre[4], euler_rc_x_pre[4];
 AxesRaw_TypeDef acc, gyro, mag, acc_fil_int, gyro_fil_int, mag_fil_int;
@@ -151,47 +146,50 @@ AxesRaw_TypeDef_Float gyro_fil, gyro_y_pre[4], gyro_x_pre[4], gyro_ahrs_FIFO[FIF
 AxesRaw_TypeDef_Float mag_fil;
 AxesRaw_TypeDef acc_off_calc, gyro_off_calc, acc_offset, gyro_offset;
 EulerAngleTypeDef euler_ahrs_offset;
-int sensor_init_cali = 0, sensor_init_cali_count = 0;
-int gyro_cali_count = 0;
+int sensor_init_cali                                     = 0;
+int sensor_init_cali_count                               = 0;
+int gyro_cali_count                                      = 0;
 
 typedef struct
 {
-  int16_t X_Degree;
-  int16_t Y_Degree;
-  int16_t Z_Degree;
-}Attitude_Degree;
+   int16_t X_Degree;
+   int16_t Y_Degree;
+   int16_t Z_Degree;
+} Attitude_Degree;
 
 typedef struct
 {
-  float a1, a2, b0, b1, b2;
-}IIR_Coeff;
+   float a1, a2, b0, b1, b2;
+} IIR_Coeff;
 
-//sensor filter
-//7hz, 800hz
-//IIR_Coeff gyro_fil_coeff = {1.922286512869545,  -0.92519529534950118, 0.00072719561998898304, 0.0014543912399779661, 0.00072719561998898304};
 
-//15hz, 800hz
-//IIR_Coeff gyro_fil_coeff = {1.8337326589246479,  -0.84653197479202391, 0.003199828966843966, 0.0063996579336879321, 0.003199828966843966};
+// sensor filter
+// 7hz, 800hz
+// IIR_Coeff gyro_fil_coeff = {1.922286512869545,  -0.92519529534950118, 0.00072719561998898304, 0.0014543912399779661, 0.00072719561998898304};
 
-//30hz, 800hz
-//IIR_Coeff gyro_fil_coeff = {1.66920314293119312,  -0.71663387350415764, 0.011857682643241156, 0.023715365286482312, 0.011857682643241156};
+// 15hz, 800hz
+// IIR_Coeff gyro_fil_coeff = {1.8337326589246479,  -0.84653197479202391, 0.003199828966843966, 0.0063996579336879321, 0.003199828966843966};
 
-//60hz, 800hz
-//IIR_Coeff gyro_fil_coeff = {1.3489677452527946 ,  -0.51398189421967566, 0.041253537241720303, 0.082507074483440607, 0.041253537241720303};
+// 30hz, 800hz
+// IIR_Coeff gyro_fil_coeff = {1.66920314293119312,  -0.71663387350415764, 0.011857682643241156, 0.023715365286482312, 0.011857682643241156};
 
-//100hz, 800hz
-IIR_Coeff gyro_fil_coeff = {0.94280904158206336,  -0.33333333333333343, 0.09763107293781749 , 0.19526214587563498 , 0.09763107293781749 };
+// 60hz, 800hz
+// IIR_Coeff gyro_fil_coeff = {1.3489677452527946 ,  -0.51398189421967566, 0.041253537241720303, 0.082507074483440607, 0.041253537241720303};
+
+// 100hz, 800hz
+IIR_Coeff gyro_fil_coeff                                 = {0.94280904158206336,  -0.33333333333333343, 0.09763107293781749 , 0.19526214587563498 , 0.09763107293781749 };
 
 Attitude_Degree  Fly, Fly_offset, Fly_origin;
 Gyro_Rad gyro_rad, gyro_degree, gyro_cali_degree;
 MotorControlTypeDef motor_pwm;
-int count1 = 0, count2 = 0;
+int count1                                               = 0;
+int count2                                               = 0;
 AHRS_State_TypeDef ahrs;
 float press, press_zero_level;
 float temperature;
 
 uint32_t VBAT_Sense;
-float VBAT = 0;
+float VBAT                                               = 0;
 
 uint8_t tmp_lis2mdl;
 SensorAxes_t tmp_mag;
@@ -199,12 +197,15 @@ SensorAxes_t tmp_mag;
 /* BLE */
 extern uint8_t set_connectable;
 uint16_t service_handle, dev_name_char_handle, appearance_char_handle;
-uint32_t ConnectionBleStatus=0;
+uint32_t ConnectionBleStatus                             = 0;
 uint8_t BufferToWrite[256];
 int32_t BytesToWrite;
 
-/* USER CODE END 0 */
-
+// ========================================================================================
+// FUNCTION : main()
+//
+//
+// ========================================================================================
 int main(void)
 {
    /* USER CODE BEGIN 1 */
@@ -830,174 +831,181 @@ void MX_GPIO_Init(void)
  */
 void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 {
-   if(sensor_init_cali == 0)
+   if (sensor_init_cali == 0)
    {
-   sensor_init_cali_count++;
+      sensor_init_cali_count++;
 
-   if(sensor_init_cali_count > 800)
-   {
-   // Read sensor data and prepare for specific coodinate system
-   ReadSensorRawData(LSM6DSL_X_0_handle, LSM6DSL_G_0_handle, LIS2MDL_M_0_handle, LPS22HB_P_0_handle, &acc, &gyro, &mag, &press);
+      if (sensor_init_cali_count > 800)
+      {
+         // Read sensor data and prepare for specific coodinate system
+         ReadSensorRawData(LSM6DSL_X_0_handle, LSM6DSL_G_0_handle, LIS2MDL_M_0_handle, LPS22HB_P_0_handle, &acc, &gyro, &mag, &press);
 
-   acc_off_calc.AXIS_X += acc.AXIS_X;
-   acc_off_calc.AXIS_Y += acc.AXIS_Y;
-   acc_off_calc.AXIS_Z += acc.AXIS_Z;
+         acc_off_calc.AXIS_X                             += acc.AXIS_X;
+         acc_off_calc.AXIS_Y                             += acc.AXIS_Y;
+         acc_off_calc.AXIS_Z                             += acc.AXIS_Z;
 
-   gyro_off_calc.AXIS_X += gyro.AXIS_X;
-   gyro_off_calc.AXIS_Y += gyro.AXIS_Y;
-   gyro_off_calc.AXIS_Z += gyro.AXIS_Z;
+         gyro_off_calc.AXIS_X                            += gyro.AXIS_X;
+         gyro_off_calc.AXIS_Y                            += gyro.AXIS_Y;
+         gyro_off_calc.AXIS_Z                            += gyro.AXIS_Z;
 
-   if (sensor_init_cali_count >= 1600)
-   {
-   acc_offset.AXIS_X = (int32_t) (acc_off_calc.AXIS_X * 0.00125f);
-   acc_offset.AXIS_Y = (int32_t) (acc_off_calc.AXIS_Y * 0.00125f);
-   acc_offset.AXIS_Z = (int32_t) (acc_off_calc.AXIS_Z * 0.00125f);
+         if (sensor_init_cali_count >= 1600)
+         {
+            acc_offset.AXIS_X                            = (int32_t) (acc_off_calc.AXIS_X * 0.00125f);
+            acc_offset.AXIS_Y                            = (int32_t) (acc_off_calc.AXIS_Y * 0.00125f);
+            acc_offset.AXIS_Z                            = (int32_t) (acc_off_calc.AXIS_Z * 0.00125f);
 
-   gyro_offset.AXIS_X = (int32_t) (gyro_off_calc.AXIS_X * 0.00125f);
-   gyro_offset.AXIS_Y = (int32_t) (gyro_off_calc.AXIS_Y * 0.00125f);
-   gyro_offset.AXIS_Z = (int32_t) (gyro_off_calc.AXIS_Z * 0.00125f);
+            gyro_offset.AXIS_X                           = (int32_t) (gyro_off_calc.AXIS_X * 0.00125f);
+            gyro_offset.AXIS_Y                           = (int32_t) (gyro_off_calc.AXIS_Y * 0.00125f);
+            gyro_offset.AXIS_Z                           = (int32_t) (gyro_off_calc.AXIS_Z * 0.00125f);
 
-   acc_off_calc.AXIS_X = 0;
-   acc_off_calc.AXIS_Y = 0;
-   acc_off_calc.AXIS_Z = 0;
-   gyro_off_calc.AXIS_X = 0;
-   gyro_off_calc.AXIS_Y = 0;
-   gyro_off_calc.AXIS_Z = 0;
+            acc_off_calc.AXIS_X                          = 0;
+            acc_off_calc.AXIS_Y                          = 0;
+            acc_off_calc.AXIS_Z                          = 0;
+            gyro_off_calc.AXIS_X                         = 0;
+            gyro_off_calc.AXIS_Y                         = 0;
+            gyro_off_calc.AXIS_Z                         = 0;
 
-   sensor_init_cali_count = 0;
-   sensor_init_cali = 1;
-   }
-   }
-   }
-
-   if(sensor_init_cali == 1)
-   {
-   tim9_cnt++;
-   tim9_cnt2++;
-
-   // Read sensor data and prepare for specific coodinate system
-   ReadSensorRawData(LSM6DSL_X_0_handle, LSM6DSL_G_0_handle, LIS2MDL_M_0_handle, LPS22HB_P_0_handle, &acc, &gyro, &mag, &press);
-
-   if (rc_cal_flag == 1)
-   {
-   acc_off_calc.AXIS_X += acc.AXIS_X;
-   acc_off_calc.AXIS_Y += acc.AXIS_Y;
-   acc_off_calc.AXIS_Z += acc.AXIS_Z;
-
-   gyro_off_calc.AXIS_X += gyro.AXIS_X;
-   gyro_off_calc.AXIS_Y += gyro.AXIS_Y;
-   gyro_off_calc.AXIS_Z += gyro.AXIS_Z;
-
-   rc_cal_cnt++;
-
-   if (rc_cal_cnt >= 800)
-   {
-   acc_offset.AXIS_X = (int32_t) (acc_off_calc.AXIS_X * 0.00125f);
-   acc_offset.AXIS_Y = (int32_t) (acc_off_calc.AXIS_Y * 0.00125f);
-   acc_offset.AXIS_Z = (int32_t) (acc_off_calc.AXIS_Z * 0.00125f);
-
-   gyro_offset.AXIS_X = (int32_t) (gyro_off_calc.AXIS_X * 0.00125f);
-   gyro_offset.AXIS_Y = (int32_t) (gyro_off_calc.AXIS_Y * 0.00125f);
-   gyro_offset.AXIS_Z = (int32_t) (gyro_off_calc.AXIS_Z * 0.00125f);
-
-   acc_off_calc.AXIS_X = 0;
-   acc_off_calc.AXIS_Y = 0;
-   acc_off_calc.AXIS_Z = 0;
-   gyro_off_calc.AXIS_X = 0;
-   gyro_off_calc.AXIS_Y = 0;
-   gyro_off_calc.AXIS_Z = 0;
-
-   rc_cal_cnt = 0;
-   rc_cal_flag = 0;
-   }
+            sensor_init_cali_count                       = 0;
+            sensor_init_cali                             = 1;
+         }
+      }
    }
 
-   acc.AXIS_X -= acc_offset.AXIS_X;
-   acc.AXIS_Y -= acc_offset.AXIS_Y;
-   acc.AXIS_Z -= (acc_offset.AXIS_Z - 1000);
-   gyro.AXIS_X -= gyro_offset.AXIS_X;
-   gyro.AXIS_Y -= gyro_offset.AXIS_Y;
-   gyro.AXIS_Z -= gyro_offset.AXIS_Z;
-
-   // Save filtered data to acc_FIFO
-   acc_FIFO[tim9_cnt2-1].AXIS_X = acc.AXIS_X;
-   acc_FIFO[tim9_cnt2-1].AXIS_Y = acc.AXIS_Y;
-   acc_FIFO[tim9_cnt2-1].AXIS_Z = acc.AXIS_Z;
-
-   // IIR Filtering on gyro
-   gyro_fil.AXIS_X = gyro_fil_coeff.b0*gyro.AXIS_X + gyro_fil_coeff.b1*gyro_x_pre[0].AXIS_X + gyro_fil_coeff.b2*gyro_x_pre[1].AXIS_X
-                               + gyro_fil_coeff.a1*gyro_y_pre[0].AXIS_X + gyro_fil_coeff.a2*gyro_y_pre[1].AXIS_X;
-   gyro_fil.AXIS_Y = gyro_fil_coeff.b0*gyro.AXIS_Y + gyro_fil_coeff.b1*gyro_x_pre[0].AXIS_Y + gyro_fil_coeff.b2*gyro_x_pre[1].AXIS_Y
-                               + gyro_fil_coeff.a1*gyro_y_pre[0].AXIS_Y + gyro_fil_coeff.a2*gyro_y_pre[1].AXIS_Y;
-   gyro_fil.AXIS_Z = gyro_fil_coeff.b0*gyro.AXIS_Z + gyro_fil_coeff.b1*gyro_x_pre[0].AXIS_Z + gyro_fil_coeff.b2*gyro_x_pre[1].AXIS_Z
-                               + gyro_fil_coeff.a1*gyro_y_pre[0].AXIS_Z + gyro_fil_coeff.a2*gyro_y_pre[1].AXIS_Z;
-   // Shift IIR filter state
-   for(int i=1;i>0;i--)
+   if (sensor_init_cali == 1)
    {
-   gyro_x_pre[i].AXIS_X = gyro_x_pre[i-1].AXIS_X;
-   gyro_x_pre[i].AXIS_Y = gyro_x_pre[i-1].AXIS_Y;
-   gyro_x_pre[i].AXIS_Z = gyro_x_pre[i-1].AXIS_Z;
-   gyro_y_pre[i].AXIS_X = gyro_y_pre[i-1].AXIS_X;
-   gyro_y_pre[i].AXIS_Y = gyro_y_pre[i-1].AXIS_Y;
-   gyro_y_pre[i].AXIS_Z = gyro_y_pre[i-1].AXIS_Z;
-   }
-   gyro_x_pre[0].AXIS_X = gyro.AXIS_X;
-   gyro_x_pre[0].AXIS_Y = gyro.AXIS_Y;
-   gyro_x_pre[0].AXIS_Z = gyro.AXIS_Z;
-   gyro_y_pre[0].AXIS_X = gyro_fil.AXIS_X;
-   gyro_y_pre[0].AXIS_Y = gyro_fil.AXIS_Y;
-   gyro_y_pre[0].AXIS_Z = gyro_fil.AXIS_Z;
+      tim9_cnt++;
+      tim9_cnt2++;
 
-   //  Save filtered data to gyro_FIFO
-   gyro_FIFO[tim9_cnt2-1].AXIS_X = gyro_fil.AXIS_X;
-   gyro_FIFO[tim9_cnt2-1].AXIS_Y = gyro_fil.AXIS_Y;
-   gyro_FIFO[tim9_cnt2-1].AXIS_Z = gyro_fil.AXIS_Z;
+      // Read sensor data and prepare for specific coodinate system
+      ReadSensorRawData(LSM6DSL_X_0_handle, LSM6DSL_G_0_handle, LIS2MDL_M_0_handle, LPS22HB_P_0_handle, &acc, &gyro, &mag, &press);
+
+      if (rc_cal_flag == 1)
+      {
+         acc_off_calc.AXIS_X                             += acc.AXIS_X;
+         acc_off_calc.AXIS_Y                             += acc.AXIS_Y;
+         acc_off_calc.AXIS_Z                             += acc.AXIS_Z;
+
+         gyro_off_calc.AXIS_X                            += gyro.AXIS_X;
+         gyro_off_calc.AXIS_Y                            += gyro.AXIS_Y;
+         gyro_off_calc.AXIS_Z                            += gyro.AXIS_Z;
+
+         rc_cal_cnt++;
+
+         if (rc_cal_cnt >= 800)
+         {
+            acc_offset.AXIS_X                            = (int32_t) (acc_off_calc.AXIS_X * 0.00125f);
+            acc_offset.AXIS_Y                            = (int32_t) (acc_off_calc.AXIS_Y * 0.00125f);
+            acc_offset.AXIS_Z                            = (int32_t) (acc_off_calc.AXIS_Z * 0.00125f);
+
+            gyro_offset.AXIS_X                           = (int32_t) (gyro_off_calc.AXIS_X * 0.00125f);
+            gyro_offset.AXIS_Y                           = (int32_t) (gyro_off_calc.AXIS_Y * 0.00125f);
+            gyro_offset.AXIS_Z                           = (int32_t) (gyro_off_calc.AXIS_Z * 0.00125f);
+
+            acc_off_calc.AXIS_X                          = 0;
+            acc_off_calc.AXIS_Y                          = 0;
+            acc_off_calc.AXIS_Z                          = 0;
+            gyro_off_calc.AXIS_X                         = 0;
+            gyro_off_calc.AXIS_Y                         = 0;
+            gyro_off_calc.AXIS_Z                         = 0;
+
+            rc_cal_cnt                                   = 0;
+            rc_cal_flag                                  = 0;
+         }
+      }
+
+      acc.AXIS_X                                         -= acc_offset.AXIS_X;
+      acc.AXIS_Y                                         -= acc_offset.AXIS_Y;
+      acc.AXIS_Z                                         -= (acc_offset.AXIS_Z - 1000);
+      gyro.AXIS_X                                        -= gyro_offset.AXIS_X;
+      gyro.AXIS_Y                                        -= gyro_offset.AXIS_Y;
+      gyro.AXIS_Z                                        -= gyro_offset.AXIS_Z;
+
+      // Save filtered data to acc_FIFO
+      acc_FIFO[tim9_cnt2 - 1].AXIS_X                     = acc.AXIS_X;
+      acc_FIFO[tim9_cnt2 - 1].AXIS_Y                     = acc.AXIS_Y;
+      acc_FIFO[tim9_cnt2 - 1].AXIS_Z                     = acc.AXIS_Z;
+
+      // IIR Filtering on gyro
+      gyro_fil.AXIS_X                                    = (gyro_fil_coeff.b0 * gyro.AXIS_X) +
+                                                           (gyro_fil_coeff.b1 * gyro_x_pre[0].AXIS_X) +
+                                                           (gyro_fil_coeff.b2 * gyro_x_pre[1].AXIS_X) +
+                                                           (gyro_fil_coeff.a1 * gyro_y_pre[0].AXIS_X) +
+                                                           (gyro_fil_coeff.a2 * gyro_y_pre[1].AXIS_X);
+      gyro_fil.AXIS_Y                                    = (gyro_fil_coeff.b0 * gyro.AXIS_Y) +
+                                                           (gyro_fil_coeff.b1 * gyro_x_pre[0].AXIS_Y) +
+                                                           (gyro_fil_coeff.b2 * gyro_x_pre[1].AXIS_Y) +
+                                                           (gyro_fil_coeff.a1 * gyro_y_pre[0].AXIS_Y) +
+                                                           (gyro_fil_coeff.a2 * gyro_y_pre[1].AXIS_Y);
+      gyro_fil.AXIS_Z                                    = (gyro_fil_coeff.b0 * gyro.AXIS_Z) +
+                                                           (gyro_fil_coeff.b1 * gyro_x_pre[0].AXIS_Z) +
+                                                           (gyro_fil_coeff.b2 * gyro_x_pre[1].AXIS_Z) +
+                                                           (gyro_fil_coeff.a1 * gyro_y_pre[0].AXIS_Z) +
+                                                           (gyro_fil_coeff.a2 * gyro_y_pre[1].AXIS_Z);
+      // Shift IIR filter state
+      for (int i = 1; i > 0; i--)
+      {
+         gyro_x_pre[i].AXIS_X                            = gyro_x_pre[i - 1].AXIS_X;
+         gyro_x_pre[i].AXIS_Y                            = gyro_x_pre[i - 1].AXIS_Y;
+         gyro_x_pre[i].AXIS_Z                            = gyro_x_pre[i - 1].AXIS_Z;
+         gyro_y_pre[i].AXIS_X                            = gyro_y_pre[i - 1].AXIS_X;
+         gyro_y_pre[i].AXIS_Y                            = gyro_y_pre[i - 1].AXIS_Y;
+         gyro_y_pre[i].AXIS_Z                            = gyro_y_pre[i - 1].AXIS_Z;
+      }
+      gyro_x_pre[0].AXIS_X                               = gyro.AXIS_X;
+      gyro_x_pre[0].AXIS_Y                               = gyro.AXIS_Y;
+      gyro_x_pre[0].AXIS_Z                               = gyro.AXIS_Z;
+      gyro_y_pre[0].AXIS_X                               = gyro_fil.AXIS_X;
+      gyro_y_pre[0].AXIS_Y                               = gyro_fil.AXIS_Y;
+      gyro_y_pre[0].AXIS_Z                               = gyro_fil.AXIS_Z;
+
+      // Save filtered data to gyro_FIFO
+      gyro_FIFO[tim9_cnt2-1].AXIS_X                      = gyro_fil.AXIS_X;
+      gyro_FIFO[tim9_cnt2-1].AXIS_Y                      = gyro_fil.AXIS_Y;
+      gyro_FIFO[tim9_cnt2-1].AXIS_Z                      = gyro_fil.AXIS_Z;
 
 
-   if(tim9_cnt2 == FIFO_Order)
-   {
-   tim9_cnt2 = 0;
-   tim9_event_flag = 1;
-   for(int i=0;i<FIFO_Order;i++)
-   {
-   acc_ahrs_FIFO[i].AXIS_X = acc_FIFO[i].AXIS_X;
-   acc_ahrs_FIFO[i].AXIS_Y = acc_FIFO[i].AXIS_Y;
-   acc_ahrs_FIFO[i].AXIS_Z = acc_FIFO[i].AXIS_Z;
-   gyro_ahrs_FIFO[i].AXIS_X = gyro_FIFO[i].AXIS_X;
-   gyro_ahrs_FIFO[i].AXIS_Y = gyro_FIFO[i].AXIS_Y;
-   gyro_ahrs_FIFO[i].AXIS_Z = gyro_FIFO[i].AXIS_Z;
-   }
-   }
+      if (tim9_cnt2 == FIFO_Order)
+      {
+         tim9_cnt2                                       = 0;
+         tim9_event_flag                                 = 1;
+         for(int i = 0; i < FIFO_Order; i++)
+         {
+            acc_ahrs_FIFO[i].AXIS_X                      = acc_FIFO[i].AXIS_X;
+            acc_ahrs_FIFO[i].AXIS_Y                      = acc_FIFO[i].AXIS_Y;
+            acc_ahrs_FIFO[i].AXIS_Z                      = acc_FIFO[i].AXIS_Z;
+            gyro_ahrs_FIFO[i].AXIS_X                     = gyro_FIFO[i].AXIS_X;
+            gyro_ahrs_FIFO[i].AXIS_Y                     = gyro_FIFO[i].AXIS_Y;
+            gyro_ahrs_FIFO[i].AXIS_Z                     = gyro_FIFO[i].AXIS_Z;
+         }
+      }
 
+      gyro_rad.gx                                        = ((float) gyro_fil.AXIS_X) * ((float) COE_MDPS_TO_RADPS);  
+      gyro_rad.gy                                        = ((float) gyro_fil.AXIS_Y) * ((float) COE_MDPS_TO_RADPS);  
+      gyro_rad.gz                                        = ((float) gyro_fil.AXIS_Z) * ((float) COE_MDPS_TO_RADPS);  
 
-   gyro_rad.gx = ((float)gyro_fil.AXIS_X)*((float)COE_MDPS_TO_RADPS);  
-   gyro_rad.gy = ((float)gyro_fil.AXIS_Y)*((float)COE_MDPS_TO_RADPS);  
-   gyro_rad.gz = ((float)gyro_fil.AXIS_Z)*((float)COE_MDPS_TO_RADPS);  
+      euler_ahrs.thz                                     += gyro_rad.gz * PID_SAMPLING_TIME;
 
-   euler_ahrs.thz += gyro_rad.gz*PID_SAMPLING_TIME;
+      if (gTHR < MIN_THR)
+      {
+         euler_rc.thz                                    = 0;
+         euler_ahrs.thz                                  = 0;
+      }
 
-   if(gTHR<MIN_THR)
-   {
-   euler_rc.thz = 0;
-   euler_ahrs.thz = 0;
-   }
+      if (rc_connection_flag && rc_enable_motor)
+      {                                                                                         // Do PID Control
+         FlightControlPID_innerLoop(&euler_rc_fil, &gyro_rad, &ahrs, &pid, &motor_pwm);
+      }
+      else
+      {
+         // set motor output zero
+         set_motor_pwm_zero(&motor_pwm);
+      }
 
-   if (rc_connection_flag && rc_enable_motor)
-   {   // Do PID Control
-   FlightControlPID_innerLoop(&euler_rc_fil, &gyro_rad, &ahrs, &pid, &motor_pwm);
-   }
-   else
-   {
-   // set motor output zero
-   set_motor_pwm_zero(&motor_pwm);
-   }
-
-   if(gTHR<MIN_THR)
-   {
-   set_motor_pwm_zero(&motor_pwm);
-   }
-
-   set_motor_pwm(&motor_pwm);      /* To comment if want to debug remocon calibration switching off the motors */
+      if (gTHR < MIN_THR)
+      {
+         set_motor_pwm_zero(&motor_pwm);
+      }
+      set_motor_pwm(&motor_pwm);                                                                // To comment if want to debug remocon calibration switching off the motors
    }
 }
 
@@ -1184,28 +1192,37 @@ fail:
  */
 static void Init_BlueNRG_Custom_Services(void)
 {
-  int ret;
-  
-  ret = Add_HWServW2ST_Service();
-  if(ret == BLE_STATUS_SUCCESS) {
-     PRINTF("HW      Service W2ST added successfully\r\n");
-  } else {
-     PRINTF("\r\nError while adding HW Service W2ST\r\n");
-  }
+   int ret;
 
-  ret = Add_ConsoleW2ST_Service();
-  if(ret == BLE_STATUS_SUCCESS) {
-     PRINTF("Console Service W2ST added successfully\r\n");
-  } else {
-     PRINTF("\r\nError while adding Console Service W2ST\r\n");
-  }
+   ret                                                   = Add_HWServW2ST_Service();
+   if (ret == BLE_STATUS_SUCCESS)
+   {
+      PRINTF("HW      Service W2ST added successfully\r\n");
+   }
+   else
+   {
+      PRINTF("\r\nError while adding HW Service W2ST\r\n");
+   }
 
-  ret = Add_ConfigW2ST_Service();
-  if(ret == BLE_STATUS_SUCCESS) {
-     PRINTF("Config  Service W2ST added successfully\r\n");
-  } else {
-     PRINTF("\r\nError while adding Config Service W2ST\r\n");
-  }
+   ret                                                   = Add_ConsoleW2ST_Service();
+   if (ret == BLE_STATUS_SUCCESS)
+   {
+      PRINTF("Console Service W2ST added successfully\r\n");
+   }
+   else
+   {
+      PRINTF("\r\nError while adding Console Service W2ST\r\n");
+   }
+
+   ret                                                   = Add_ConfigW2ST_Service();
+   if (ret == BLE_STATUS_SUCCESS)
+   {
+      PRINTF("Config  Service W2ST added successfully\r\n");
+   }
+   else
+   {
+      PRINTF("\r\nError while adding Config Service W2ST\r\n");
+   }
 }
 
 /**
@@ -1215,66 +1232,61 @@ static void Init_BlueNRG_Custom_Services(void)
   */
 static void SendMotionData(void)
 {
-  SensorAxes_t ACC_Value;
-  SensorAxes_t GYR_Value;
-  SensorAxes_t MAG_Value;
+   SensorAxes_t ACC_Value;
+   SensorAxes_t GYR_Value;
+   SensorAxes_t MAG_Value;
 
-  
-  
-  ACC_Value.AXIS_X = acc.AXIS_X;
-  ACC_Value.AXIS_Y = acc.AXIS_Y;
-  ACC_Value.AXIS_Z = acc.AXIS_Z;
-  GYR_Value.AXIS_X = gyro.AXIS_X;
-  GYR_Value.AXIS_Y = gyro.AXIS_Y;
-  GYR_Value.AXIS_Z = gyro.AXIS_Z;
-  MAG_Value.AXIS_X = mag.AXIS_X;
-  MAG_Value.AXIS_Y = mag.AXIS_Y;
-  MAG_Value.AXIS_Z = mag.AXIS_Z;
-  
-  
-  
-  /*Debug */
-  //PRINTF("ACC[X, Y, Z]: %d\t%d\t%d\t\n", ACC_Value.AXIS_X, ACC_Value.AXIS_Y, ACC_Value.AXIS_Z);
-  //PRINTF("GYRO[X, Y, Z]: %d\t%d\t%d\t\n", GYR_Value.AXIS_X, GYR_Value.AXIS_Y, GYR_Value.AXIS_Z);
-  //PRINTF("MAG[X, Y, Z]: %d\t%d\t%d\t\n", MAG_Value.AXIS_X, MAG_Value.AXIS_Y, MAG_Value.AXIS_Z);
-  
-  AccGyroMag_Update(&ACC_Value,&GYR_Value,&MAG_Value);
-  
+   ACC_Value.AXIS_X                                      = acc.AXIS_X;
+   ACC_Value.AXIS_Y                                      = acc.AXIS_Y;
+   ACC_Value.AXIS_Z                                      = acc.AXIS_Z;
+   GYR_Value.AXIS_X                                      = gyro.AXIS_X;
+   GYR_Value.AXIS_Y                                      = gyro.AXIS_Y;
+   GYR_Value.AXIS_Z                                      = gyro.AXIS_Z;
+   MAG_Value.AXIS_X                                      = mag.AXIS_X;
+   MAG_Value.AXIS_Y                                      = mag.AXIS_Y;
+   MAG_Value.AXIS_Z                                      = mag.AXIS_Z;
+
+   /*Debug */
+   // PRINTF("ACC[X, Y, Z]: %d\t%d\t%d\t\n", ACC_Value.AXIS_X, ACC_Value.AXIS_Y, ACC_Value.AXIS_Z);
+   // PRINTF("GYRO[X, Y, Z]: %d\t%d\t%d\t\n", GYR_Value.AXIS_X, GYR_Value.AXIS_Y, GYR_Value.AXIS_Z);
+   // PRINTF("MAG[X, Y, Z]: %d\t%d\t%d\t\n", MAG_Value.AXIS_X, MAG_Value.AXIS_Y, MAG_Value.AXIS_Z);
+   AccGyroMag_Update(&ACC_Value,&GYR_Value,&MAG_Value);
 }
 
 static void SendBattEnvData(void)
 {
    int32_t decPart, intPart;
-   int32_t PressToSend=0;
-   uint16_t BattToSend=0;
-   int16_t RSSIToSend=0, TempToSend=0;
+   int32_t PressToSend                                   = 0;
+   uint16_t BattToSend                                   = 0;
+   int16_t RSSIToSend                                    = 0;
+   int16_t TempToSend                                    = 0;
    int8_t rssi;
    uint16_t conn_handle;
-   
+
    HAL_ADC_Start(&hadc1);
-        if (HAL_ADC_PollForConversion(&hadc1, 1000000) == HAL_OK)
-        {
-            VBAT_Sense = HAL_ADC_GetValue(&hadc1);
-            VBAT = (((VBAT_Sense*3.3)/4095)*(BAT_RUP+BAT_RDW))/BAT_RDW;
-            //PRINTF("Battery voltage = %fV\n\n", VBAT);
-        }
-    HAL_ADC_Stop(&hadc1);
-    
-    MCR_BLUEMS_F2I_2D(press, intPart, decPart);
-    PressToSend=intPart*100+decPart;
-    MCR_BLUEMS_F2I_1D(((int32_t)((float)VBAT*100.0f)/4.2f), intPart, decPart);
-    BattToSend = intPart*10+decPart;
-    if (BattToSend > 1000){
-      BattToSend =1000;
-    }
-    MCR_BLUEMS_F2I_1D(temperature, intPart, decPart);
-    TempToSend = intPart*10+decPart;
-    
-    hci_read_rssi(&conn_handle, &rssi);
-    RSSIToSend = (int16_t)rssi*10;
-    
-    Batt_Env_RSSI_Update(PressToSend,BattToSend,(int16_t) TempToSend,RSSIToSend ); 
-      
+   if (HAL_ADC_PollForConversion(&hadc1, 1000000) == HAL_OK)
+   {
+      VBAT_Sense                                         = HAL_ADC_GetValue(&hadc1);
+      VBAT                                               = (((VBAT_Sense * 3.3) / 4095) * (BAT_RUP + BAT_RDW)) / BAT_RDW;
+      //PRINTF("Battery voltage = %fV\n\n", VBAT);
+   }
+   HAL_ADC_Stop(&hadc1);
+
+   MCR_BLUEMS_F2I_2D(press, intPart, decPart);
+   PressToSend=intPart*100+decPart;
+   MCR_BLUEMS_F2I_1D(((int32_t)((float) VBAT * 100.0f) / 4.2f), intPart, decPart);
+   BattToSend                                            = (intPart * 10) + decPart;
+   if (BattToSend > 1000)
+   {
+      BattToSend                                         = 1000;
+   }
+   MCR_BLUEMS_F2I_1D(temperature, intPart, decPart);
+   TempToSend                                            = (intPart * 10) + decPart;
+
+   hci_read_rssi(&conn_handle, &rssi);
+   RSSIToSend                                            = (int16_t) rssi * 10;
+
+   Batt_Env_RSSI_Update(PressToSend,BattToSend,(int16_t) TempToSend, RSSIToSend); 
 }
 
 
@@ -1298,11 +1310,10 @@ static void SendArmingData(void)
    */
 void assert_failed(uint8_t* file, uint32_t line)
 {
-  /* USER CODE BEGIN 6 */
-  /* User can add his own implementation to report the file name and line number,
-    ex: printf("Wrong parameters value: file %s on line %d\r\n", file, line) */
-  /* USER CODE END 6 */
-
+   /* USER CODE BEGIN 6 */
+   /* User can add his own implementation to report the file name and line number,
+   ex: printf("Wrong parameters value: file %s on line %d\r\n", file, line) */
+   /* USER CODE END 6 */
 }
 
 #endif
