@@ -205,474 +205,452 @@ int32_t BytesToWrite;
 
 /* USER CODE END 0 */
 
- int main(void)
+int main(void)
 {
+   /* USER CODE BEGIN 1 */
+   int16_t pid_interval, i;
 
-  /* USER CODE BEGIN 1 */
-  int16_t pid_interval, i;
+   int mytimcnt                                          = 0;
+   acc_fil.AXIS_X                                        = 0;
+   acc_fil.AXIS_Y                                        = 0;
+   acc_fil.AXIS_Z                                        = 0;
+   mag_fil.AXIS_X                                        = 0;
+   mag_fil.AXIS_Y                                        = 0;
+   mag_fil.AXIS_Z                                        = 0;
+   gyro_fil.AXIS_X                                       = 0;
+   gyro_fil.AXIS_Y                                       = 0;
+   gyro_fil.AXIS_Z                                       = 0;
+   euler_rc_fil.thx                                      = 0;
+   euler_rc_fil.thy                                      = 0;
+   euler_rc_fil.thz                                      = 0;
+   acc_off_calc.AXIS_X                                   = 0;
+   acc_off_calc.AXIS_Y                                   = 0;
+   acc_off_calc.AXIS_Z                                   = 0;
+   gyro_off_calc.AXIS_X                                  = 0;
+   gyro_off_calc.AXIS_Y                                  = 0;
+   gyro_off_calc.AXIS_Z                                  = 0;
+   acc_offset.AXIS_X                                     = 0;
+   acc_offset.AXIS_Y                                     = 0;
+   acc_offset.AXIS_Z                                     = 1000;
+   gyro_offset.AXIS_X                                    = 0;
+   gyro_offset.AXIS_Y                                    = 0;
+   gyro_offset.AXIS_Z                                    = 0;
+   euler_rc.thz                                          = euler_ahrs.thz;
+   euler_ahrs_offset.thx                                 = 0;
+   euler_ahrs_offset.thy                                 = 0;
+
+   for (i = 0; i < 4; i++)
+   {
+      acc_y_pre[i].AXIS_X                                = 0;
+      acc_y_pre[i].AXIS_Y                                = 0;
+      acc_y_pre[i].AXIS_Z                                = 0;
+      acc_x_pre[i].AXIS_X                                = 0;
+      acc_x_pre[i].AXIS_Y                                = 0;
+      acc_x_pre[i].AXIS_Z                                = 0;
+      gyro_y_pre[i].AXIS_X                               = 0;
+      gyro_y_pre[i].AXIS_Y                               = 0;
+      gyro_y_pre[i].AXIS_Z                               = 0;
+      gyro_x_pre[i].AXIS_X                               = 0;
+      gyro_x_pre[i].AXIS_Y                               = 0;
+      gyro_x_pre[i].AXIS_Z                               = 0;
+      euler_rc_y_pre[i].thx                              = 0;
+      euler_rc_y_pre[i].thy                              = 0;
+      euler_rc_y_pre[i].thz                              = 0;
+      euler_rc_x_pre[i].thx                              = 0;
+      euler_rc_x_pre[i].thy                              = 0;
+      euler_rc_x_pre[i].thz                              = 0;
+   }
+
+   /* USER CODE END 1 */
+
+   /* MCU Configuration----------------------------------------------------------*/
+
+   /* Reset of all peripherals, Initializes the Flash interface and the Systick. */
+   HAL_Init();
+
+   /* Configure the system clock */
+   SystemClock_Config();
+
+   /* Initialize all configured peripherals */
+   MX_GPIO_Init();
+   MX_ADC1_Init();  
+   MX_TIM2_Init();
+   MX_TIM4_Init();
+   MX_TIM9_Init();
+   MX_USART1_UART_Init();
+   //MX_USB_DEVICE_Init();
+
+   /* USER CODE BEGIN 2 */
+
+   PRINTF("STEVAL-FCU001V1 FW rev.1.0 - Sep 2017\n\n");
+
+   //  Initialize Onboard LED
+   BSP_LED_Init(LED1);
+   BSP_LED_Init(LED2);
+   BSP_LED_Off(LED1);
+   BSP_LED_Off(LED2);
   
-  int mytimcnt = 0;
-  acc_fil.AXIS_X = 0;
-  acc_fil.AXIS_Y = 0;
-  acc_fil.AXIS_Z = 0;
-  mag_fil.AXIS_X = 0;
-  mag_fil.AXIS_Y = 0;
-  mag_fil.AXIS_Z = 0;
-  gyro_fil.AXIS_X = 0;
-  gyro_fil.AXIS_Y = 0;
-  gyro_fil.AXIS_Z = 0;
-  euler_rc_fil.thx = 0;
-  euler_rc_fil.thy = 0;
-  euler_rc_fil.thz = 0;
-  acc_off_calc.AXIS_X = 0;
-  acc_off_calc.AXIS_Y = 0;
-  acc_off_calc.AXIS_Z = 0;
-  gyro_off_calc.AXIS_X = 0;
-  gyro_off_calc.AXIS_Y = 0;
-  gyro_off_calc.AXIS_Z = 0;
-  acc_offset.AXIS_X = 0;
-  acc_offset.AXIS_Y = 0;
-  acc_offset.AXIS_Z = 1000;
-  gyro_offset.AXIS_X = 0;
-  gyro_offset.AXIS_Y = 0;
-  gyro_offset.AXIS_Z = 0;
-  euler_rc.thz = euler_ahrs.thz;
-  euler_ahrs_offset.thx = 0;
-  euler_ahrs_offset.thy = 0;
+   /* Configure and disable all the Chip Select pins for sensors on SPI*/
+   Sensor_IO_SPI_CS_Init_All();
 
-  for(i=0;i<4;i++)
-  {
-    acc_y_pre[i].AXIS_X = 0;
-    acc_y_pre[i].AXIS_Y = 0;
-    acc_y_pre[i].AXIS_Z = 0;
-    acc_x_pre[i].AXIS_X = 0;
-    acc_x_pre[i].AXIS_Y = 0;
-    acc_x_pre[i].AXIS_Z = 0;
-    gyro_y_pre[i].AXIS_X = 0;
-    gyro_y_pre[i].AXIS_Y = 0;
-    gyro_y_pre[i].AXIS_Z = 0;
-    gyro_x_pre[i].AXIS_X = 0;
-    gyro_x_pre[i].AXIS_Y = 0;
-    gyro_x_pre[i].AXIS_Z = 0;
-    euler_rc_y_pre[i].thx = 0;
-    euler_rc_y_pre[i].thy = 0;
-    euler_rc_y_pre[i].thz = 0;
-    euler_rc_x_pre[i].thx = 0;
-    euler_rc_x_pre[i].thy = 0;
-    euler_rc_x_pre[i].thz = 0;
-  }
+   /* Initialize and Enable the available sensors on SPI*/
+   initializeAllSensors();
+   enableAllSensors();
 
-  /* USER CODE END 1 */
+   /* Initialize settings for 6-axis MEMS Accelerometer */
+   /* ODR 6.6kHz */
+   /* FS 4g */
+   /* Analog Filter Bandwith @ 1500Hz */
+   /* ODR/2 low pass filtered sent to composite filter */
+   /* Low pass filter enabled @ ODR/400 */
+   //BSP_ACCELERO_Set_ODR_Value(LSM6DSL_X_0_handle, 1660.0);                                    /* ODR 1.6kHz */
+   BSP_ACCELERO_Set_ODR_Value(LSM6DSL_X_0_handle, 6660.0);                                      /* ODR 6.6kHz */
+   BSP_ACCELERO_Set_FS(LSM6DSL_X_0_handle, FS_MID);                                             /* FS 4g */
 
-  /* MCU Configuration----------------------------------------------------------*/
+   // LSM6DSL_ACC_GYRO_W_InComposit(LSM6DSL_X_0_handle, LSM6DSL_ACC_GYRO_IN_ODR_DIV_4);         /* ODR/4 low pass filtered sent to composite filter */
+   LSM6DSL_ACC_GYRO_W_InComposit(LSM6DSL_X_0_handle, LSM6DSL_ACC_GYRO_IN_ODR_DIV_2);            /* ODR/2 low pass filtered sent to composite filter */
+   LSM6DSL_ACC_GYRO_W_LowPassFiltSel_XL(LSM6DSL_X_0_handle, LSM6DSL_ACC_GYRO_LPF2_XL_ENABLE);   /* Enable LPF2 filter in composite filter block */
+   // LSM6DSL_ACC_GYRO_W_HPCF_XL(LSM6DSL_X_0_handle, LSM6DSL_ACC_GYRO_HPCF_XL_DIV4);            /* Low pass filter @ ODR/50 */
+   // LSM6DSL_ACC_GYRO_W_HPCF_XL(LSM6DSL_X_0_handle, LSM6DSL_ACC_GYRO_HPCF_XL_DIV100);          /* Low pass filter @ ODR/100 */
+   LSM6DSL_ACC_GYRO_W_HPCF_XL(LSM6DSL_X_0_handle, LSM6DSL_ACC_GYRO_HPCF_XL_DIV400);             /* Low pass filter @ ODR/400 */
 
-  /* Reset of all peripherals, Initializes the Flash interface and the Systick. */
-  HAL_Init();
+   uint8_t tmp_6axis_reg_value;
+   BSP_ACCELERO_Read_Reg(LSM6DSL_X_0_handle, 0x10, &tmp_6axis_reg_value);
+   // tmp_6axis_reg_value = tmp_6axis_reg_value | 0x01;                                         /* Set LSB to 1 >> Analog filter 400Hz*/
+   tmp_6axis_reg_value                                   = tmp_6axis_reg_value & 0xFE;          /* Set LSB to 0 >> Analog filter 1500Hz*/
+   BSP_ACCELERO_Write_Reg(LSM6DSL_X_0_handle, 0x10, tmp_6axis_reg_value);
 
-  /* Configure the system clock */
-  SystemClock_Config();
+   /* Initialize settings for 6-axis MEMS Gyroscope */
+   /* FS 2000dps */
+   /* ODR 416Hz */
+   /* LPF1 FTYPE set to 10b */
+   LSM6DSL_ACC_GYRO_W_LP_BW_G(LSM6DSL_G_0_handle, LSM6DSL_ACC_GYRO_LP_G_NARROW);                /* LPF1 FTYPE set to 10b */                                                      
+   BSP_GYRO_Write_Reg(LSM6DSL_G_0_handle, 0x11, 0x6C);                                          /* Gyroscope settings: full scale 2000dps, ODR 416Hz */
 
-  /* Initialize all configured peripherals */
-  MX_GPIO_Init();
-  MX_ADC1_Init();  
-  MX_TIM2_Init();
-  MX_TIM4_Init();
-  MX_TIM9_Init();
-  MX_USART1_UART_Init();
-  //MX_USB_DEVICE_Init();
- 
-  /* USER CODE BEGIN 2 */
+   /* Initialize settings for Magnetometer settings (By default after reset is in in idle mode) */
+   /* Register CFG_REG_A 0x60 = 0x8c */
+   /* Register 0x61 = 0x02 */
+   BSP_MAGNETO_Write_Reg(LIS2MDL_M_0_handle, 0x60, 0x8c);
+   BSP_MAGNETO_Write_Reg(LIS2MDL_M_0_handle, 0x61, 0x02);
 
-  PRINTF("STEVAL-FCU001V1 FW rev.1.0 - Sep 2017\n\n");
-  
-//  Initialize Onboard LED
-  BSP_LED_Init(LED1);
-  BSP_LED_Init(LED2);
-  BSP_LED_Off(LED1);
-  BSP_LED_Off(LED2);
-  
-  /* Configure and disable all the Chip Select pins for sensors on SPI*/
-  Sensor_IO_SPI_CS_Init_All();
-  
-  /* Initialize and Enable the available sensors on SPI*/
-  initializeAllSensors();
-  enableAllSensors();
-  
-  /* Initialize settings for 6-axis MEMS Accelerometer */
-  /* ODR 6.6kHz */
-  /* FS 4g */
-  /* Analog Filter Bandwith @ 1500Hz */
-  /* ODR/2 low pass filtered sent to composite filter */
-  /* Low pass filter enabled @ ODR/400 */
-  //BSP_ACCELERO_Set_ODR_Value(LSM6DSL_X_0_handle, 1660.0);       /* ODR 1.6kHz */
-  BSP_ACCELERO_Set_ODR_Value(LSM6DSL_X_0_handle, 6660.0);       /* ODR 6.6kHz */
-  BSP_ACCELERO_Set_FS(LSM6DSL_X_0_handle, FS_MID);                   /* FS 4g */
-  //LSM6DSL_ACC_GYRO_W_InComposit(LSM6DSL_X_0_handle, LSM6DSL_ACC_GYRO_IN_ODR_DIV_4);   /* ODR/4 low pass filtered sent to composite filter */
-  LSM6DSL_ACC_GYRO_W_InComposit(LSM6DSL_X_0_handle, LSM6DSL_ACC_GYRO_IN_ODR_DIV_2);   /* ODR/2 low pass filtered sent to composite filter */
-  LSM6DSL_ACC_GYRO_W_LowPassFiltSel_XL(LSM6DSL_X_0_handle, LSM6DSL_ACC_GYRO_LPF2_XL_ENABLE); /* Enable LPF2 filter in composite filter block */
-  //LSM6DSL_ACC_GYRO_W_HPCF_XL(LSM6DSL_X_0_handle, LSM6DSL_ACC_GYRO_HPCF_XL_DIV4); /* Low pass filter @ ODR/50 */
-  //LSM6DSL_ACC_GYRO_W_HPCF_XL(LSM6DSL_X_0_handle, LSM6DSL_ACC_GYRO_HPCF_XL_DIV100); /* Low pass filter @ ODR/100 */
-  LSM6DSL_ACC_GYRO_W_HPCF_XL(LSM6DSL_X_0_handle, LSM6DSL_ACC_GYRO_HPCF_XL_DIV400); /* Low pass filter @ ODR/400 */
-  uint8_t tmp_6axis_reg_value;
-  BSP_ACCELERO_Read_Reg(LSM6DSL_X_0_handle, 0x10, &tmp_6axis_reg_value);
-  //tmp_6axis_reg_value = tmp_6axis_reg_value | 0x01;                             /* Set LSB to 1 >> Analog filter 400Hz*/
-  tmp_6axis_reg_value = tmp_6axis_reg_value & 0xFE;                             /* Set LSB to 0 >> Analog filter 1500Hz*/
-  BSP_ACCELERO_Write_Reg(LSM6DSL_X_0_handle, 0x10, tmp_6axis_reg_value);
-  
-  /* Initialize settings for 6-axis MEMS Gyroscope */
-  /* FS 2000dps */
-  /* ODR 416Hz */
-  /* LPF1 FTYPE set to 10b */
-  LSM6DSL_ACC_GYRO_W_LP_BW_G(LSM6DSL_G_0_handle, LSM6DSL_ACC_GYRO_LP_G_NARROW); /* LPF1 FTYPE set to 10b */                                                      
-  BSP_GYRO_Write_Reg(LSM6DSL_G_0_handle, 0x11, 0x6C);                           /* Gyroscope settings: full scale 2000dps, ODR 416Hz */
-  
-  /* Initialize settings for Magnetometer settings (By default after reset is in in idle mode) */
-  /* Register CFG_REG_A 0x60 = 0x8c */
-  /* Register 0x61 = 0x02 */
-  BSP_MAGNETO_Write_Reg(LIS2MDL_M_0_handle, 0x60, 0x8c);
-  BSP_MAGNETO_Write_Reg(LIS2MDL_M_0_handle, 0x61, 0x02);
-  
-  /* Initialize Remote control*/
-  init_remote_control();
+   /* Initialize Remote control*/
+   init_remote_control();
 
-  /* Initialize TIM2 for External Remocon RF receiver PWM Input*/
-  HAL_TIM_IC_Start_IT(&htim2,TIM_CHANNEL_1);
-  HAL_TIM_IC_Start_IT(&htim2,TIM_CHANNEL_2);
-  HAL_TIM_IC_Start_IT(&htim2,TIM_CHANNEL_3);
-  HAL_TIM_IC_Start_IT(&htim2,TIM_CHANNEL_4);
+   /* Initialize TIM2 for External Remocon RF receiver PWM Input*/
+   HAL_TIM_IC_Start_IT(&htim2, TIM_CHANNEL_1);
+   HAL_TIM_IC_Start_IT(&htim2, TIM_CHANNEL_2);
+   HAL_TIM_IC_Start_IT(&htim2, TIM_CHANNEL_3);
+   HAL_TIM_IC_Start_IT(&htim2, TIM_CHANNEL_4);
 
-  /* Initialize TIM4 for Motors PWM Output*/
-  HAL_TIM_PWM_Start(&htim4,TIM_CHANNEL_1);
-  HAL_TIM_PWM_Start(&htim4,TIM_CHANNEL_2);
-  HAL_TIM_PWM_Start(&htim4,TIM_CHANNEL_3);
-  HAL_TIM_PWM_Start(&htim4,TIM_CHANNEL_4);
+   /* Initialize TIM4 for Motors PWM Output*/
+   HAL_TIM_PWM_Start(&htim4, TIM_CHANNEL_1);
+   HAL_TIM_PWM_Start(&htim4, TIM_CHANNEL_2);
+   HAL_TIM_PWM_Start(&htim4, TIM_CHANNEL_3);
+   HAL_TIM_PWM_Start(&htim4, TIM_CHANNEL_4);
 
-  /* Initialize General purpose TIM9 50Hz*/
-  HAL_TIM_Base_Start_IT(&htim9);
+   /* Initialize General purpose TIM9 50Hz*/
+   HAL_TIM_Base_Start_IT(&htim9);
 
-  /* Initialize PID and set Motor PWM to zero */
-  PIDControlInit(&pid);
-  set_motor_pwm_zero(&motor_pwm);
+   /* Initialize PID and set Motor PWM to zero */
+   PIDControlInit(&pid);
+   set_motor_pwm_zero(&motor_pwm);
 
-  /* Setup a timer with 1ms interval */
-  pid_interval = (int16_t)(PID_SAMPLING_TIME*1000.0f);
-  SetupTimer(&tim, pid_interval);
+   /* Setup a timer with 1ms interval */
+   pid_interval                                          = (int16_t) (PID_SAMPLING_TIME * 1000.0f);
+   SetupTimer(&tim, pid_interval);
 
-  /* Start timer */
-  StartTimer(&tim);
-  ch = 0;
-  ch_flag = 0;
-  
-  
-  /* BLE communication */
-  PRINTF("BLE communication initialization...\n\n");
-  BlueNRG_Init();
-  /* Initialize the BlueNRG Custom services */
-  Init_BlueNRG_Custom_Services();
-  
-  
-  /* Read initial value of Pressure and Temperature for Altitude estimation */ 
-  BSP_PRESSURE_Get_Press(LPS22HB_P_0_handle, &press_zero_level);      /* Read the Pressure level when arming (0m reference) for altitude calculation */
-  BSP_TEMPERATURE_Get_Temp(LPS22HB_T_0_handle, &temperature);         /* Read the Temperature when arming (0m reference) for altitude calculation */
-  
-  
-  /* USER CODE END 2 */
+   /* Start timer */
+   StartTimer(&tim);
+   ch                                                    = 0;
+   ch_flag                                               = 0;
 
-            
-  
-  /* Infinite loop */
-  /* USER CODE BEGIN WHILE */
-  while (1)
-  {
-    /* USER CODE END WHILE */
 
-    /* USER CODE BEGIN 3 */    
-    if(HCI_ProcessEvent) {
-          HCI_ProcessEvent=0;
-          HCI_Process();
-    }
-    
-    if(set_connectable){
-          /* Now update the BLE advertize data and make the Board connectable */
-          setConnectable();
-          set_connectable = FALSE;
-    }  
-        
-    if (tim9_event_flag == 1)
-    {     // Timer9 event: frequency 800Hz
-      tim9_event_flag = 0;
-          
-      count1++;
-           
-      acc_ahrs.AXIS_X = 0;
-      acc_ahrs.AXIS_Y = 0;
-      acc_ahrs.AXIS_Z = 0;
-      gyro_ahrs.AXIS_X = 0;
-      gyro_ahrs.AXIS_Y = 0;
-      gyro_ahrs.AXIS_Z = 0;
+   /* BLE communication */
+   PRINTF("BLE communication initialization...\n\n");
+   BlueNRG_Init();
+   /* Initialize the BlueNRG Custom services */
+   Init_BlueNRG_Custom_Services();
 
-      for(i=0;i<FIFO_Order;i++)
+
+   /* Read initial value of Pressure and Temperature for Altitude estimation */ 
+   BSP_PRESSURE_Get_Press(LPS22HB_P_0_handle, &press_zero_level);                               /* Read the Pressure level when arming (0m reference) for altitude calculation */
+   BSP_TEMPERATURE_Get_Temp(LPS22HB_T_0_handle, &temperature);                                  /* Read the Temperature when arming (0m reference) for altitude calculation */
+
+   /* USER CODE END 2 */
+
+   /* Infinite loop */
+   /* USER CODE BEGIN WHILE */
+   while (1)
+   {
+      if (HCI_ProcessEvent)
       {
-        acc_ahrs.AXIS_X += acc_ahrs_FIFO[i].AXIS_X;
-        acc_ahrs.AXIS_Y += acc_ahrs_FIFO[i].AXIS_Y;
-        acc_ahrs.AXIS_Z += acc_ahrs_FIFO[i].AXIS_Z;
-        gyro_ahrs.AXIS_X += gyro_ahrs_FIFO[i].AXIS_X;
-        gyro_ahrs.AXIS_Y += gyro_ahrs_FIFO[i].AXIS_Y;
-        gyro_ahrs.AXIS_Z += gyro_ahrs_FIFO[i].AXIS_Z;
+         HCI_ProcessEvent                                = 0;
+         HCI_Process();
       }
 
-      acc_ahrs.AXIS_X *=FIFO_Order_Recip;
-      acc_ahrs.AXIS_Y *=FIFO_Order_Recip;
-      acc_ahrs.AXIS_Z *=FIFO_Order_Recip;
-      gyro_ahrs.AXIS_X *=FIFO_Order_Recip;
-      gyro_ahrs.AXIS_Y *=FIFO_Order_Recip;
-      gyro_ahrs.AXIS_Z *=FIFO_Order_Recip;
+      if (set_connectable)
+      {
+         /* Now update the BLE advertize data and make the Board connectable */
+         setConnectable();
+         set_connectable = FALSE;
+      }  
 
-      
-      acc_fil_int.AXIS_X = (int32_t) acc_ahrs.AXIS_X;  
-      acc_fil_int.AXIS_Y = (int32_t) acc_ahrs.AXIS_Y;  
-      acc_fil_int.AXIS_Z = (int32_t) acc_ahrs.AXIS_Z;  
-      gyro_fil_int.AXIS_X = (int32_t) gyro_ahrs.AXIS_X;  
-      gyro_fil_int.AXIS_Y = (int32_t) gyro_ahrs.AXIS_Y;  
-      gyro_fil_int.AXIS_Z = (int32_t) gyro_ahrs.AXIS_Z;  
+      if (tim9_event_flag == 1)
+      {                                                                                         // Timer9 event: frequency 800Hz
+         tim9_event_flag                                 = 0;
+
+         count1++;
+
+         acc_ahrs.AXIS_X                                 = 0;
+         acc_ahrs.AXIS_Y                                 = 0;
+         acc_ahrs.AXIS_Z                                 = 0;
+         gyro_ahrs.AXIS_X                                = 0;
+         gyro_ahrs.AXIS_Y                                = 0;
+         gyro_ahrs.AXIS_Z                                = 0;
+
+         for (i = 0; i < FIFO_Order; i++)
+         {
+            acc_ahrs.AXIS_X                              += acc_ahrs_FIFO[i].AXIS_X;
+            acc_ahrs.AXIS_Y                              += acc_ahrs_FIFO[i].AXIS_Y;
+            acc_ahrs.AXIS_Z                              += acc_ahrs_FIFO[i].AXIS_Z;
+            gyro_ahrs.AXIS_X                             += gyro_ahrs_FIFO[i].AXIS_X;
+            gyro_ahrs.AXIS_Y                             += gyro_ahrs_FIFO[i].AXIS_Y;
+            gyro_ahrs.AXIS_Z                             += gyro_ahrs_FIFO[i].AXIS_Z;
+         }
+
+         acc_ahrs.AXIS_X                                 *= FIFO_Order_Recip;
+         acc_ahrs.AXIS_Y                                 *= FIFO_Order_Recip;
+         acc_ahrs.AXIS_Z                                 *= FIFO_Order_Recip;
+         gyro_ahrs.AXIS_X                                *= FIFO_Order_Recip;
+         gyro_ahrs.AXIS_Y                                *= FIFO_Order_Recip;
+         gyro_ahrs.AXIS_Z                                *= FIFO_Order_Recip;
 
 
-      //PRINTF("%f %f %f %f\n", acc_ahrs.AXIS_X, acc_ahrs.AXIS_Y, gyro_ahrs.AXIS_X, gyro_ahrs.AXIS_Y);
+         acc_fil_int.AXIS_X                              = (int32_t) acc_ahrs.AXIS_X;  
+         acc_fil_int.AXIS_Y                              = (int32_t) acc_ahrs.AXIS_Y;  
+         acc_fil_int.AXIS_Z                              = (int32_t) acc_ahrs.AXIS_Z;  
+         gyro_fil_int.AXIS_X                             = (int32_t) gyro_ahrs.AXIS_X;  
+         gyro_fil_int.AXIS_Y                             = (int32_t) gyro_ahrs.AXIS_Y;  
+         gyro_fil_int.AXIS_Z                             = (int32_t) gyro_ahrs.AXIS_Z;  
 
-      // AHRS update, quaternion & true gyro data are stored in ahrs
-      ahrs_fusion_ag(&acc_ahrs, &gyro_ahrs, &ahrs);
+         // PRINTF("%f %f %f %f\n", acc_ahrs.AXIS_X, acc_ahrs.AXIS_Y, gyro_ahrs.AXIS_X, gyro_ahrs.AXIS_Y);
 
-      // Calculate euler angle drone
-      QuaternionToEuler(&ahrs.q, &euler_ahrs);
+         // AHRS update, quaternion & true gyro data are stored in ahrs
+         ahrs_fusion_ag(&acc_ahrs, &gyro_ahrs, &ahrs);
 
-      //BSP_LED_Toggle(LED1);
-      
-      #ifdef REMOCON_BLE
-      
- 
-//          gRUD = (joydata[3]-128)*(-13);
-//          gTHR = joydata[4]*13;
-//          gAIL = (joydata[5]-128)*(-13);
-//          gELE = (joydata[6]-128)*13;
-          gRUD = (joydata[2]-128)*(-13);
-          gTHR = joydata[3]*13;
-          gAIL = (joydata[4]-128)*(-13);
-          gELE = (joydata[5]-128)*13;
-          
-          /* joydata[6]: seek bar data*/
-          /* joydata[7]: additional button data
-                        first bit: Takeoff (0 = Land,  1 = Takeoff)
-                        second bit: Calibration When it changes status is active
-                        third bit: Arming (0 = Disarmed,  1 = Armed) */
-          gJoystick_status = joydata[7];
-          if ((gJoystick_status&0x04)==0x04){
-            rc_enable_motor = 1;
-            fly_ready = 1;
+         // Calculate euler angle drone
+         QuaternionToEuler(&ahrs.q, &euler_ahrs);
+
+         // BSP_LED_Toggle(LED1);
+
+#ifdef REMOCON_BLE
+         // gRUD = (joydata[3]-128)*(-13);
+         // gTHR = joydata[4]*13;
+         // gAIL = (joydata[5]-128)*(-13);
+         // gELE = (joydata[6]-128)*13;
+
+         gRUD                                            = (joydata[2] - 128) * (-13);
+         gTHR                                            = joydata[3] * 13;
+         gAIL                                            = (joydata[4] - 128) * (-13);
+         gELE                                            = (joydata[5] - 128) * 13;
+
+         /* joydata[6]: seek bar data*/
+         /* joydata[7]: additional button data
+               first bit: Takeoff (0 = Land,  1 = Takeoff)
+               second bit: Calibration When it changes status is active
+               third bit: Arming (0 = Disarmed,  1 = Armed) */
+
+         gJoystick_status                                = joydata[7];
+         if ((gJoystick_status & 0x04) == 0x04)
+         {
+            rc_enable_motor                              = 1;
+            fly_ready                                    = 1;
             BSP_LED_On(LED2);
-          }
-          else {
-            rc_enable_motor = 0;
-            fly_ready = 0;
-          }
-          
+         }
+         else
+         {
+            rc_enable_motor                              = 0;
+            fly_ready                                    = 0;
+         }
 
-          if (connected){
-            rc_connection_flag = 1;                       /* BLE Remocon connected flag for enabling motor output */
+
+         if (connected)
+         {
+            rc_connection_flag                           = 1;                                   /* BLE Remocon connected flag for enabling motor output */
             SendMotionData();
             SendBattEnvData();
             SendArmingData();            
-          }
-          else{
-            rc_connection_flag = 0;
-            gTHR=0;
-            rc_enable_motor = 0;
-            fly_ready = 0;
+         }
+         else
+         {
+            rc_connection_flag                           = 0;
+            gTHR                                         = 0;
+            rc_enable_motor                              = 0;
+            fly_ready                                    = 0;
             BSP_LED_Off(LED1);
             BSP_LED_Off(LED2);
-          }
-          
-          if (joydata[7]&0x02){
-            rc_cal_flag = 1;
+         }
+
+         if (joydata[7] & 0x02)
+         {
+            rc_cal_flag                                  = 1;
             BSP_LED_On(LED1);
-          }
-          
-          
-      #endif
-          
-      #ifdef REMOCON_PWM
-          if ( (gTHR == 0) && (gELE < - RC_CAL_THRESHOLD) && (gAIL > RC_CAL_THRESHOLD) && (gRUD < - RC_CAL_THRESHOLD))
-          {
-            rc_cal_flag = 1;
+         }
+#endif
+
+#ifdef REMOCON_PWM
+         if ((gTHR == 0) && (gELE < - RC_CAL_THRESHOLD) && (gAIL > RC_CAL_THRESHOLD) && (gRUD < - RC_CAL_THRESHOLD))
+         {
+            rc_cal_flag                                  = 1;
             BSP_LED_On(LED1);
-          }
-           
-      
-          if ( (gTHR == 0) && (gELE < - RC_CAL_THRESHOLD) && (gAIL < - RC_CAL_THRESHOLD) && (gRUD > RC_CAL_THRESHOLD))
-          {
-            rc_enable_motor = 1;
-            fly_ready = 1;
+         }
+
+         if ((gTHR == 0) && (gELE < - RC_CAL_THRESHOLD) && (gAIL < - RC_CAL_THRESHOLD) && (gRUD > RC_CAL_THRESHOLD))
+         {
+            rc_enable_motor                              = 1;
+            fly_ready                                    = 1;
             BSP_LED_On(LED2);          
-          }
-      #endif
-      
-      
-      // Get target euler angle from remote control
-      GetTargetEulerAngle(&euler_rc, &euler_ahrs);
+         }
+#endif
+         // Get target euler angle from remote control
+         GetTargetEulerAngle(&euler_rc, &euler_ahrs);
 
-      
-          
-      if(gTHR<MIN_THR)
-      {
-        euler_ahrs_offset.thx = 0;
-        euler_ahrs_offset.thy = 0;
+         if (gTHR < MIN_THR)
+         {
+            euler_ahrs_offset.thx                        = 0;
+            euler_ahrs_offset.thy                        = 0;
+         }
+
+         Fly_origin.X_Degree                             = (int16_t) (euler_ahrs.thx * 5730);
+         Fly_origin.Y_Degree                             = (int16_t) (euler_ahrs.thy * 5730);
+         Fly_origin.Z_Degree                             = (int16_t) (euler_ahrs.thz * 5730);
+
+
+         if (gTHR < MIN_THR)
+         {
+            euler_rc.thz                                 = 0;
+            euler_ahrs.thz                               = 0;
+         }
+
+         euler_rc_fil.thx                                = euler_rc.thx;
+         euler_rc_fil.thy                                = euler_rc.thy;
+         euler_rc_fil.thz                                = euler_rc.thz;
+
+         FlightControlPID_OuterLoop(&euler_rc_fil, &euler_ahrs, &ahrs, &pid);
+
+         /* Added for debug on UART*/
+         /* Remocon ELE, AIL, RUD, THR, AHRS Euler angle x and y axis, Remocon Euler angle x and y axis */
+         // PRINTF("%d\t%d\t%d\t%d\t%f\t%f\t%f\t%f\n", gELE, gAIL, gRUD, gTHR, euler_ahrs.thx * 57.3f, euler_ahrs.thy * 57.3f, euler_rc.thx * 57.3f, euler_rc.thy * 57.3f);
+         /* Remocon ELE, AIL, RUD, THR, Motor1_pwm, AHRS Euler angle x and y axis */
+         // PRINTF("%d\t%d\t%d\t%d\t%f\t%f\t%f\t%f\t%f\n", gELE, gAIL, gRUD, gTHR, motor_pwm.motor1_pwm, euler_ahrs.thx * 57.3f, euler_ahrs.thy * 57.3f, euler_rc.thx * 57.3f, euler_rc.thy * 57.3f);
+         // PRINTF("%d\t%d\t%d\t%d\n", gELE, gAIL, gRUD, gTHR);
+         /* Remocon THR, Acc and Gyro FIFO data x and y axis, AHRS Euler angle x and y axis, Remocon Euler angle x and y axis*/
+         // PRINTF("%d\t%f\t%f\t%f\t%f\t%f\t%f\t%f\t%f\n", gTHR, acc_ahrs.AXIS_X, acc_ahrs.AXIS_Y, gyro_ahrs.AXIS_X, gyro_ahrs.AXIS_Y, euler_ahrs.thx * 57.3f, euler_ahrs.thy * 57.3f, euler_rc.thx * 57.3f, euler_rc.thy * 57.3f);
+         /* MEMS Accelerometer RAW data */
+         // PRINTF("%d\t%d\t%d\t\n", acc.AXIS_X, acc.AXIS_Y, acc.AXIS_Z);
+
+         /* Pressure data on UART for debug*/
+         // PRINTF("Pressure [atm] = %f\n\n",pre);  
+         /* Magnetometer data on UART for debug*/
+         // PRINTF("Magnetometer X = %d\tY = %d\tZ = %d\n\n", mag.AXIS_X, mag.AXIS_Y, mag.AXIS_Z);  
       }
 
-      Fly_origin.X_Degree = (int16_t)(euler_ahrs.thx * 5730);
-      Fly_origin.Y_Degree = (int16_t)(euler_ahrs.thy * 5730);
-      Fly_origin.Z_Degree = (int16_t)(euler_ahrs.thz * 5730);
-
-
-      if(gTHR<MIN_THR)
+      if (HAL_GPIO_ReadPin(GPIOA, GPIO_PIN_1) == GPIO_PIN_SET)
       {
-        euler_rc.thz = 0;
-        euler_ahrs.thz = 0;
+         ch_flag                                         = 1;
       }
 
-      euler_rc_fil.thx = euler_rc.thx;
-      euler_rc_fil.thy = euler_rc.thy;
-      euler_rc_fil.thz = euler_rc.thz;
-      
-      FlightControlPID_OuterLoop(&euler_rc_fil, &euler_ahrs, &ahrs, &pid);
-      
-    /* Added for debug on UART*/
-    /* Remocon ELE, AIL, RUD, THR, AHRS Euler angle x and y axis, Remocon Euler angle x and y axis */
-    //PRINTF("%d\t%d\t%d\t%d\t%f\t%f\t%f\t%f\n", gELE, gAIL, gRUD, gTHR, euler_ahrs.thx * 57.3f, euler_ahrs.thy * 57.3f, euler_rc.thx * 57.3f, euler_rc.thy * 57.3f);
-    /* Remocon ELE, AIL, RUD, THR, Motor1_pwm, AHRS Euler angle x and y axis */
-    //PRINTF("%d\t%d\t%d\t%d\t%f\t%f\t%f\t%f\t%f\n", gELE, gAIL, gRUD, gTHR, motor_pwm.motor1_pwm, euler_ahrs.thx * 57.3f, euler_ahrs.thy * 57.3f, euler_rc.thx * 57.3f, euler_rc.thy * 57.3f);
-    //PRINTF("%d\t%d\t%d\t%d\n", gELE, gAIL, gRUD, gTHR);
-    /* Remocon THR, Acc and Gyro FIFO data x and y axis, AHRS Euler angle x and y axis, Remocon Euler angle x and y axis*/
-    //PRINTF("%d\t%f\t%f\t%f\t%f\t%f\t%f\t%f\t%f\n", gTHR, acc_ahrs.AXIS_X, acc_ahrs.AXIS_Y, gyro_ahrs.AXIS_X, gyro_ahrs.AXIS_Y, euler_ahrs.thx * 57.3f, euler_ahrs.thy * 57.3f, euler_rc.thx * 57.3f, euler_rc.thy * 57.3f);
-    /* MEMS Accelerometer RAW data */
-    //PRINTF("%d\t%d\t%d\t\n", acc.AXIS_X, acc.AXIS_Y, acc.AXIS_Z);
-      
-    /* Pressure data on UART for debug*/
-    //PRINTF("Pressure [atm] = %f\n\n",pre);  
-    /* Magnetometer data on UART for debug*/
-    //PRINTF("Magnetometer X = %d\tY = %d\tZ = %d\n\n", mag.AXIS_X, mag.AXIS_Y, mag.AXIS_Z);  
-
-
-    }
-
-  if (HAL_GPIO_ReadPin(GPIOA, GPIO_PIN_1) == GPIO_PIN_SET)
-  {
-    ch_flag = 1;
-  }
-
-  if (isTimerEventExist(&tim))    // Check if a timer event is present
-  {
-
-        ClearTimer(&tim);           // Clear current event;
-
-        count2++;
-
-        mytimcnt++;
-        if (rc_connection_flag && rc_enable_motor)
-        {
-          if (mytimcnt%50 == 0)
-          BSP_LED_On(LED2);
-        }
-        else
-        {
-          if (mytimcnt%50 == 0)
-            BSP_LED_Toggle(LED2);
-        }
-    }
-  
-    
-
-  }
-  /* USER CODE END 3 */
-
+      if (isTimerEventExist(&tim))                                                              // Check if a timer event is present
+      {
+         ClearTimer(&tim);                                                                      // Clear current event;
+         count2++;
+         mytimcnt++;
+         if (rc_connection_flag && rc_enable_motor)
+         {
+            if ((mytimcnt % 50) == 0)
+            {
+               BSP_LED_On(LED2);
+            }
+         }
+         else
+         {
+            if ((mytimcnt % 50) == 0)
+            {
+               BSP_LED_Toggle(LED2);
+            }
+         }
+      }
+   }
 }
 
 /** System Clock Configuration
 */
 void SystemClock_Config(void)
 {
-  RCC_OscInitTypeDef RCC_OscInitStruct;
-  RCC_ClkInitTypeDef RCC_ClkInitStruct;
+   RCC_OscInitTypeDef RCC_OscInitStruct;
+   RCC_ClkInitTypeDef RCC_ClkInitStruct;
 
-    /**Configure the main internal regulator output voltage 
-    */
-  __HAL_RCC_PWR_CLK_ENABLE();
+   // Configure the main internal regulator output voltage 
+   __HAL_RCC_PWR_CLK_ENABLE();
+   __HAL_PWR_VOLTAGESCALING_CONFIG(PWR_REGULATOR_VOLTAGE_SCALE2);
 
-  __HAL_PWR_VOLTAGESCALING_CONFIG(PWR_REGULATOR_VOLTAGE_SCALE2);
+   // Initializes the CPU, AHB and APB busses clocks 
+   RCC_OscInitStruct.OscillatorType                      = RCC_OSCILLATORTYPE_HSE;
+   RCC_OscInitStruct.HSEState                            = RCC_HSE_ON;
+   RCC_OscInitStruct.PLL.PLLState                        = RCC_PLL_ON;
+   RCC_OscInitStruct.PLL.PLLSource                       = RCC_PLLSOURCE_HSE;
+   RCC_OscInitStruct.PLL.PLLM                            = 16;
+   RCC_OscInitStruct.PLL.PLLN                            = 336;
+   RCC_OscInitStruct.PLL.PLLP                            = RCC_PLLP_DIV4;
+   RCC_OscInitStruct.PLL.PLLQ                            = 7;
 
-    /**Initializes the CPU, AHB and APB busses clocks 
-    */
-  RCC_OscInitStruct.OscillatorType = RCC_OSCILLATORTYPE_HSE;
-  RCC_OscInitStruct.HSEState = RCC_HSE_ON;
-  RCC_OscInitStruct.PLL.PLLState = RCC_PLL_ON;
-  RCC_OscInitStruct.PLL.PLLSource = RCC_PLLSOURCE_HSE;
-  RCC_OscInitStruct.PLL.PLLM = 16;
-  RCC_OscInitStruct.PLL.PLLN = 336;
-  RCC_OscInitStruct.PLL.PLLP = RCC_PLLP_DIV4;
-  RCC_OscInitStruct.PLL.PLLQ = 7;
-
-  HAL_RCC_OscConfig(&RCC_OscInitStruct);
+   HAL_RCC_OscConfig(&RCC_OscInitStruct);
   
-    /**Initializes the CPU, AHB and APB busses clocks 
-    */
-  RCC_ClkInitStruct.ClockType = RCC_CLOCKTYPE_HCLK|RCC_CLOCKTYPE_SYSCLK
-                              |RCC_CLOCKTYPE_PCLK1|RCC_CLOCKTYPE_PCLK2;
-  RCC_ClkInitStruct.SYSCLKSource = RCC_SYSCLKSOURCE_PLLCLK;
-  RCC_ClkInitStruct.AHBCLKDivider = RCC_SYSCLK_DIV1;
-  RCC_ClkInitStruct.APB1CLKDivider = RCC_HCLK_DIV2;
-  RCC_ClkInitStruct.APB2CLKDivider = RCC_HCLK_DIV1;
-  HAL_RCC_ClockConfig(&RCC_ClkInitStruct, FLASH_LATENCY_2);
+   // Initializes the CPU, AHB and APB busses clocks 
+   RCC_ClkInitStruct.ClockType                           = RCC_CLOCKTYPE_HCLK    |
+                                                           RCC_CLOCKTYPE_SYSCLK  |
+                                                           RCC_CLOCKTYPE_PCLK1   |
+                                                           RCC_CLOCKTYPE_PCLK2;
+   RCC_ClkInitStruct.SYSCLKSource                        = RCC_SYSCLKSOURCE_PLLCLK;
+   RCC_ClkInitStruct.AHBCLKDivider                       = RCC_SYSCLK_DIV1;
+   RCC_ClkInitStruct.APB1CLKDivider                      = RCC_HCLK_DIV2;
+   RCC_ClkInitStruct.APB2CLKDivider                      = RCC_HCLK_DIV1;
+   HAL_RCC_ClockConfig(&RCC_ClkInitStruct, FLASH_LATENCY_2);
 
-    /**Configure the Systick interrupt time 
-    */
-  HAL_SYSTICK_Config(HAL_RCC_GetHCLKFreq()/1000);
+   // Configure the Systick interrupt time
+   HAL_SYSTICK_Config(HAL_RCC_GetHCLKFreq() / 1000);
 
-    /**Configure the Systick 
-    */
-  HAL_SYSTICK_CLKSourceConfig(SYSTICK_CLKSOURCE_HCLK);
+   // Configure the Systick 
+   HAL_SYSTICK_CLKSourceConfig(SYSTICK_CLKSOURCE_HCLK);
 
-  /* SysTick_IRQn interrupt configuration */
-  HAL_NVIC_SetPriority(SysTick_IRQn, 0, 0);
-
-  
+   // SysTick_IRQn interrupt configuration
+   HAL_NVIC_SetPriority(SysTick_IRQn, 0, 0);
 }
 
 /* ADC1 init function */
 void MX_ADC1_Init(void)
 {
+   ADC_ChannelConfTypeDef sConfig;
 
-  ADC_ChannelConfTypeDef sConfig;
+   // Configure the global features of the ADC (Clock, Resolution, Data Alignment and number of conversion)
+   hadc1.Instance                                        = ADC1;
+   hadc1.Init.ClockPrescaler                             = ADC_CLOCKPRESCALER_PCLK_DIV4;
+   hadc1.Init.Resolution                                 = ADC_RESOLUTION12b;
+   hadc1.Init.ScanConvMode                               = DISABLE;
+   hadc1.Init.ContinuousConvMode                         = DISABLE;
+   hadc1.Init.DiscontinuousConvMode                      = DISABLE;
+   hadc1.Init.ExternalTrigConvEdge                       = ADC_EXTERNALTRIGCONVEDGE_NONE;
+   hadc1.Init.DataAlign                                  = ADC_DATAALIGN_RIGHT;
+   hadc1.Init.NbrOfConversion                            = 1;
+   hadc1.Init.DMAContinuousRequests                      = DISABLE;
+   hadc1.Init.EOCSelection                               = EOC_SINGLE_CONV;
+   HAL_ADC_Init(&hadc1);
 
-    /**Configure the global features of the ADC (Clock, Resolution, Data Alignment and number of conversion)
-    */
-  hadc1.Instance = ADC1;
-  hadc1.Init.ClockPrescaler = ADC_CLOCKPRESCALER_PCLK_DIV4;
-  hadc1.Init.Resolution = ADC_RESOLUTION12b;
-  hadc1.Init.ScanConvMode = DISABLE;
-  hadc1.Init.ContinuousConvMode = DISABLE;
-  hadc1.Init.DiscontinuousConvMode = DISABLE;
-  hadc1.Init.ExternalTrigConvEdge = ADC_EXTERNALTRIGCONVEDGE_NONE;
-  hadc1.Init.DataAlign = ADC_DATAALIGN_RIGHT;
-  hadc1.Init.NbrOfConversion = 1;
-  hadc1.Init.DMAContinuousRequests = DISABLE;
-  hadc1.Init.EOCSelection = EOC_SINGLE_CONV;
-  HAL_ADC_Init(&hadc1);
-
-    /**Configure for the selected ADC regular channel its corresponding rank in the sequencer and its sample time.
-    */
-  sConfig.Channel = ADC_CHANNEL_9;
-  sConfig.Rank = 1;
-  sConfig.SamplingTime = ADC_SAMPLETIME_3CYCLES;
-  HAL_ADC_ConfigChannel(&hadc1, &sConfig);
-
+   // Configure for the selected ADC regular channel its corresponding rank in the sequencer and its sample time.
+   sConfig.Channel                                       = ADC_CHANNEL_9;
+   sConfig.Rank                                          = 1;
+   sConfig.SamplingTime                                  = ADC_SAMPLETIME_3CYCLES;
+   HAL_ADC_ConfigChannel(&hadc1, &sConfig);
 }
 
 ///* SPI1 init function */
@@ -718,147 +696,131 @@ void MX_ADC1_Init(void)
 /* TIM2 init function */
 void MX_TIM2_Init(void)
 {
+   TIM_ClockConfigTypeDef sClockSourceConfig;
+   TIM_MasterConfigTypeDef sMasterConfig;
+   TIM_IC_InitTypeDef sConfigIC;
 
-  TIM_ClockConfigTypeDef sClockSourceConfig;
-  TIM_MasterConfigTypeDef sMasterConfig;
-  TIM_IC_InitTypeDef sConfigIC;
+   htim2.Instance                                        = TIM2;
+   htim2.Init.Prescaler                                  = 20;
+   htim2.Init.CounterMode                                = TIM_COUNTERMODE_UP;
+   htim2.Init.Period                                     = 32767;
+   htim2.Init.ClockDivision                              = TIM_CLOCKDIVISION_DIV1;
+   HAL_TIM_Base_Init(&htim2);
 
-  htim2.Instance = TIM2;
-  htim2.Init.Prescaler = 20;
-  htim2.Init.CounterMode = TIM_COUNTERMODE_UP;
-  htim2.Init.Period = 32767;
-  htim2.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
-  HAL_TIM_Base_Init(&htim2);
+   sClockSourceConfig.ClockSource                        = TIM_CLOCKSOURCE_INTERNAL;
+   HAL_TIM_ConfigClockSource(&htim2, &sClockSourceConfig);
 
-  sClockSourceConfig.ClockSource = TIM_CLOCKSOURCE_INTERNAL;
-  HAL_TIM_ConfigClockSource(&htim2, &sClockSourceConfig);
+   HAL_TIM_IC_Init(&htim2);
 
-  HAL_TIM_IC_Init(&htim2);
+   sMasterConfig.MasterOutputTrigger                     = TIM_TRGO_RESET;
+   sMasterConfig.MasterSlaveMode                         = TIM_MASTERSLAVEMODE_DISABLE;
+   HAL_TIMEx_MasterConfigSynchronization(&htim2, &sMasterConfig);
 
-  sMasterConfig.MasterOutputTrigger = TIM_TRGO_RESET;
-  sMasterConfig.MasterSlaveMode = TIM_MASTERSLAVEMODE_DISABLE;
-  HAL_TIMEx_MasterConfigSynchronization(&htim2, &sMasterConfig);
-
-  sConfigIC.ICPolarity = TIM_INPUTCHANNELPOLARITY_BOTHEDGE;
-  sConfigIC.ICSelection = TIM_ICSELECTION_DIRECTTI;
-  sConfigIC.ICPrescaler = TIM_ICPSC_DIV1;
-  sConfigIC.ICFilter = 0;
-  HAL_TIM_IC_ConfigChannel(&htim2, &sConfigIC, TIM_CHANNEL_1);
-
-  HAL_TIM_IC_ConfigChannel(&htim2, &sConfigIC, TIM_CHANNEL_2);
-
-  HAL_TIM_IC_ConfigChannel(&htim2, &sConfigIC, TIM_CHANNEL_3);
-
-  HAL_TIM_IC_ConfigChannel(&htim2, &sConfigIC, TIM_CHANNEL_4);
-
+   sConfigIC.ICPolarity                                  = TIM_INPUTCHANNELPOLARITY_BOTHEDGE;
+   sConfigIC.ICSelection                                 = TIM_ICSELECTION_DIRECTTI;
+   sConfigIC.ICPrescaler                                 = TIM_ICPSC_DIV1;
+   sConfigIC.ICFilter                                    = 0;
+   HAL_TIM_IC_ConfigChannel(&htim2, &sConfigIC, TIM_CHANNEL_1);
+   HAL_TIM_IC_ConfigChannel(&htim2, &sConfigIC, TIM_CHANNEL_2);
+   HAL_TIM_IC_ConfigChannel(&htim2, &sConfigIC, TIM_CHANNEL_3);
+   HAL_TIM_IC_ConfigChannel(&htim2, &sConfigIC, TIM_CHANNEL_4);
 }
 
 /* TIM4 init function */
 void MX_TIM4_Init(void)
 {
+   TIM_ClockConfigTypeDef sClockSourceConfig;
+   TIM_MasterConfigTypeDef sMasterConfig;
+   TIM_OC_InitTypeDef sConfigOC;
 
-  TIM_ClockConfigTypeDef sClockSourceConfig;
-  TIM_MasterConfigTypeDef sMasterConfig;
-  TIM_OC_InitTypeDef sConfigOC;
+   htim4.Instance                                        = TIM4;
+#ifdef MOTOR_DC
+   htim4.Init.Prescaler                                  = 84;                                  /* DC motor configuration - Freq 494Hz*/
+   htim4.Init.CounterMode                                = TIM_COUNTERMODE_UP;
+   htim4.Init.Period                                     = 1999;
+#endif
+#ifdef MOTOR_ESC
+   htim4.Init.Prescaler                                  = 100;                                 /* ESC motor configuration - Freq 400Hz*/
+   htim4.Init.CounterMode                                = TIM_COUNTERMODE_UP;
+   htim4.Init.Period                                     = 2075;
+#endif
+                           
+   htim4.Init.ClockDivision                              = TIM_CLOCKDIVISION_DIV1;
+   HAL_TIM_Base_Init(&htim4);
 
-  htim4.Instance = TIM4;
-  #ifdef MOTOR_DC
-    htim4.Init.Prescaler = 84;                                    /* DC motor configuration - Freq 494Hz*/
-    htim4.Init.CounterMode = TIM_COUNTERMODE_UP;
-    htim4.Init.Period = 1999;                  
-  #endif
-  #ifdef MOTOR_ESC
-    htim4.Init.Prescaler = 100;                                    /* ESC motor configuration - Freq 400Hz*/
-    htim4.Init.CounterMode = TIM_COUNTERMODE_UP;
-    htim4.Init.Period = 2075;                                   
-  #endif
-                                       
-  htim4.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
-  HAL_TIM_Base_Init(&htim4);
+   sClockSourceConfig.ClockSource                        = TIM_CLOCKSOURCE_INTERNAL;
+   HAL_TIM_ConfigClockSource(&htim4, &sClockSourceConfig);
 
-  sClockSourceConfig.ClockSource = TIM_CLOCKSOURCE_INTERNAL;
-  HAL_TIM_ConfigClockSource(&htim4, &sClockSourceConfig);
+   HAL_TIM_PWM_Init(&htim4);
 
-  HAL_TIM_PWM_Init(&htim4);
+   sMasterConfig.MasterOutputTrigger                     = TIM_TRGO_RESET;
+   sMasterConfig.MasterSlaveMode                         = TIM_MASTERSLAVEMODE_DISABLE;
+   HAL_TIMEx_MasterConfigSynchronization(&htim4, &sMasterConfig);
 
-  sMasterConfig.MasterOutputTrigger = TIM_TRGO_RESET;
-  sMasterConfig.MasterSlaveMode = TIM_MASTERSLAVEMODE_DISABLE;
-  HAL_TIMEx_MasterConfigSynchronization(&htim4, &sMasterConfig);
-
-  sConfigOC.OCMode = TIM_OCMODE_PWM1;
-  sConfigOC.Pulse = 0;
-  sConfigOC.OCPolarity = TIM_OCPOLARITY_HIGH;
-  sConfigOC.OCFastMode = TIM_OCFAST_DISABLE;
-  HAL_TIM_PWM_ConfigChannel(&htim4, &sConfigOC, TIM_CHANNEL_1);
-
-  HAL_TIM_PWM_ConfigChannel(&htim4, &sConfigOC, TIM_CHANNEL_2);
-
-  HAL_TIM_PWM_ConfigChannel(&htim4, &sConfigOC, TIM_CHANNEL_3);
-
-  HAL_TIM_PWM_ConfigChannel(&htim4, &sConfigOC, TIM_CHANNEL_4);
-
+   sConfigOC.OCMode                                      = TIM_OCMODE_PWM1;
+   sConfigOC.Pulse                                       = 0;
+   sConfigOC.OCPolarity                                  = TIM_OCPOLARITY_HIGH;
+   sConfigOC.OCFastMode                                  = TIM_OCFAST_DISABLE;
+   HAL_TIM_PWM_ConfigChannel(&htim4, &sConfigOC, TIM_CHANNEL_1);
+   HAL_TIM_PWM_ConfigChannel(&htim4, &sConfigOC, TIM_CHANNEL_2);
+   HAL_TIM_PWM_ConfigChannel(&htim4, &sConfigOC, TIM_CHANNEL_3);
+   HAL_TIM_PWM_ConfigChannel(&htim4, &sConfigOC, TIM_CHANNEL_4);
 }
 
 /* TIM9 init function */
 void MX_TIM9_Init(void)
 {
+   TIM_ClockConfigTypeDef sClockSourceConfig;
 
-  TIM_ClockConfigTypeDef sClockSourceConfig;
+   htim9.Instance                                        = TIM9;
+   htim9.Init.Prescaler                                  = 51;
+   htim9.Init.CounterMode                                = TIM_COUNTERMODE_UP;
+   htim9.Init.Period                                     = 1999;
+   htim9.Init.ClockDivision                              = TIM_CLOCKDIVISION_DIV1;
+   HAL_TIM_Base_Init(&htim9);
 
-  htim9.Instance = TIM9;
-  htim9.Init.Prescaler = 51;
-  htim9.Init.CounterMode = TIM_COUNTERMODE_UP;
-  htim9.Init.Period = 1999;
-  htim9.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
-  HAL_TIM_Base_Init(&htim9);
-
-  sClockSourceConfig.ClockSource = TIM_CLOCKSOURCE_INTERNAL;
-  HAL_TIM_ConfigClockSource(&htim9, &sClockSourceConfig);
-
+   sClockSourceConfig.ClockSource                        = TIM_CLOCKSOURCE_INTERNAL;
+   HAL_TIM_ConfigClockSource(&htim9, &sClockSourceConfig);
 }
 
 /* USART1 init function */
 void MX_USART1_UART_Init(void)
 {
-
-  huart1.Instance = USART1;
-  huart1.Init.BaudRate = 115200;
-  huart1.Init.WordLength = UART_WORDLENGTH_8B;
-  huart1.Init.StopBits = UART_STOPBITS_1;
-  huart1.Init.Parity = UART_PARITY_NONE;
-  huart1.Init.Mode = UART_MODE_TX_RX;
-  huart1.Init.HwFlowCtl = UART_HWCONTROL_NONE;
-  huart1.Init.OverSampling = UART_OVERSAMPLING_16;
-  HAL_UART_Init(&huart1);
-
+   huart1.Instance                                       = USART1;
+   huart1.Init.BaudRate                                  = 115200;
+   huart1.Init.WordLength                                = UART_WORDLENGTH_8B;
+   huart1.Init.StopBits                                  = UART_STOPBITS_1;
+   huart1.Init.Parity                                    = UART_PARITY_NONE;
+   huart1.Init.Mode                                      = UART_MODE_TX_RX;
+   huart1.Init.HwFlowCtl                                 = UART_HWCONTROL_NONE;
+   huart1.Init.OverSampling                              = UART_OVERSAMPLING_16;
+   HAL_UART_Init(&huart1);
 }
 
 /** Configure pins as
-        * Analog
-        * Input
-        * Output
-        * EVENT_OUT
-        * EXTI
-        * Free pins are configured automatically as Analog (this feature is enabled through
-        * the Code Generation settings)
-*/
+ * Analog
+ * Input
+ * Output
+ * EVENT_OUT
+ * EXTI
+ * Free pins are configured automatically as Analog (this feature is enabled through
+ * the Code Generation settings)
+ */
 void MX_GPIO_Init(void)
 {
+   GPIO_InitTypeDef GPIO_InitStruct;
 
-  GPIO_InitTypeDef GPIO_InitStruct;
+   /* GPIO Ports Clock Enable */
+   __GPIOC_CLK_ENABLE();
+   __GPIOA_CLK_ENABLE();
+   __GPIOB_CLK_ENABLE();
 
-  /* GPIO Ports Clock Enable */
-  __GPIOC_CLK_ENABLE();
-  __GPIOA_CLK_ENABLE();
-  __GPIOB_CLK_ENABLE();
-
-  /*Configure GPIO pins : PB4 PB5 */
-  GPIO_InitStruct.Pin = GPIO_PIN_4|GPIO_PIN_5;
-  GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_OD;
-  GPIO_InitStruct.Pull = GPIO_NOPULL;
-  GPIO_InitStruct.Speed = GPIO_SPEED_LOW;
-  HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
-
+   /*Configure GPIO pins : PB4 PB5 */
+   GPIO_InitStruct.Pin                                   = GPIO_PIN_4 | GPIO_PIN_5;
+   GPIO_InitStruct.Mode                                  = GPIO_MODE_OUTPUT_OD;
+   GPIO_InitStruct.Pull                                  = GPIO_NOPULL;
+   GPIO_InitStruct.Speed                                 = GPIO_SPEED_LOW;
+   HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
 }
 
 /* USER CODE BEGIN 4 */
@@ -868,175 +830,175 @@ void MX_GPIO_Init(void)
  */
 void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 {
-  if(sensor_init_cali == 0)
-  {
-    sensor_init_cali_count++;
+   if(sensor_init_cali == 0)
+   {
+   sensor_init_cali_count++;
 
-    if(sensor_init_cali_count > 800)
-    {
-      // Read sensor data and prepare for specific coodinate system
-      ReadSensorRawData(LSM6DSL_X_0_handle, LSM6DSL_G_0_handle, LIS2MDL_M_0_handle, LPS22HB_P_0_handle, &acc, &gyro, &mag, &press);
+   if(sensor_init_cali_count > 800)
+   {
+   // Read sensor data and prepare for specific coodinate system
+   ReadSensorRawData(LSM6DSL_X_0_handle, LSM6DSL_G_0_handle, LIS2MDL_M_0_handle, LPS22HB_P_0_handle, &acc, &gyro, &mag, &press);
 
-      acc_off_calc.AXIS_X += acc.AXIS_X;
-      acc_off_calc.AXIS_Y += acc.AXIS_Y;
-      acc_off_calc.AXIS_Z += acc.AXIS_Z;
+   acc_off_calc.AXIS_X += acc.AXIS_X;
+   acc_off_calc.AXIS_Y += acc.AXIS_Y;
+   acc_off_calc.AXIS_Z += acc.AXIS_Z;
 
-      gyro_off_calc.AXIS_X += gyro.AXIS_X;
-      gyro_off_calc.AXIS_Y += gyro.AXIS_Y;
-      gyro_off_calc.AXIS_Z += gyro.AXIS_Z;
+   gyro_off_calc.AXIS_X += gyro.AXIS_X;
+   gyro_off_calc.AXIS_Y += gyro.AXIS_Y;
+   gyro_off_calc.AXIS_Z += gyro.AXIS_Z;
 
-      if (sensor_init_cali_count >= 1600)
-      {
-        acc_offset.AXIS_X = (int32_t) (acc_off_calc.AXIS_X * 0.00125f);
-        acc_offset.AXIS_Y = (int32_t) (acc_off_calc.AXIS_Y * 0.00125f);
-        acc_offset.AXIS_Z = (int32_t) (acc_off_calc.AXIS_Z * 0.00125f);
+   if (sensor_init_cali_count >= 1600)
+   {
+   acc_offset.AXIS_X = (int32_t) (acc_off_calc.AXIS_X * 0.00125f);
+   acc_offset.AXIS_Y = (int32_t) (acc_off_calc.AXIS_Y * 0.00125f);
+   acc_offset.AXIS_Z = (int32_t) (acc_off_calc.AXIS_Z * 0.00125f);
 
-        gyro_offset.AXIS_X = (int32_t) (gyro_off_calc.AXIS_X * 0.00125f);
-        gyro_offset.AXIS_Y = (int32_t) (gyro_off_calc.AXIS_Y * 0.00125f);
-        gyro_offset.AXIS_Z = (int32_t) (gyro_off_calc.AXIS_Z * 0.00125f);
+   gyro_offset.AXIS_X = (int32_t) (gyro_off_calc.AXIS_X * 0.00125f);
+   gyro_offset.AXIS_Y = (int32_t) (gyro_off_calc.AXIS_Y * 0.00125f);
+   gyro_offset.AXIS_Z = (int32_t) (gyro_off_calc.AXIS_Z * 0.00125f);
 
-        acc_off_calc.AXIS_X = 0;
-        acc_off_calc.AXIS_Y = 0;
-        acc_off_calc.AXIS_Z = 0;
-        gyro_off_calc.AXIS_X = 0;
-        gyro_off_calc.AXIS_Y = 0;
-        gyro_off_calc.AXIS_Z = 0;
+   acc_off_calc.AXIS_X = 0;
+   acc_off_calc.AXIS_Y = 0;
+   acc_off_calc.AXIS_Z = 0;
+   gyro_off_calc.AXIS_X = 0;
+   gyro_off_calc.AXIS_Y = 0;
+   gyro_off_calc.AXIS_Z = 0;
 
-        sensor_init_cali_count = 0;
-        sensor_init_cali = 1;
-      }
-    }
-  }
+   sensor_init_cali_count = 0;
+   sensor_init_cali = 1;
+   }
+   }
+   }
 
-  if(sensor_init_cali == 1)
-  {
-    tim9_cnt++;
-    tim9_cnt2++;
+   if(sensor_init_cali == 1)
+   {
+   tim9_cnt++;
+   tim9_cnt2++;
 
-    // Read sensor data and prepare for specific coodinate system
-    ReadSensorRawData(LSM6DSL_X_0_handle, LSM6DSL_G_0_handle, LIS2MDL_M_0_handle, LPS22HB_P_0_handle, &acc, &gyro, &mag, &press);
-    
-    if (rc_cal_flag == 1)
-    {
-      acc_off_calc.AXIS_X += acc.AXIS_X;
-      acc_off_calc.AXIS_Y += acc.AXIS_Y;
-      acc_off_calc.AXIS_Z += acc.AXIS_Z;
+   // Read sensor data and prepare for specific coodinate system
+   ReadSensorRawData(LSM6DSL_X_0_handle, LSM6DSL_G_0_handle, LIS2MDL_M_0_handle, LPS22HB_P_0_handle, &acc, &gyro, &mag, &press);
 
-      gyro_off_calc.AXIS_X += gyro.AXIS_X;
-      gyro_off_calc.AXIS_Y += gyro.AXIS_Y;
-      gyro_off_calc.AXIS_Z += gyro.AXIS_Z;
+   if (rc_cal_flag == 1)
+   {
+   acc_off_calc.AXIS_X += acc.AXIS_X;
+   acc_off_calc.AXIS_Y += acc.AXIS_Y;
+   acc_off_calc.AXIS_Z += acc.AXIS_Z;
 
-      rc_cal_cnt++;
+   gyro_off_calc.AXIS_X += gyro.AXIS_X;
+   gyro_off_calc.AXIS_Y += gyro.AXIS_Y;
+   gyro_off_calc.AXIS_Z += gyro.AXIS_Z;
 
-      if (rc_cal_cnt >= 800)
-      {
-        acc_offset.AXIS_X = (int32_t) (acc_off_calc.AXIS_X * 0.00125f);
-        acc_offset.AXIS_Y = (int32_t) (acc_off_calc.AXIS_Y * 0.00125f);
-        acc_offset.AXIS_Z = (int32_t) (acc_off_calc.AXIS_Z * 0.00125f);
+   rc_cal_cnt++;
 
-        gyro_offset.AXIS_X = (int32_t) (gyro_off_calc.AXIS_X * 0.00125f);
-        gyro_offset.AXIS_Y = (int32_t) (gyro_off_calc.AXIS_Y * 0.00125f);
-        gyro_offset.AXIS_Z = (int32_t) (gyro_off_calc.AXIS_Z * 0.00125f);
+   if (rc_cal_cnt >= 800)
+   {
+   acc_offset.AXIS_X = (int32_t) (acc_off_calc.AXIS_X * 0.00125f);
+   acc_offset.AXIS_Y = (int32_t) (acc_off_calc.AXIS_Y * 0.00125f);
+   acc_offset.AXIS_Z = (int32_t) (acc_off_calc.AXIS_Z * 0.00125f);
 
-        acc_off_calc.AXIS_X = 0;
-        acc_off_calc.AXIS_Y = 0;
-        acc_off_calc.AXIS_Z = 0;
-        gyro_off_calc.AXIS_X = 0;
-        gyro_off_calc.AXIS_Y = 0;
-        gyro_off_calc.AXIS_Z = 0;
+   gyro_offset.AXIS_X = (int32_t) (gyro_off_calc.AXIS_X * 0.00125f);
+   gyro_offset.AXIS_Y = (int32_t) (gyro_off_calc.AXIS_Y * 0.00125f);
+   gyro_offset.AXIS_Z = (int32_t) (gyro_off_calc.AXIS_Z * 0.00125f);
 
-        rc_cal_cnt = 0;
-        rc_cal_flag = 0;
-      }
-    }
+   acc_off_calc.AXIS_X = 0;
+   acc_off_calc.AXIS_Y = 0;
+   acc_off_calc.AXIS_Z = 0;
+   gyro_off_calc.AXIS_X = 0;
+   gyro_off_calc.AXIS_Y = 0;
+   gyro_off_calc.AXIS_Z = 0;
 
-    acc.AXIS_X -= acc_offset.AXIS_X;
-    acc.AXIS_Y -= acc_offset.AXIS_Y;
-    acc.AXIS_Z -= (acc_offset.AXIS_Z - 1000);
-    gyro.AXIS_X -= gyro_offset.AXIS_X;
-    gyro.AXIS_Y -= gyro_offset.AXIS_Y;
-    gyro.AXIS_Z -= gyro_offset.AXIS_Z;
+   rc_cal_cnt = 0;
+   rc_cal_flag = 0;
+   }
+   }
 
-    // Save filtered data to acc_FIFO
-    acc_FIFO[tim9_cnt2-1].AXIS_X = acc.AXIS_X;
-    acc_FIFO[tim9_cnt2-1].AXIS_Y = acc.AXIS_Y;
-    acc_FIFO[tim9_cnt2-1].AXIS_Z = acc.AXIS_Z;
+   acc.AXIS_X -= acc_offset.AXIS_X;
+   acc.AXIS_Y -= acc_offset.AXIS_Y;
+   acc.AXIS_Z -= (acc_offset.AXIS_Z - 1000);
+   gyro.AXIS_X -= gyro_offset.AXIS_X;
+   gyro.AXIS_Y -= gyro_offset.AXIS_Y;
+   gyro.AXIS_Z -= gyro_offset.AXIS_Z;
 
-    // IIR Filtering on gyro
-    gyro_fil.AXIS_X = gyro_fil_coeff.b0*gyro.AXIS_X + gyro_fil_coeff.b1*gyro_x_pre[0].AXIS_X + gyro_fil_coeff.b2*gyro_x_pre[1].AXIS_X
-                                                    + gyro_fil_coeff.a1*gyro_y_pre[0].AXIS_X + gyro_fil_coeff.a2*gyro_y_pre[1].AXIS_X;
-    gyro_fil.AXIS_Y = gyro_fil_coeff.b0*gyro.AXIS_Y + gyro_fil_coeff.b1*gyro_x_pre[0].AXIS_Y + gyro_fil_coeff.b2*gyro_x_pre[1].AXIS_Y
-                                                    + gyro_fil_coeff.a1*gyro_y_pre[0].AXIS_Y + gyro_fil_coeff.a2*gyro_y_pre[1].AXIS_Y;
-    gyro_fil.AXIS_Z = gyro_fil_coeff.b0*gyro.AXIS_Z + gyro_fil_coeff.b1*gyro_x_pre[0].AXIS_Z + gyro_fil_coeff.b2*gyro_x_pre[1].AXIS_Z
-                                                    + gyro_fil_coeff.a1*gyro_y_pre[0].AXIS_Z + gyro_fil_coeff.a2*gyro_y_pre[1].AXIS_Z;
-    // Shift IIR filter state
-    for(int i=1;i>0;i--)
-    {
-      gyro_x_pre[i].AXIS_X = gyro_x_pre[i-1].AXIS_X;
-      gyro_x_pre[i].AXIS_Y = gyro_x_pre[i-1].AXIS_Y;
-      gyro_x_pre[i].AXIS_Z = gyro_x_pre[i-1].AXIS_Z;
-      gyro_y_pre[i].AXIS_X = gyro_y_pre[i-1].AXIS_X;
-      gyro_y_pre[i].AXIS_Y = gyro_y_pre[i-1].AXIS_Y;
-      gyro_y_pre[i].AXIS_Z = gyro_y_pre[i-1].AXIS_Z;
-    }
-    gyro_x_pre[0].AXIS_X = gyro.AXIS_X;
-    gyro_x_pre[0].AXIS_Y = gyro.AXIS_Y;
-    gyro_x_pre[0].AXIS_Z = gyro.AXIS_Z;
-    gyro_y_pre[0].AXIS_X = gyro_fil.AXIS_X;
-    gyro_y_pre[0].AXIS_Y = gyro_fil.AXIS_Y;
-    gyro_y_pre[0].AXIS_Z = gyro_fil.AXIS_Z;
+   // Save filtered data to acc_FIFO
+   acc_FIFO[tim9_cnt2-1].AXIS_X = acc.AXIS_X;
+   acc_FIFO[tim9_cnt2-1].AXIS_Y = acc.AXIS_Y;
+   acc_FIFO[tim9_cnt2-1].AXIS_Z = acc.AXIS_Z;
 
-    //  Save filtered data to gyro_FIFO
-    gyro_FIFO[tim9_cnt2-1].AXIS_X = gyro_fil.AXIS_X;
-    gyro_FIFO[tim9_cnt2-1].AXIS_Y = gyro_fil.AXIS_Y;
-    gyro_FIFO[tim9_cnt2-1].AXIS_Z = gyro_fil.AXIS_Z;
-    
+   // IIR Filtering on gyro
+   gyro_fil.AXIS_X = gyro_fil_coeff.b0*gyro.AXIS_X + gyro_fil_coeff.b1*gyro_x_pre[0].AXIS_X + gyro_fil_coeff.b2*gyro_x_pre[1].AXIS_X
+                               + gyro_fil_coeff.a1*gyro_y_pre[0].AXIS_X + gyro_fil_coeff.a2*gyro_y_pre[1].AXIS_X;
+   gyro_fil.AXIS_Y = gyro_fil_coeff.b0*gyro.AXIS_Y + gyro_fil_coeff.b1*gyro_x_pre[0].AXIS_Y + gyro_fil_coeff.b2*gyro_x_pre[1].AXIS_Y
+                               + gyro_fil_coeff.a1*gyro_y_pre[0].AXIS_Y + gyro_fil_coeff.a2*gyro_y_pre[1].AXIS_Y;
+   gyro_fil.AXIS_Z = gyro_fil_coeff.b0*gyro.AXIS_Z + gyro_fil_coeff.b1*gyro_x_pre[0].AXIS_Z + gyro_fil_coeff.b2*gyro_x_pre[1].AXIS_Z
+                               + gyro_fil_coeff.a1*gyro_y_pre[0].AXIS_Z + gyro_fil_coeff.a2*gyro_y_pre[1].AXIS_Z;
+   // Shift IIR filter state
+   for(int i=1;i>0;i--)
+   {
+   gyro_x_pre[i].AXIS_X = gyro_x_pre[i-1].AXIS_X;
+   gyro_x_pre[i].AXIS_Y = gyro_x_pre[i-1].AXIS_Y;
+   gyro_x_pre[i].AXIS_Z = gyro_x_pre[i-1].AXIS_Z;
+   gyro_y_pre[i].AXIS_X = gyro_y_pre[i-1].AXIS_X;
+   gyro_y_pre[i].AXIS_Y = gyro_y_pre[i-1].AXIS_Y;
+   gyro_y_pre[i].AXIS_Z = gyro_y_pre[i-1].AXIS_Z;
+   }
+   gyro_x_pre[0].AXIS_X = gyro.AXIS_X;
+   gyro_x_pre[0].AXIS_Y = gyro.AXIS_Y;
+   gyro_x_pre[0].AXIS_Z = gyro.AXIS_Z;
+   gyro_y_pre[0].AXIS_X = gyro_fil.AXIS_X;
+   gyro_y_pre[0].AXIS_Y = gyro_fil.AXIS_Y;
+   gyro_y_pre[0].AXIS_Z = gyro_fil.AXIS_Z;
 
-    if(tim9_cnt2 == FIFO_Order)
-    {
-      tim9_cnt2 = 0;
-      tim9_event_flag = 1;
-      for(int i=0;i<FIFO_Order;i++)
-      {
-        acc_ahrs_FIFO[i].AXIS_X = acc_FIFO[i].AXIS_X;
-        acc_ahrs_FIFO[i].AXIS_Y = acc_FIFO[i].AXIS_Y;
-        acc_ahrs_FIFO[i].AXIS_Z = acc_FIFO[i].AXIS_Z;
-        gyro_ahrs_FIFO[i].AXIS_X = gyro_FIFO[i].AXIS_X;
-        gyro_ahrs_FIFO[i].AXIS_Y = gyro_FIFO[i].AXIS_Y;
-        gyro_ahrs_FIFO[i].AXIS_Z = gyro_FIFO[i].AXIS_Z;
-      }
-    }
+   //  Save filtered data to gyro_FIFO
+   gyro_FIFO[tim9_cnt2-1].AXIS_X = gyro_fil.AXIS_X;
+   gyro_FIFO[tim9_cnt2-1].AXIS_Y = gyro_fil.AXIS_Y;
+   gyro_FIFO[tim9_cnt2-1].AXIS_Z = gyro_fil.AXIS_Z;
 
-      
-      gyro_rad.gx = ((float)gyro_fil.AXIS_X)*((float)COE_MDPS_TO_RADPS);  
-      gyro_rad.gy = ((float)gyro_fil.AXIS_Y)*((float)COE_MDPS_TO_RADPS);  
-      gyro_rad.gz = ((float)gyro_fil.AXIS_Z)*((float)COE_MDPS_TO_RADPS);  
 
-      euler_ahrs.thz += gyro_rad.gz*PID_SAMPLING_TIME;
+   if(tim9_cnt2 == FIFO_Order)
+   {
+   tim9_cnt2 = 0;
+   tim9_event_flag = 1;
+   for(int i=0;i<FIFO_Order;i++)
+   {
+   acc_ahrs_FIFO[i].AXIS_X = acc_FIFO[i].AXIS_X;
+   acc_ahrs_FIFO[i].AXIS_Y = acc_FIFO[i].AXIS_Y;
+   acc_ahrs_FIFO[i].AXIS_Z = acc_FIFO[i].AXIS_Z;
+   gyro_ahrs_FIFO[i].AXIS_X = gyro_FIFO[i].AXIS_X;
+   gyro_ahrs_FIFO[i].AXIS_Y = gyro_FIFO[i].AXIS_Y;
+   gyro_ahrs_FIFO[i].AXIS_Z = gyro_FIFO[i].AXIS_Z;
+   }
+   }
 
-      if(gTHR<MIN_THR)
-      {
-        euler_rc.thz = 0;
-        euler_ahrs.thz = 0;
-      }
 
-      if (rc_connection_flag && rc_enable_motor)
-      {   // Do PID Control
-        FlightControlPID_innerLoop(&euler_rc_fil, &gyro_rad, &ahrs, &pid, &motor_pwm);
-      }
-      else
-      {
-        // set motor output zero
-        set_motor_pwm_zero(&motor_pwm);
-      }
+   gyro_rad.gx = ((float)gyro_fil.AXIS_X)*((float)COE_MDPS_TO_RADPS);  
+   gyro_rad.gy = ((float)gyro_fil.AXIS_Y)*((float)COE_MDPS_TO_RADPS);  
+   gyro_rad.gz = ((float)gyro_fil.AXIS_Z)*((float)COE_MDPS_TO_RADPS);  
 
-      if(gTHR<MIN_THR)
-      {
-        set_motor_pwm_zero(&motor_pwm);
-      }
+   euler_ahrs.thz += gyro_rad.gz*PID_SAMPLING_TIME;
 
-      set_motor_pwm(&motor_pwm);      /* To comment if want to debug remocon calibration switching off the motors */
-  }
+   if(gTHR<MIN_THR)
+   {
+   euler_rc.thz = 0;
+   euler_ahrs.thz = 0;
+   }
+
+   if (rc_connection_flag && rc_enable_motor)
+   {   // Do PID Control
+   FlightControlPID_innerLoop(&euler_rc_fil, &gyro_rad, &ahrs, &pid, &motor_pwm);
+   }
+   else
+   {
+   // set motor output zero
+   set_motor_pwm_zero(&motor_pwm);
+   }
+
+   if(gTHR<MIN_THR)
+   {
+   set_motor_pwm_zero(&motor_pwm);
+   }
+
+   set_motor_pwm(&motor_pwm);      /* To comment if want to debug remocon calibration switching off the motors */
+   }
 }
 
 
@@ -1047,33 +1009,33 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 */
 static void initializeAllSensors( void )
 {
-  if (BSP_ACCELERO_Init( LSM6DSL_X_0, &LSM6DSL_X_0_handle ) != COMPONENT_OK)
-  {
-    while(1);
-  }
-  
-  if (BSP_GYRO_Init( LSM6DSL_G_0, &LSM6DSL_G_0_handle ) != COMPONENT_OK)
-  {
-    while(1);
-  }
-  
-  if (BSP_MAGNETO_Init( LIS2MDL_M_0, &LIS2MDL_M_0_handle ) != COMPONENT_OK)
-  {
-    while(1);
-  }
-  
-  
-  if (BSP_PRESSURE_Init( LPS22HB_P_0, &LPS22HB_P_0_handle ) != COMPONENT_OK)
-  {
-    while(1);
-  }
+   if (BSP_ACCELERO_Init( LSM6DSL_X_0, &LSM6DSL_X_0_handle) != COMPONENT_OK)
+   {
+      while(1);
+   }
 
-  if (BSP_TEMPERATURE_Init( LPS22HB_T_0, &LPS22HB_T_0_handle ) != COMPONENT_OK)
-  {
-    while(1);
-  }
- 
-  
+   if (BSP_GYRO_Init( LSM6DSL_G_0, &LSM6DSL_G_0_handle) != COMPONENT_OK)
+   {
+      while(1);
+   }
+
+   if (BSP_MAGNETO_Init( LIS2MDL_M_0, &LIS2MDL_M_0_handle) != COMPONENT_OK)
+   {
+      while(1);
+   }
+
+
+   if (BSP_PRESSURE_Init( LPS22HB_P_0, &LPS22HB_P_0_handle) != COMPONENT_OK)
+   {
+      while(1);
+   }
+
+   if (BSP_TEMPERATURE_Init( LPS22HB_T_0, &LPS22HB_T_0_handle) != COMPONENT_OK)
+   {
+      while(1);
+   }
+
+
 }
 
 /**
@@ -1083,23 +1045,23 @@ static void initializeAllSensors( void )
 */
 void enableAllSensors( void )
 {
-  BSP_ACCELERO_Sensor_Enable( LSM6DSL_X_0_handle );
-  PRINTF("LSM6DSL MEMS Accelerometer initialized and enabled\n");
-  BSP_GYRO_Sensor_Enable( LSM6DSL_G_0_handle );
-  PRINTF("LSM6DSL MEMS Gyroscope initialized and enabled\n");
-  BSP_MAGNETO_Sensor_Enable( LIS2MDL_M_0_handle );
-  PRINTF("LIS2MDL Magnetometer initialized and enabled\n");
-  BSP_PRESSURE_Sensor_Enable( LPS22HB_P_0_handle );
-  PRINTF("LPS22HB Pressure sensor initialized and enabled\n");
-  BSP_TEMPERATURE_Sensor_Enable( LPS22HB_T_0_handle );
-  PRINTF("LPS22HB Temperature sensor initialized and enabled\n");
+   BSP_ACCELERO_Sensor_Enable( LSM6DSL_X_0_handle );
+   PRINTF("LSM6DSL MEMS Accelerometer initialized and enabled\n");
+   BSP_GYRO_Sensor_Enable( LSM6DSL_G_0_handle );
+   PRINTF("LSM6DSL MEMS Gyroscope initialized and enabled\n");
+   BSP_MAGNETO_Sensor_Enable( LIS2MDL_M_0_handle );
+   PRINTF("LIS2MDL Magnetometer initialized and enabled\n");
+   BSP_PRESSURE_Sensor_Enable( LPS22HB_P_0_handle );
+   PRINTF("LPS22HB Pressure sensor initialized and enabled\n");
+   BSP_TEMPERATURE_Sensor_Enable( LPS22HB_T_0_handle );
+   PRINTF("LPS22HB Temperature sensor initialized and enabled\n");
 }
 
 
 
 void BlueNRG_Init(void)
 {
-  
+
   int ret = 1;
   uint8_t  hwVersion=0;
   uint16_t fwVersion=0;
@@ -1345,12 +1307,3 @@ void assert_failed(uint8_t* file, uint32_t line)
 
 #endif
 
-/**
-  * @}
-  */
-
-/**
-  * @}
-*/
-
-/************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/
