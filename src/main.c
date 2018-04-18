@@ -208,10 +208,10 @@ int32_t BytesToWrite;
 // ========================================================================================
 int main(void)
 {
-   /* USER CODE BEGIN 1 */
-   int16_t pid_interval, i;
-
+   int16_t pid_interval                                  = 0;
+   int16_t i                                             = 0;
    int mytimcnt                                          = 0;
+
    acc_fil.AXIS_X                                        = 0;
    acc_fil.AXIS_Y                                        = 0;
    acc_fil.AXIS_Z                                        = 0;
@@ -262,17 +262,14 @@ int main(void)
       euler_rc_x_pre[i].thz                              = 0;
    }
 
-   /* USER CODE END 1 */
-
-   /* MCU Configuration----------------------------------------------------------*/
-
-   /* Reset of all peripherals, Initializes the Flash interface and the Systick. */
+   // MCU Configuration
+   // Reset of all peripherals, Initializes the Flash interface and the Systick.
    HAL_Init();
 
-   /* Configure the system clock */
+   // Configure the system clock
    SystemClock_Config();
 
-   /* Initialize all configured peripherals */
+   // Initialize all configured peripherals
    MX_GPIO_Init();
    MX_ADC1_Init();  
    MX_TIM2_Init();
@@ -281,30 +278,28 @@ int main(void)
    MX_USART1_UART_Init();
    //MX_USB_DEVICE_Init();
 
-   /* USER CODE BEGIN 2 */
-
    PRINTF("STEVAL-FCU001V1 FW rev.1.0 - Sep 2017\n\n");
 
-   //  Initialize Onboard LED
+   // Initialize Onboard LED
    BSP_LED_Init(LED1);
    BSP_LED_Init(LED2);
    BSP_LED_Off(LED1);
    BSP_LED_Off(LED2);
   
-   /* Configure and disable all the Chip Select pins for sensors on SPI*/
+   // Configure and disable all the Chip Select pins for sensors on SPI
    Sensor_IO_SPI_CS_Init_All();
 
-   /* Initialize and Enable the available sensors on SPI*/
+   // Initialize and Enable the available sensors on SPI
    initializeAllSensors();
    enableAllSensors();
 
-   /* Initialize settings for 6-axis MEMS Accelerometer */
-   /* ODR 6.6kHz */
-   /* FS 4g */
-   /* Analog Filter Bandwith @ 1500Hz */
-   /* ODR/2 low pass filtered sent to composite filter */
-   /* Low pass filter enabled @ ODR/400 */
-   //BSP_ACCELERO_Set_ODR_Value(LSM6DSL_X_0_handle, 1660.0);                                    /* ODR 1.6kHz */
+   // Initialize settings for 6-axis MEMS Accelerometer
+   // ODR 6.6kHz
+   // FS 4g
+   // Analog Filter Bandwith @ 1500Hz
+   // ODR/2 low pass filtered sent to composite filter
+   // Low pass filter enabled @ ODR/400
+   // BSP_ACCELERO_Set_ODR_Value(LSM6DSL_X_0_handle, 1660.0);                                   // ODR 1.6kHz
    BSP_ACCELERO_Set_ODR_Value(LSM6DSL_X_0_handle, 6660.0);                                      /* ODR 6.6kHz */
    BSP_ACCELERO_Set_FS(LSM6DSL_X_0_handle, FS_MID);                                             /* FS 4g */
 
