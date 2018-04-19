@@ -38,48 +38,17 @@
 
 #include "steval_fcu001_v1_accelero.h"
 
+static DrvContextTypeDef ACCELERO_SensorHandle[ACCELERO_SENSORS_MAX_NUM];
+static ACCELERO_Data_t ACCELERO_Data[ACCELERO_SENSORS_MAX_NUM];                     // Accelerometer - all.
+static LSM6DSL_X_Data_t LSM6DSL_X_0_Data;                                           // Accelerometer - sensor 0.
+static LSM303AGR_X_Data_t LSM303AGR_X_0_Data;                                       // Accelerometer - sensor 1.
+
+// @addtogroup STEVAL_FCU001_V1_ACCELERO_Private_FunctionPrototypes Private function prototypes
+static DrvStatusTypeDef BSP_LSM6DSL_ACCELERO_Init(void **handle);
+static DrvStatusTypeDef BSP_LSM303AGR_ACCELERO_Init(void **handle);
 
 
-/** @addtogroup BSP BSP
- * @{
- */
-
-/** @addtogroup STEVAL_FCU001_V1 STEVAL_FCU001_V1
- * @{
- */
-
-/** @addtogroup STEVAL_FCU001_V1_ACCELERO Accelerometer
- * @{
- */
-
-/** @addtogroup STEVAL_FCU001_V1_ACCELERO_Private_Variables Private variables
- * @{
- */
-
-static DrvContextTypeDef ACCELERO_SensorHandle[ ACCELERO_SENSORS_MAX_NUM ];
-static ACCELERO_Data_t ACCELERO_Data[ ACCELERO_SENSORS_MAX_NUM ]; // Accelerometer - all.
-static LSM6DSL_X_Data_t LSM6DSL_X_0_Data; // Accelerometer - sensor 0.
-static LSM303AGR_X_Data_t LSM303AGR_X_0_Data; // Accelerometer - sensor 1.
-
-/**
- * @}
- */
-
-/** @addtogroup STEVAL_FCU001_V1_ACCELERO_Private_FunctionPrototypes Private function prototypes
- * @{
- */
-
-static DrvStatusTypeDef BSP_LSM6DSL_ACCELERO_Init( void **handle );
-static DrvStatusTypeDef BSP_LSM303AGR_ACCELERO_Init( void **handle );
-
-/**
- * @}
- */
-
-
-/** @addtogroup STEVAL_FCU001_V1_ACCELERO_Public_Functions Public functions
- * @{
- */
+// @addtogroup STEVAL_FCU001_V1_ACCELERO_Public_Functions Public functions
 
 /**
  * @brief Initialize an accelerometer sensor
@@ -88,120 +57,120 @@ static DrvStatusTypeDef BSP_LSM303AGR_ACCELERO_Init( void **handle );
  * @retval COMPONENT_OK in case of success
  * @retval COMPONENT_ERROR in case of failure
  */
-DrvStatusTypeDef BSP_ACCELERO_Init( ACCELERO_ID_t id, void **handle )
+DrvStatusTypeDef BSP_ACCELERO_Init(ACCELERO_ID_t id, void **handle)
 {
-
-  *handle = NULL;
-
-  switch(id)
-  {
-    case ACCELERO_SENSORS_AUTO:
-    default:
-    {
-      /* Try to init the LSM6DSL accelerometer before */
-      if(BSP_LSM6DSL_ACCELERO_Init(handle) == COMPONENT_ERROR )
+   *handle                                               = NULL;
+   switch(id)
+   {
+      case ACCELERO_SENSORS_AUTO :
+      default :
       {
-        /* Try to init the LSM303AGR accelerometer */
-        if( BSP_LSM303AGR_ACCELERO_Init(handle) == COMPONENT_ERROR )
-        {
-          return COMPONENT_ERROR;
-        }
+         // Try to init the LSM6DSL accelerometer before
+         if (BSP_LSM6DSL_ACCELERO_Init(handle) == COMPONENT_ERROR)
+         {
+            // Try to init the LSM303AGR accelerometer
+            if (BSP_LSM303AGR_ACCELERO_Init(handle) == COMPONENT_ERROR)
+            {
+               return COMPONENT_ERROR;
+            }
+         }
+         break;
       }
-      break;
-    }
-    case LSM6DSL_X_0:
-    {
-      if( BSP_LSM6DSL_ACCELERO_Init(handle) == COMPONENT_ERROR )
-      {
-        return COMPONENT_ERROR;
-      }
-      break;
-    }
-    case LSM303AGR_X_0:
-    {
-      if( BSP_LSM303AGR_ACCELERO_Init(handle) == COMPONENT_ERROR )
-      {
-        return COMPONENT_ERROR;
-      }
-      break;
-    }
-  }
 
-  return COMPONENT_OK;
+      case LSM6DSL_X_0 :
+      {
+         if (BSP_LSM6DSL_ACCELERO_Init(handle) == COMPONENT_ERROR)
+         {
+            return COMPONENT_ERROR;
+         }
+         break;
+      }
+
+      case LSM303AGR_X_0 :
+      {
+         if (BSP_LSM303AGR_ACCELERO_Init(handle) == COMPONENT_ERROR)
+         {
+            return COMPONENT_ERROR;
+         }
+         break;
+      }
+   }
+
+   return COMPONENT_OK;
 }
 
-static DrvStatusTypeDef BSP_LSM6DSL_ACCELERO_Init( void **handle )
+static DrvStatusTypeDef BSP_LSM6DSL_ACCELERO_Init(void **handle)
 {
-  ACCELERO_Drv_t *driver = NULL;
-  uint8_t data = 0x0C;
-    
-  if(ACCELERO_SensorHandle[ LSM6DSL_X_0 ].isInitialized == 1)
-  {
-    /* We have reached the max num of instance for this component */
-    return COMPONENT_ERROR;
-  }
-  
-  if ( Sensor_IO_SPI_Init() == COMPONENT_ERROR )
-  {
-    return COMPONENT_ERROR;
-  }
-  
-  /* Setup sensor handle. */
-  ACCELERO_SensorHandle[ LSM6DSL_X_0 ].who_am_i      = LSM6DSL_ACC_GYRO_WHO_AM_I;
-  ACCELERO_SensorHandle[ LSM6DSL_X_0 ].ifType        = 1; // SPI interface
-  ACCELERO_SensorHandle[ LSM6DSL_X_0 ].address       = LSM6DSL_ACC_GYRO_I2C_ADDRESS_HIGH;
-  ACCELERO_SensorHandle[ LSM6DSL_X_0 ].spiDevice     = LSM6DSL;
-  ACCELERO_SensorHandle[ LSM6DSL_X_0 ].instance      = LSM6DSL_X_0;
-  ACCELERO_SensorHandle[ LSM6DSL_X_0 ].isInitialized = 0;
-  ACCELERO_SensorHandle[ LSM6DSL_X_0 ].isEnabled     = 0;
-  ACCELERO_SensorHandle[ LSM6DSL_X_0 ].isCombo       = 1;
-  ACCELERO_SensorHandle[ LSM6DSL_X_0 ].pData         = ( void * )&ACCELERO_Data[ LSM6DSL_X_0 ];
-  ACCELERO_SensorHandle[ LSM6DSL_X_0 ].pVTable       = ( void * )&LSM6DSL_X_Drv;
-  ACCELERO_SensorHandle[ LSM6DSL_X_0 ].pExtVTable    = ( void * )&LSM6DSL_X_ExtDrv;
- 
-  LSM6DSL_X_0_Data.comboData = &LSM6DSL_Combo_Data[0];
-  ACCELERO_Data[ LSM6DSL_X_0 ].pComponentData = ( void * )&LSM6DSL_X_0_Data;
-  ACCELERO_Data[ LSM6DSL_X_0 ].pExtData       = 0;
-  
-  *handle = (void *)&ACCELERO_SensorHandle[ LSM6DSL_X_0 ];
-  
-  Sensor_IO_SPI_CS_Init(*handle);
-  
-  if(LSM6DSL_Combo_Data[0].isGyroInitialized == 0)
-  { 
-    // SPI Serial Interface Mode selection --> 3Wires
-    if( Sensor_IO_Write(*handle, LSM6DSL_ACC_GYRO_CTRL3_C, &data, 1) )
-    {
+   ACCELERO_Drv_t *driver                                = NULL;
+   uint8_t data                                          = 0x0C;
+
+   if (ACCELERO_SensorHandle[LSM6DSL_X_0].isInitialized == 1)
+   {
+      /* We have reached the max num of instance for this component */
       return COMPONENT_ERROR;
-    }
-  }
+   }
+
+   if (Sensor_IO_SPI_Init() == COMPONENT_ERROR)
+   {
+      return COMPONENT_ERROR;
+   }
+  
+   /* Setup sensor handle. */
+   ACCELERO_SensorHandle[LSM6DSL_X_0].who_am_i           = LSM6DSL_ACC_GYRO_WHO_AM_I;
+   ACCELERO_SensorHandle[LSM6DSL_X_0].ifType             = 1;                                // SPI interface
+   ACCELERO_SensorHandle[LSM6DSL_X_0].address            = LSM6DSL_ACC_GYRO_I2C_ADDRESS_HIGH;
+   ACCELERO_SensorHandle[LSM6DSL_X_0].spiDevice          = LSM6DSL;
+   ACCELERO_SensorHandle[LSM6DSL_X_0].instance           = LSM6DSL_X_0;
+   ACCELERO_SensorHandle[LSM6DSL_X_0].isInitialized      = 0;
+   ACCELERO_SensorHandle[LSM6DSL_X_0].isEnabled          = 0;
+   ACCELERO_SensorHandle[LSM6DSL_X_0].isCombo            = 1;
+   ACCELERO_SensorHandle[LSM6DSL_X_0].pData              = (void *) &ACCELERO_Data[LSM6DSL_X_0];
+   ACCELERO_SensorHandle[LSM6DSL_X_0].pVTable            = (void *) &LSM6DSL_X_Drv;
+   ACCELERO_SensorHandle[LSM6DSL_X_0].pExtVTable         = (void *) &LSM6DSL_X_ExtDrv;
+
+   LSM6DSL_X_0_Data.comboData                            = &LSM6DSL_Combo_Data[0];
+   ACCELERO_Data[LSM6DSL_X_0].pComponentData             = (void *) &LSM6DSL_X_0_Data;
+   ACCELERO_Data[LSM6DSL_X_0].pExtData                   = 0;
+
+   *handle                                               = (void *) &ACCELERO_SensorHandle[LSM6DSL_X_0];
+
+   Sensor_IO_SPI_CS_Init(*handle);
+  
+   if (LSM6DSL_Combo_Data[0].isGyroInitialized == 0)
+   { 
+      // SPI Serial Interface Mode selection --> 3Wires
+      if (Sensor_IO_Write(*handle, LSM6DSL_ACC_GYRO_CTRL3_C, &data, 1))
+      {
+         return COMPONENT_ERROR;
+      }
+   }
  
-  driver = ( ACCELERO_Drv_t * )((DrvContextTypeDef *)(*handle))->pVTable;
-  
-  if ( driver->Init == NULL )
-  {
-    memset((*handle), 0, sizeof(DrvContextTypeDef));
-    *handle = NULL;
-    return COMPONENT_ERROR;
-  }
-  
-  if ( driver->Init( (DrvContextTypeDef *)(*handle) ) == COMPONENT_ERROR )
-  {
-    memset((*handle), 0, sizeof(DrvContextTypeDef));
-    *handle = NULL;
-    return COMPONENT_ERROR;
-  }
-  
-  /* Disable I2C interface */
-  if ( LSM6DSL_ACC_GYRO_W_I2C_DISABLE( *handle, LSM6DSL_ACC_GYRO_I2C_DISABLE_SPI_ONLY ) == MEMS_ERROR )
-  {
-    return COMPONENT_ERROR;
-  }
-  
-  /* Configure interrupt lines for LSM6DSL */
-  LSM6DSL_Sensor_IO_ITConfig();
-  
-  return COMPONENT_OK;
+   driver                                                = (ACCELERO_Drv_t *)((DrvContextTypeDef *)(*handle))->pVTable;
+
+   if (driver->Init == NULL)
+   {
+      memset((*handle), 0, sizeof(DrvContextTypeDef));
+      *handle                                            = NULL;
+      return COMPONENT_ERROR;
+   }
+
+   if (driver->Init((DrvContextTypeDef *)(*handle) ) == COMPONENT_ERROR)
+   {
+      memset((*handle), 0, sizeof(DrvContextTypeDef));
+      *handle                                            = NULL;
+      return COMPONENT_ERROR;
+   }
+
+   // Disable I2C interface
+   if (LSM6DSL_ACC_GYRO_W_I2C_DISABLE(*handle, LSM6DSL_ACC_GYRO_I2C_DISABLE_SPI_ONLY) == MEMS_ERROR)
+   {
+      return COMPONENT_ERROR;
+   }
+
+   // Configure interrupt lines for LSM6DSL
+   LSM6DSL_Sensor_IO_ITConfig();
+
+   return COMPONENT_OK;
 }
 
 
@@ -221,38 +190,36 @@ static DrvStatusTypeDef BSP_LSM303AGR_ACCELERO_Init( void **handle )
   }
 
   /* Setup sensor handle. */
-  ACCELERO_SensorHandle[ LSM303AGR_X_0 ].who_am_i      = LSM303AGR_ACC_WHO_AM_I;
-  ACCELERO_SensorHandle[ LSM303AGR_X_0 ].address       = LSM303AGR_ACC_I2C_ADDRESS;
-  ACCELERO_SensorHandle[ LSM303AGR_X_0 ].instance      = LSM303AGR_X_0;
-  ACCELERO_SensorHandle[ LSM303AGR_X_0 ].isInitialized = 0;
-  ACCELERO_SensorHandle[ LSM303AGR_X_0 ].isEnabled     = 0;
-  ACCELERO_SensorHandle[ LSM303AGR_X_0 ].isCombo       = 1;
-  ACCELERO_SensorHandle[ LSM303AGR_X_0 ].pData         = ( void * )&ACCELERO_Data[ LSM303AGR_X_0 ];
-  ACCELERO_SensorHandle[ LSM303AGR_X_0 ].pVTable       = ( void * )&LSM303AGR_X_Drv;
-  ACCELERO_SensorHandle[ LSM303AGR_X_0 ].pExtVTable    = 0;
+  ACCELERO_SensorHandle[LSM303AGR_X_0].who_am_i          = LSM303AGR_ACC_WHO_AM_I;
+  ACCELERO_SensorHandle[LSM303AGR_X_0].address           = LSM303AGR_ACC_I2C_ADDRESS;
+  ACCELERO_SensorHandle[LSM303AGR_X_0].instance          = LSM303AGR_X_0;
+  ACCELERO_SensorHandle[LSM303AGR_X_0].isInitialized     = 0;
+  ACCELERO_SensorHandle[LSM303AGR_X_0].isEnabled         = 0;
+  ACCELERO_SensorHandle[LSM303AGR_X_0].isCombo           = 1;
+  ACCELERO_SensorHandle[LSM303AGR_X_0].pData             = (void *) &ACCELERO_Data[LSM303AGR_X_0];
+  ACCELERO_SensorHandle[LSM303AGR_X_0].pVTable           = (void *) &LSM303AGR_X_Drv;
+  ACCELERO_SensorHandle[LSM303AGR_X_0].pExtVTable        = 0;
 
-  ACCELERO_Data[ LSM303AGR_X_0 ].pComponentData = ( void * )&LSM303AGR_X_0_Data;
-  ACCELERO_Data[ LSM303AGR_X_0 ].pExtData       = 0;
+  ACCELERO_Data[ LSM303AGR_X_0 ].pComponentData          = (void *) &LSM303AGR_X_0_Data;
+  ACCELERO_Data[ LSM303AGR_X_0 ].pExtData                = 0;
 
-  *handle = (void *)&ACCELERO_SensorHandle[ LSM303AGR_X_0 ];
+  *handle                                                = (void *) &ACCELERO_SensorHandle[LSM303AGR_X_0];
+   driver                                                = (ACCELERO_Drv_t *)((DrvContextTypeDef *)(*handle))->pVTable;
 
-  driver = ( ACCELERO_Drv_t * )((DrvContextTypeDef *)(*handle))->pVTable;
+   if (driver->Init == NULL)
+   {
+      memset((*handle), 0, sizeof(DrvContextTypeDef));
+      *handle                                            = NULL;
+      return COMPONENT_ERROR;
+   }
 
-  if ( driver->Init == NULL )
-  {
-    memset((*handle), 0, sizeof(DrvContextTypeDef));
-    *handle = NULL;
-    return COMPONENT_ERROR;
-  }
-
-  if ( driver->Init( (DrvContextTypeDef *)(*handle) ) == COMPONENT_ERROR )
-  {
-    memset((*handle), 0, sizeof(DrvContextTypeDef));
-    *handle = NULL;
-    return COMPONENT_ERROR;
-  }
-
-  return COMPONENT_OK;
+   if (driver->Init((DrvContextTypeDef *)(*handle)) == COMPONENT_ERROR )
+   {
+      memset((*handle), 0, sizeof(DrvContextTypeDef));
+      *handle                                            = NULL;
+      return COMPONENT_ERROR;
+   }
+   return COMPONENT_OK;
 }
 
 
@@ -262,34 +229,32 @@ static DrvStatusTypeDef BSP_LSM303AGR_ACCELERO_Init( void **handle )
  * @retval COMPONENT_OK in case of success
  * @retval COMPONENT_ERROR in case of failure
  */
-DrvStatusTypeDef BSP_ACCELERO_DeInit( void **handle )
+DrvStatusTypeDef BSP_ACCELERO_DeInit(void **handle)
 {
+   DrvContextTypeDef *ctx                                = (DrvContextTypeDef *)(*handle);
+   ACCELERO_Drv_t *driver                                = NULL;
 
-  DrvContextTypeDef *ctx = (DrvContextTypeDef *)(*handle);
-  ACCELERO_Drv_t *driver = NULL;
+   if (ctx == NULL)
+   {
+      return COMPONENT_ERROR;
+   }
 
-  if(ctx == NULL)
-  {
-    return COMPONENT_ERROR;
-  }
+   driver                                                = (ACCELERO_Drv_t *) ctx->pVTable;
 
-  driver = ( ACCELERO_Drv_t * )ctx->pVTable;
+   if (driver->DeInit == NULL)
+   {
+      return COMPONENT_ERROR;
+   }
 
-  if ( driver->DeInit == NULL )
-  {
-    return COMPONENT_ERROR;
-  }
+   if (driver->DeInit(ctx) == COMPONENT_ERROR)
+   {
+      return COMPONENT_ERROR;
+   }
 
-  if ( driver->DeInit( ctx ) == COMPONENT_ERROR )
-  {
-    return COMPONENT_ERROR;
-  }
+   memset(ctx, 0, sizeof(DrvContextTypeDef));
+   *handle                                               = NULL;
 
-  memset(ctx, 0, sizeof(DrvContextTypeDef));
-
-  *handle = NULL;
-
-  return COMPONENT_OK;
+   return COMPONENT_OK;
 }
 
 
@@ -301,28 +266,27 @@ DrvStatusTypeDef BSP_ACCELERO_DeInit( void **handle )
  */
 DrvStatusTypeDef BSP_ACCELERO_Sensor_Enable( void *handle )
 {
+   DrvContextTypeDef *ctx                                = (DrvContextTypeDef *)handle;
+   ACCELERO_Drv_t *driver                                = NULL;
 
-  DrvContextTypeDef *ctx = (DrvContextTypeDef *)handle;
-  ACCELERO_Drv_t *driver = NULL;
+   if (ctx == NULL)
+   {
+      return COMPONENT_ERROR;
+   }
 
-  if(ctx == NULL)
-  {
-    return COMPONENT_ERROR;
-  }
+   driver                                                = ( ACCELERO_Drv_t * ) ctx->pVTable;
 
-  driver = ( ACCELERO_Drv_t * )ctx->pVTable;
+   if (driver->Sensor_Enable == NULL)
+   {
+      return COMPONENT_ERROR;
+   }
 
-  if ( driver->Sensor_Enable == NULL )
-  {
-    return COMPONENT_ERROR;
-  }
+   if (driver->Sensor_Enable(ctx) == COMPONENT_ERROR)
+   {
+      return COMPONENT_ERROR;
+   }
 
-  if ( driver->Sensor_Enable( ctx ) == COMPONENT_ERROR )
-  {
-    return COMPONENT_ERROR;
-  }
-
-  return COMPONENT_OK;
+   return COMPONENT_OK;
 }
 
 

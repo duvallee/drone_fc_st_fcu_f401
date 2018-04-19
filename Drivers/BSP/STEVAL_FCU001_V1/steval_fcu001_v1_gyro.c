@@ -84,32 +84,32 @@ static DrvStatusTypeDef BSP_LSM6DSL_GYRO_Init( void **handle );
  */
 DrvStatusTypeDef BSP_GYRO_Init( GYRO_ID_t id, void **handle )
 {
+   *handle                                               = NULL;
 
-  *handle = NULL;
-
-  switch(id)
-  {
-    case GYRO_SENSORS_AUTO:
-    default:
-    {
-      /* Try to init the LSM6DSL first */
-      if( BSP_LSM6DSL_GYRO_Init(handle) == COMPONENT_ERROR )
+   switch (id)
+   {
+      case GYRO_SENSORS_AUTO :
+      default :
       {
-        return COMPONENT_ERROR;
+         // Try to init the LSM6DSL first
+         if (BSP_LSM6DSL_GYRO_Init(handle) == COMPONENT_ERROR)
+         {
+            return COMPONENT_ERROR;
+         }
+         break;
       }
-      break;
-    }
-    case LSM6DSL_G_0:
-    {
-      if( BSP_LSM6DSL_GYRO_Init(handle) == COMPONENT_ERROR )
-      {
-        return COMPONENT_ERROR;
-      }
-      break;
-    }
-  }
 
-  return COMPONENT_OK;
+      case LSM6DSL_G_0 :
+      {
+         if (BSP_LSM6DSL_GYRO_Init(handle) == COMPONENT_ERROR)
+         {
+            return COMPONENT_ERROR;
+         }
+         break;
+      }
+   }
+
+   return COMPONENT_OK;
 }
 
 

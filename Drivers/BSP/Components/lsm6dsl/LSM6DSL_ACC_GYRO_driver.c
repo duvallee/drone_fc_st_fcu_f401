@@ -2452,18 +2452,22 @@ status_t LSM6DSL_ACC_GYRO_R_LPF1_SEL_G(void *handle, LSM6DSL_ACC_GYRO_LPF1_SEL_G
 *******************************************************************************/
 status_t  LSM6DSL_ACC_GYRO_W_I2C_DISABLE(void *handle, LSM6DSL_ACC_GYRO_I2C_DISABLE_t newValue)
 {
-  u8_t value;
+   u8_t value;
 
-  if( !LSM6DSL_ACC_GYRO_ReadReg(handle, LSM6DSL_ACC_GYRO_CTRL4_C, &value, 1))
-    return MEMS_ERROR;
+   if (!LSM6DSL_ACC_GYRO_ReadReg(handle, LSM6DSL_ACC_GYRO_CTRL4_C, &value, 1))
+   {
+      return MEMS_ERROR;
+   }
 
-  value &= ~LSM6DSL_ACC_GYRO_I2C_DISABLE_MASK;
-  value |= newValue;
+   value                                                 &= ~LSM6DSL_ACC_GYRO_I2C_DISABLE_MASK;
+   value                                                 |= newValue;
 
-  if( !LSM6DSL_ACC_GYRO_WriteReg(handle, LSM6DSL_ACC_GYRO_CTRL4_C, &value, 1) )
-    return MEMS_ERROR;
+   if (!LSM6DSL_ACC_GYRO_WriteReg(handle, LSM6DSL_ACC_GYRO_CTRL4_C, &value, 1))
+   {
+      return MEMS_ERROR;
+   }
 
-  return MEMS_SUCCESS;
+   return MEMS_SUCCESS;
 }
 
 /*******************************************************************************

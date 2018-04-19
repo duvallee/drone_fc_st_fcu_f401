@@ -278,7 +278,7 @@ int main(void)
    MX_USART1_UART_Init();
    //MX_USB_DEVICE_Init();
 
-   PRINTF("STEVAL-FCU001V1 FW rev.1.0 - Sep 2017\n\n");
+   PRINTF("\nSTEVAL-FCU001V1 FW rev.1.0 - Sep 2017\n\n");
 
    // Initialize Onboard LED
    BSP_LED_Init(LED1);
@@ -1009,28 +1009,28 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 */
 static void initializeAllSensors( void )
 {
-   if (BSP_ACCELERO_Init( LSM6DSL_X_0, &LSM6DSL_X_0_handle) != COMPONENT_OK)
+   if (BSP_ACCELERO_Init(LSM6DSL_X_0, &LSM6DSL_X_0_handle) != COMPONENT_OK)
    {
       while(1);
    }
 
-   if (BSP_GYRO_Init( LSM6DSL_G_0, &LSM6DSL_G_0_handle) != COMPONENT_OK)
+   if (BSP_GYRO_Init(LSM6DSL_G_0, &LSM6DSL_G_0_handle) != COMPONENT_OK)
    {
       while(1);
    }
 
-   if (BSP_MAGNETO_Init( LIS2MDL_M_0, &LIS2MDL_M_0_handle) != COMPONENT_OK)
+   if (BSP_MAGNETO_Init(LIS2MDL_M_0, &LIS2MDL_M_0_handle) != COMPONENT_OK)
    {
       while(1);
    }
 
 
-   if (BSP_PRESSURE_Init( LPS22HB_P_0, &LPS22HB_P_0_handle) != COMPONENT_OK)
+   if (BSP_PRESSURE_Init(LPS22HB_P_0, &LPS22HB_P_0_handle) != COMPONENT_OK)
    {
       while(1);
    }
 
-   if (BSP_TEMPERATURE_Init( LPS22HB_T_0, &LPS22HB_T_0_handle) != COMPONENT_OK)
+   if (BSP_TEMPERATURE_Init(LPS22HB_T_0, &LPS22HB_T_0_handle) != COMPONENT_OK)
    {
       while(1);
    }
