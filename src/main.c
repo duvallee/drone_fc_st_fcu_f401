@@ -329,39 +329,39 @@ int main(void)
    BSP_MAGNETO_Write_Reg(LIS2MDL_M_0_handle, 0x60, 0x8c);
    BSP_MAGNETO_Write_Reg(LIS2MDL_M_0_handle, 0x61, 0x02);
 
-   /* Initialize Remote control*/
+   // Initialize Remote control
    init_remote_control();
 
-   /* Initialize TIM2 for External Remocon RF receiver PWM Input*/
+   // Initialize TIM2 for External Remocon RF receiver PWM Input
    HAL_TIM_IC_Start_IT(&htim2, TIM_CHANNEL_1);
    HAL_TIM_IC_Start_IT(&htim2, TIM_CHANNEL_2);
    HAL_TIM_IC_Start_IT(&htim2, TIM_CHANNEL_3);
    HAL_TIM_IC_Start_IT(&htim2, TIM_CHANNEL_4);
 
-   /* Initialize TIM4 for Motors PWM Output*/
+   // Initialize TIM4 for Motors PWM Output
    HAL_TIM_PWM_Start(&htim4, TIM_CHANNEL_1);
    HAL_TIM_PWM_Start(&htim4, TIM_CHANNEL_2);
    HAL_TIM_PWM_Start(&htim4, TIM_CHANNEL_3);
    HAL_TIM_PWM_Start(&htim4, TIM_CHANNEL_4);
 
-   /* Initialize General purpose TIM9 50Hz*/
+   // Initialize General purpose TIM9 50Hz
    HAL_TIM_Base_Start_IT(&htim9);
 
-   /* Initialize PID and set Motor PWM to zero */
+   // Initialize PID and set Motor PWM to zero
    PIDControlInit(&pid);
    set_motor_pwm_zero(&motor_pwm);
 
-   /* Setup a timer with 1ms interval */
+   // Setup a timer with 1ms interval
    pid_interval                                          = (int16_t) (PID_SAMPLING_TIME * 1000.0f);
    SetupTimer(&tim, pid_interval);
 
-   /* Start timer */
+   // Start timer
    StartTimer(&tim);
    ch                                                    = 0;
    ch_flag                                               = 0;
 
 
-   /* BLE communication */
+   // BLE communication
    PRINTF("BLE communication initialization...\n\n");
    BlueNRG_Init();
    /* Initialize the BlueNRG Custom services */
@@ -372,10 +372,7 @@ int main(void)
    BSP_PRESSURE_Get_Press(LPS22HB_P_0_handle, &press_zero_level);                               /* Read the Pressure level when arming (0m reference) for altitude calculation */
    BSP_TEMPERATURE_Get_Temp(LPS22HB_T_0_handle, &temperature);                                  /* Read the Temperature when arming (0m reference) for altitude calculation */
 
-   /* USER CODE END 2 */
-
-   /* Infinite loop */
-   /* USER CODE BEGIN WHILE */
+   // Infinite loop
    while (1)
    {
       if (HCI_ProcessEvent)
@@ -623,7 +620,7 @@ void SystemClock_Config(void)
    HAL_NVIC_SetPriority(SysTick_IRQn, 0, 0);
 }
 
-/* ADC1 init function */
+// ADC1 init function
 void MX_ADC1_Init(void)
 {
    ADC_ChannelConfTypeDef sConfig;
@@ -1048,137 +1045,140 @@ static void initializeAllSensors( void )
 */
 void enableAllSensors( void )
 {
-   BSP_ACCELERO_Sensor_Enable( LSM6DSL_X_0_handle );
-   PRINTF("LSM6DSL MEMS Accelerometer initialized and enabled\n");
-   BSP_GYRO_Sensor_Enable( LSM6DSL_G_0_handle );
-   PRINTF("LSM6DSL MEMS Gyroscope initialized and enabled\n");
-   BSP_MAGNETO_Sensor_Enable( LIS2MDL_M_0_handle );
-   PRINTF("LIS2MDL Magnetometer initialized and enabled\n");
-   BSP_PRESSURE_Sensor_Enable( LPS22HB_P_0_handle );
-   PRINTF("LPS22HB Pressure sensor initialized and enabled\n");
-   BSP_TEMPERATURE_Sensor_Enable( LPS22HB_T_0_handle );
-   PRINTF("LPS22HB Temperature sensor initialized and enabled\n");
-}
+   BSP_ACCELERO_Sensor_Enable(LSM6DSL_X_0_handle);
+   PRINTF("LSM6DSL MEMS Accelerometer initialized and enabled \n");
 
+   BSP_GYRO_Sensor_Enable(LSM6DSL_G_0_handle);
+   PRINTF("LSM6DSL MEMS Gyroscope initialized and enabled \n");
+
+   BSP_MAGNETO_Sensor_Enable(LIS2MDL_M_0_handle);
+   PRINTF("LIS2MDL Magnetometer initialized and enabled \n");
+
+   BSP_PRESSURE_Sensor_Enable(LPS22HB_P_0_handle);
+   PRINTF("LPS22HB Pressure sensor initialized and enabled \n");
+
+   BSP_TEMPERATURE_Sensor_Enable(LPS22HB_T_0_handle);
+   PRINTF("LPS22HB Temperature sensor initialized and enabled \n");
+}
 
 
 void BlueNRG_Init(void)
 {
-
-  int ret = 1;
-  uint8_t  hwVersion=0;
-  uint16_t fwVersion=0;
+   int ret                                               = 1;
+   uint8_t hwVersion                                     = 0;
+   uint16_t fwVersion                                    = 0;
   
-  PRINTF("****** START BLE TESTS ******\r\n");
-  BNRG_SPI_Init();
+   PRINTF("****** START BLE TESTS ******\r\n");
+   BNRG_SPI_Init();
 
-  uint8_t tmp_bdaddr[6]= {MAC_BLUEMS};
-  int32_t i;
-  for(i=0;i<6;i++)
-    bdaddr[i] = tmp_bdaddr[i];
+   uint8_t tmp_bdaddr[6]                                 = {MAC_BLUEMS};
+   int32_t i;
+   
+   for (i = 0; i < 6; i++)
+   {
+      bdaddr[i]                                          = tmp_bdaddr[i];
+   }
   
-  /* Initialize the BlueNRG HCI */
-  HCI_Init();
+   // Initialize the BlueNRG HCI
+   HCI_Init();
     
- /* Reset BlueNRG hardware */
-  BlueNRG_RST();
+   // Reset BlueNRG hardware
+   BlueNRG_RST();
   
-  /* get the BlueNRG HW and FW versions */
-  PRINTF("\r\nReading BlueNRG version ...\r\n");
-  if (getBlueNRGVersion(&hwVersion, &fwVersion)== BLE_STATUS_SUCCESS)
-  {
-    
-    /* 
-     * Reset BlueNRG again otherwise it will fail.
-     */
-    BlueNRG_RST();
-    
-    PRINTF("Setting Pubblic Address...\r\n");
-    ret = aci_hal_write_config_data(CONFIG_DATA_PUBADDR_OFFSET,
-                                    CONFIG_DATA_PUBADDR_LEN,
-                                    bdaddr);
-    if(ret){
-      testStatus = COMPONENT_ERROR;
-      PRINTF("\r\nSetting Pubblic BD_ADDR failed *****\r\n");
-      goto fail;
-    }
-    
-    PRINTF("GATT Initializzation...\r\n");
-    ret = aci_gatt_init();    
-    if(ret){
-      testStatus = COMPONENT_ERROR;
-      PRINTF("\r\nGATT_Init failed ****\r\n");
-      goto fail;
-    }
+   // get the BlueNRG HW and FW versions
+   PRINTF("\r\nReading BlueNRG version ...\r\n");
 
-//    ret = aci_gatt_update_char_value(service_handle, dev_name_char_handle, 0,
-//                                     7/*strlen(BoardName)*/, (uint8_t *)BoardName);
-//  
-//    if(ret){
-//       PRINTF("\r\naci_gatt_update_char_value failed\r\n");
-//      while(1);
-//    }
-    
-    /* Set the GAP INIT like X-NUCLEO-IDB05A1 eval board  since using same SPBTLE_RF module*/
-    ret = aci_gap_init_IDB05A1(GAP_PERIPHERAL_ROLE_IDB05A1, 0, 0x07, &service_handle, &dev_name_char_handle, &appearance_char_handle);
-  
-    if(ret != BLE_STATUS_SUCCESS){
-      PRINTF("\r\nGAP_Init failed\r\n");
-      goto fail;
-    }
-    
-    PRINTF("GAP setting Authentication ....\r\n");
-    ret = aci_gap_set_auth_requirement(MITM_PROTECTION_REQUIRED,
-                                       OOB_AUTH_DATA_ABSENT,
-                                       NULL, 7, 16,
-                                       USE_FIXED_PIN_FOR_PAIRING, 123456,
-                                       BONDING);
-    if (ret != BLE_STATUS_SUCCESS) {
-      testStatus = COMPONENT_ERROR;
-       PRINTF("\r\nGAP setting Authentication failed ******\r\n");
-       goto fail;
-    }
+   if (getBlueNRGVersion(&hwVersion, &fwVersion)== BLE_STATUS_SUCCESS)
+   {
+      // Reset BlueNRG again otherwise it will fail.
+      BlueNRG_RST();
 
-    PRINTF("SERVER: BLE Stack Initialized \r\n"
-           "Board HWver=%d, FWver=%d.%d.%c\r\n"
-           "BoardMAC = %x:%x:%x:%x:%x:%x\r\n",
-           hwVersion,
-           fwVersion>>8,
-           (fwVersion>>4)&0xF,
-           (hwVersion > 0x30) ? ('a'+(fwVersion&0xF)-1) : 'a',
-           bdaddr[5],bdaddr[4],bdaddr[3],bdaddr[2],bdaddr[1],bdaddr[0]);
+      PRINTF("Setting Pubblic Address...\r\n");
 
-    /* Set output power level */
-    aci_hal_set_tx_power_level(1,4);    /* -2.1dBm */
-    
-    ret = Add_ConsoleW2ST_Service();
-    if(ret == BLE_STATUS_SUCCESS)
-       PRINTF("Console Service W2ST added successfully\r\n");
-    else{
-       testStatus = COMPONENT_ERROR;
-       PRINTF("\r\nError while adding Console Service W2ST\r\n");
-    }
-    
-    ret = Add_ConfigW2ST_Service();
-    if(ret == BLE_STATUS_SUCCESS)
-       PRINTF("Config  Service W2ST added successfully\r\n");
-    else{
-       testStatus = COMPONENT_ERROR;
-       PRINTF("\r\nError while adding Config Service W2ST\r\n");
-    }
-    
-    PRINTF("\r\nAll test passed!\r\n");
-  }
-  else {
-       testStatus = COMPONENT_ERROR;
-       PRINTF("\r\nError in BlueNRG tests. ******\r\n");
-  }
-  PRINTF("****** END BLE TESTS ******\r\n");
-  return;
+      ret                                                = aci_hal_write_config_data(CONFIG_DATA_PUBADDR_OFFSET, CONFIG_DATA_PUBADDR_LEN, bdaddr);
+      if (ret)
+      {
+         PRINTF("\r\nSetting Pubblic BD_ADDR failed *****\r\n");
+         testStatus                                      = COMPONENT_ERROR;
+         return;
+      }
 
-fail:
-  testStatus = COMPONENT_ERROR;
-  return;
+      PRINTF("GATT Initializzation...\r\n");
+
+      ret                                                = aci_gatt_init();    
+      if (ret)
+      {
+         PRINTF("\r\nGATT_Init failed ****\r\n");
+         testStatus                                      = COMPONENT_ERROR;
+         return;
+      }
+
+      // ret = aci_gatt_update_char_value(service_handle, dev_name_char_handle, 0,
+      //                                     7/*strlen(BoardName)*/, (uint8_t *)BoardName);
+      //  
+      // if(ret){
+      //    PRINTF("\r\naci_gatt_update_char_value failed\r\n");
+      //    while(1);
+      // }
+
+      // Set the GAP INIT like X-NUCLEO-IDB05A1 eval board  since using same SPBTLE_RF module
+      ret                                                = aci_gap_init_IDB05A1(GAP_PERIPHERAL_ROLE_IDB05A1, 0, 0x07, &service_handle, &dev_name_char_handle, &appearance_char_handle);
+
+      if(ret != BLE_STATUS_SUCCESS)
+      {
+         PRINTF("\r\nGAP_Init failed\r\n");
+         testStatus                                      = COMPONENT_ERROR;
+         return;
+      }
+
+      PRINTF("GAP setting Authentication ....\r\n");
+      ret                                                = aci_gap_set_auth_requirement(MITM_PROTECTION_REQUIRED, OOB_AUTH_DATA_ABSENT, NULL, 7, 16, USE_FIXED_PIN_FOR_PAIRING, 123456, BONDING);
+      if (ret != BLE_STATUS_SUCCESS)
+      {
+         PRINTF("\r\nGAP setting Authentication failed ******\r\n");
+         testStatus                                      = COMPONENT_ERROR;
+         return;
+      }
+
+      PRINTF("SERVER: BLE Stack Initialized \r\n");
+      PRINTF("Board HWver=%d, FWver=%d.%d.%c \r\n", hwVersion, fwVersion >> 8, (fwVersion >> 4) & 0xF, (hwVersion > 0x30) ? ('a'+(fwVersion & 0xF) - 1) : 'a');
+      PRINTF("BoardMAC = %x:%x:%x:%x:%x:%x \r\n", bdaddr[5], bdaddr[4], bdaddr[3], bdaddr[2], bdaddr[1], bdaddr[0]);
+
+      // Set output power level
+      aci_hal_set_tx_power_level(1, 4);                                                         // -2.1dBm
+
+      ret                                                = Add_ConsoleW2ST_Service();
+      if (ret == BLE_STATUS_SUCCESS)
+      {
+         PRINTF("Console Service W2ST added successfully\r\n");
+      }
+      else
+      {
+         PRINTF("\r\nError while adding Console Service W2ST\r\n");
+         testStatus                                      = COMPONENT_ERROR;
+      }
+
+      ret                                                = Add_ConfigW2ST_Service();
+      if (ret == BLE_STATUS_SUCCESS)
+      {
+         PRINTF("Config  Service W2ST added successfully\r\n");
+      }
+      else
+      {
+         PRINTF("\r\nError while adding Config Service W2ST\r\n");
+         testStatus                                      = COMPONENT_ERROR;
+         return;
+      }
+
+      PRINTF("\r\nAll test passed!\r\n");
+   }
+   else
+   {
+      testStatus                                         = COMPONENT_ERROR;
+      PRINTF("\r\nError in BlueNRG tests. ******\r\n");
+   }
+   PRINTF("****** END BLE TESTS ******\r\n");
+   return;
 }
 
 /** @brief Initialize all the Custom BlueNRG services
@@ -1241,11 +1241,11 @@ static void SendMotionData(void)
    MAG_Value.AXIS_Y                                      = mag.AXIS_Y;
    MAG_Value.AXIS_Z                                      = mag.AXIS_Z;
 
-   /*Debug */
+   // Debug
    // PRINTF("ACC[X, Y, Z]: %d\t%d\t%d\t\n", ACC_Value.AXIS_X, ACC_Value.AXIS_Y, ACC_Value.AXIS_Z);
    // PRINTF("GYRO[X, Y, Z]: %d\t%d\t%d\t\n", GYR_Value.AXIS_X, GYR_Value.AXIS_Y, GYR_Value.AXIS_Z);
    // PRINTF("MAG[X, Y, Z]: %d\t%d\t%d\t\n", MAG_Value.AXIS_X, MAG_Value.AXIS_Y, MAG_Value.AXIS_Z);
-   AccGyroMag_Update(&ACC_Value,&GYR_Value,&MAG_Value);
+   AccGyroMag_Update(&ACC_Value, &GYR_Value, &MAG_Value);
 }
 
 static void SendBattEnvData(void)
@@ -1263,12 +1263,12 @@ static void SendBattEnvData(void)
    {
       VBAT_Sense                                         = HAL_ADC_GetValue(&hadc1);
       VBAT                                               = (((VBAT_Sense * 3.3) / 4095) * (BAT_RUP + BAT_RDW)) / BAT_RDW;
-      //PRINTF("Battery voltage = %fV\n\n", VBAT);
+      // PRINTF("Battery voltage = %fV \n\n", VBAT);
    }
    HAL_ADC_Stop(&hadc1);
 
    MCR_BLUEMS_F2I_2D(press, intPart, decPart);
-   PressToSend=intPart*100+decPart;
+   PressToSend                                           = (intPart * 100) + decPart;
    MCR_BLUEMS_F2I_1D(((int32_t)((float) VBAT * 100.0f) / 4.2f), intPart, decPart);
    BattToSend                                            = (intPart * 10) + decPart;
    if (BattToSend > 1000)
@@ -1281,7 +1281,7 @@ static void SendBattEnvData(void)
    hci_read_rssi(&conn_handle, &rssi);
    RSSIToSend                                            = (int16_t) rssi * 10;
 
-   Batt_Env_RSSI_Update(PressToSend,BattToSend,(int16_t) TempToSend, RSSIToSend); 
+   Batt_Env_RSSI_Update(PressToSend, BattToSend, (int16_t) TempToSend, RSSIToSend); 
 }
 
 
@@ -1290,12 +1290,7 @@ static void SendArmingData(void)
    ARMING_Update(rc_enable_motor);
 }
 
-
-
-/* USER CODE END 4 */
-
 #ifdef USE_FULL_ASSERT
-
 /**
    * @brief Reports the name of the source file and the source line number
    * where the assert_param error has occurred.
@@ -1310,6 +1305,6 @@ void assert_failed(uint8_t* file, uint32_t line)
    ex: printf("Wrong parameters value: file %s on line %d\r\n", file, line) */
    /* USER CODE END 6 */
 }
-
 #endif
+
 
