@@ -264,7 +264,7 @@ DrvStatusTypeDef BSP_ACCELERO_DeInit(void **handle)
  * @retval COMPONENT_OK in case of success
  * @retval COMPONENT_ERROR in case of failure
  */
-DrvStatusTypeDef BSP_ACCELERO_Sensor_Enable( void *handle )
+DrvStatusTypeDef BSP_ACCELERO_Sensor_Enable(void *handle)
 {
    DrvContextTypeDef *ctx                                = (DrvContextTypeDef *)handle;
    ACCELERO_Drv_t *driver                                = NULL;
@@ -297,30 +297,29 @@ DrvStatusTypeDef BSP_ACCELERO_Sensor_Enable( void *handle )
  * @retval COMPONENT_OK in case of success
  * @retval COMPONENT_ERROR in case of failure
  */
-DrvStatusTypeDef BSP_ACCELERO_Sensor_Disable( void *handle )
+DrvStatusTypeDef BSP_ACCELERO_Sensor_Disable(void *handle)
 {
+   DrvContextTypeDef *ctx                                = (DrvContextTypeDef *) handle;
+   ACCELERO_Drv_t *driver                                = NULL;
 
-  DrvContextTypeDef *ctx = (DrvContextTypeDef *)handle;
-  ACCELERO_Drv_t *driver = NULL;
+   if (ctx == NULL)
+   {
+      return COMPONENT_ERROR;
+   }
 
-  if(ctx == NULL)
-  {
-    return COMPONENT_ERROR;
-  }
+   driver                                                = (ACCELERO_Drv_t *) ctx->pVTable;
 
-  driver = ( ACCELERO_Drv_t * )ctx->pVTable;
+   if (driver->Sensor_Disable == NULL)
+   {
+      return COMPONENT_ERROR;
+   }
 
-  if ( driver->Sensor_Disable == NULL )
-  {
-    return COMPONENT_ERROR;
-  }
+   if (driver->Sensor_Disable(ctx) == COMPONENT_ERROR)
+   {
+      return COMPONENT_ERROR;
+   }
 
-  if ( driver->Sensor_Disable( ctx ) == COMPONENT_ERROR )
-  {
-    return COMPONENT_ERROR;
-  }
-
-  return COMPONENT_OK;
+   return COMPONENT_OK;
 }
 
 
@@ -331,23 +330,22 @@ DrvStatusTypeDef BSP_ACCELERO_Sensor_Disable( void *handle )
  * @retval COMPONENT_OK in case of success
  * @retval COMPONENT_ERROR in case of failure
  */
-DrvStatusTypeDef BSP_ACCELERO_IsInitialized( void *handle, uint8_t *status )
+DrvStatusTypeDef BSP_ACCELERO_IsInitialized(void *handle, uint8_t *status)
 {
-  DrvContextTypeDef *ctx = (DrvContextTypeDef *)handle;
+   DrvContextTypeDef *ctx                                = (DrvContextTypeDef *) handle;
 
-  if(ctx == NULL)
-  {
-    return COMPONENT_ERROR;
-  }
+   if (ctx == NULL)
+   {
+      return COMPONENT_ERROR;
+   }
 
-  if ( status == NULL )
-  {
-    return COMPONENT_ERROR;
-  }
+   if ( status == NULL )
+   {
+      return COMPONENT_ERROR;
+   }
 
-  *status = ctx->isInitialized;
-
-  return COMPONENT_OK;
+   *status                                               = ctx->isInitialized;
+   return COMPONENT_OK;
 }
 
 
@@ -358,23 +356,22 @@ DrvStatusTypeDef BSP_ACCELERO_IsInitialized( void *handle, uint8_t *status )
  * @retval COMPONENT_OK in case of success
  * @retval COMPONENT_ERROR in case of failure
  */
-DrvStatusTypeDef BSP_ACCELERO_IsEnabled( void *handle, uint8_t *status )
+DrvStatusTypeDef BSP_ACCELERO_IsEnabled(void *handle, uint8_t *status)
 {
-  DrvContextTypeDef *ctx = (DrvContextTypeDef *)handle;
+   DrvContextTypeDef *ctx                                = (DrvContextTypeDef *)handle;
 
-  if(ctx == NULL)
-  {
-    return COMPONENT_ERROR;
-  }
+   if (ctx == NULL)
+   {
+      return COMPONENT_ERROR;
+   }
 
-  if ( status == NULL )
-  {
-    return COMPONENT_ERROR;
-  }
+   if (status == NULL)
+   {
+      return COMPONENT_ERROR;
+   }
+   *status                                               = ctx->isEnabled;
 
-  *status = ctx->isEnabled;
-
-  return COMPONENT_OK;
+   return COMPONENT_OK;
 }
 
 
@@ -385,25 +382,23 @@ DrvStatusTypeDef BSP_ACCELERO_IsEnabled( void *handle, uint8_t *status )
  * @retval COMPONENT_OK in case of success
  * @retval COMPONENT_ERROR in case of failure
  */
-DrvStatusTypeDef BSP_ACCELERO_IsCombo( void *handle, uint8_t *status )
+DrvStatusTypeDef BSP_ACCELERO_IsCombo(void *handle, uint8_t *status)
 {
-  DrvContextTypeDef *ctx = (DrvContextTypeDef *)handle;
+   DrvContextTypeDef *ctx                                = (DrvContextTypeDef *) handle;
 
-  if(ctx == NULL)
-  {
-    return COMPONENT_ERROR;
-  }
+   if (ctx == NULL)
+   {
+      return COMPONENT_ERROR;
+   }
 
-  if ( status == NULL )
-  {
-    return COMPONENT_ERROR;
-  }
+   if ( status == NULL )
+   {
+      return COMPONENT_ERROR;
+   }
 
-  *status = ctx->isCombo;
-
-  return COMPONENT_OK;
+   *status                                               = ctx->isCombo;
+   return COMPONENT_OK;
 }
-
 
 /**
  * @brief Get the accelerometer sensor instance
@@ -412,26 +407,23 @@ DrvStatusTypeDef BSP_ACCELERO_IsCombo( void *handle, uint8_t *status )
  * @retval COMPONENT_OK in case of success
  * @retval COMPONENT_ERROR in case of failure
  */
-DrvStatusTypeDef BSP_ACCELERO_Get_Instance( void *handle, uint8_t *instance )
+DrvStatusTypeDef BSP_ACCELERO_Get_Instance(void *handle, uint8_t *instance)
 {
-  DrvContextTypeDef *ctx = (DrvContextTypeDef *)handle;
+   DrvContextTypeDef *ctx                                = (DrvContextTypeDef *) handle;
 
-  if(ctx == NULL)
-  {
-    return COMPONENT_ERROR;
-  }
+   if (ctx == NULL)
+   {
+      return COMPONENT_ERROR;
+   }
 
-  if ( instance == NULL )
-  {
-    return COMPONENT_ERROR;
-  }
+   if (instance == NULL)
+   {
+      return COMPONENT_ERROR;
+   }
 
-  *instance = ctx->instance;
-
-  return COMPONENT_OK;
+   *instance                                             = ctx->instance;
+   return COMPONENT_OK;
 }
-
-
 
 /**
  * @brief Get the WHO_AM_I ID of the accelerometer sensor
@@ -440,30 +432,29 @@ DrvStatusTypeDef BSP_ACCELERO_Get_Instance( void *handle, uint8_t *instance )
  * @retval COMPONENT_OK in case of success
  * @retval COMPONENT_ERROR in case of failure
  */
-DrvStatusTypeDef BSP_ACCELERO_Get_WhoAmI( void *handle, uint8_t *who_am_i )
+DrvStatusTypeDef BSP_ACCELERO_Get_WhoAmI(void *handle, uint8_t *who_am_i)
 {
+   DrvContextTypeDef *ctx                                = (DrvContextTypeDef *)handle;
+   ACCELERO_Drv_t *driver                                = NULL;
 
-  DrvContextTypeDef *ctx = (DrvContextTypeDef *)handle;
-  ACCELERO_Drv_t *driver = NULL;
+   if(ctx == NULL)
+   {
+      return COMPONENT_ERROR;
+   }
 
-  if(ctx == NULL)
-  {
-    return COMPONENT_ERROR;
-  }
+   driver                                                = (ACCELERO_Drv_t *) ctx->pVTable;
 
-  driver = ( ACCELERO_Drv_t * )ctx->pVTable;
+   if (driver->Get_WhoAmI == NULL)
+   {
+      return COMPONENT_ERROR;
+   }
 
-  if ( driver->Get_WhoAmI == NULL )
-  {
-    return COMPONENT_ERROR;
-  }
+   if (driver->Get_WhoAmI(ctx, who_am_i) == COMPONENT_ERROR)
+   {
+      return COMPONENT_ERROR;
+   }
 
-  if ( driver->Get_WhoAmI( ctx, who_am_i ) == COMPONENT_ERROR )
-  {
-    return COMPONENT_ERROR;
-  }
-
-  return COMPONENT_OK;
+   return COMPONENT_OK;
 }
 
 
@@ -474,33 +465,30 @@ DrvStatusTypeDef BSP_ACCELERO_Get_WhoAmI( void *handle, uint8_t *who_am_i )
  * @retval COMPONENT_OK in case of success
  * @retval COMPONENT_ERROR in case of failure
  */
-DrvStatusTypeDef BSP_ACCELERO_Check_WhoAmI( void *handle )
+DrvStatusTypeDef BSP_ACCELERO_Check_WhoAmI(void *handle)
 {
+   DrvContextTypeDef *ctx                                = (DrvContextTypeDef *)handle;
+   ACCELERO_Drv_t *driver                                = NULL;
 
-  DrvContextTypeDef *ctx = (DrvContextTypeDef *)handle;
-  ACCELERO_Drv_t *driver = NULL;
+   if (ctx == NULL)
+   {
+      return COMPONENT_ERROR;
+   }
 
-  if(ctx == NULL)
-  {
-    return COMPONENT_ERROR;
-  }
+   driver                                                = (ACCELERO_Drv_t *) ctx->pVTable;
 
-  driver = ( ACCELERO_Drv_t * )ctx->pVTable;
+   if (driver->Check_WhoAmI == NULL)
+   {
+      return COMPONENT_ERROR;
+   }
 
-  if ( driver->Check_WhoAmI == NULL )
-  {
-    return COMPONENT_ERROR;
-  }
+   if (driver->Check_WhoAmI(ctx) == COMPONENT_ERROR)
+   {
+      return COMPONENT_ERROR;
+   }
 
-  if ( driver->Check_WhoAmI( ctx ) == COMPONENT_ERROR )
-  {
-    return COMPONENT_ERROR;
-  }
-
-  return COMPONENT_OK;
+   return COMPONENT_OK;
 }
-
-
 
 /**
  * @brief Get the accelerometer sensor axes
@@ -509,38 +497,35 @@ DrvStatusTypeDef BSP_ACCELERO_Check_WhoAmI( void *handle )
  * @retval COMPONENT_OK in case of success
  * @retval COMPONENT_ERROR in case of failure
  */
-DrvStatusTypeDef BSP_ACCELERO_Get_Axes( void *handle, SensorAxes_t *acceleration )
+DrvStatusTypeDef BSP_ACCELERO_Get_Axes(void *handle, SensorAxes_t *acceleration)
 {
+   DrvContextTypeDef *ctx                                = (DrvContextTypeDef *)handle;
+   ACCELERO_Drv_t *driver                                = NULL;
 
-  DrvContextTypeDef *ctx = (DrvContextTypeDef *)handle;
-  ACCELERO_Drv_t *driver = NULL;
+   if (ctx == NULL)
+   {
+      return COMPONENT_ERROR;
+   }
 
-  if(ctx == NULL)
-  {
-    return COMPONENT_ERROR;
-  }
+   driver                                                = (ACCELERO_Drv_t *) ctx->pVTable;
 
-  driver = ( ACCELERO_Drv_t * )ctx->pVTable;
+   if (acceleration == NULL)
+   {
+      return COMPONENT_ERROR;
+   }
 
-  if(acceleration == NULL)
-  {
-    return COMPONENT_ERROR;
-  }
+   if (driver->Get_Axes == NULL)
+   {
+      return COMPONENT_ERROR;
+   }
 
-  if ( driver->Get_Axes == NULL )
-  {
-    return COMPONENT_ERROR;
-  }
+   if (driver->Get_Axes(ctx, acceleration) == COMPONENT_ERROR)
+   {
+      return COMPONENT_ERROR;
+   }
 
-  if ( driver->Get_Axes( ctx, acceleration ) == COMPONENT_ERROR )
-  {
-    return COMPONENT_ERROR;
-  }
-
-  return COMPONENT_OK;
+   return COMPONENT_OK;
 }
-
-
 
 /**
  * @brief Get the accelerometer sensor raw axes
@@ -549,34 +534,34 @@ DrvStatusTypeDef BSP_ACCELERO_Get_Axes( void *handle, SensorAxes_t *acceleration
  * @retval COMPONENT_OK in case of success
  * @retval COMPONENT_ERROR in case of failure
  */
-DrvStatusTypeDef BSP_ACCELERO_Get_AxesRaw( void *handle, SensorAxesRaw_t *value )
+DrvStatusTypeDef BSP_ACCELERO_Get_AxesRaw(void *handle, SensorAxesRaw_t *value)
 {
-  DrvContextTypeDef *ctx = (DrvContextTypeDef *)handle;
-  ACCELERO_Drv_t *driver = NULL;
+   DrvContextTypeDef *ctx                                = (DrvContextTypeDef *) handle;
+   ACCELERO_Drv_t *driver                                = NULL;
 
-  if(ctx == NULL)
-  {
-    return COMPONENT_ERROR;
-  }
+   if (ctx == NULL)
+   {
+      return COMPONENT_ERROR;
+   }
 
-  driver = ( ACCELERO_Drv_t * )ctx->pVTable;
+   driver                                                = (ACCELERO_Drv_t *) ctx->pVTable;
 
-  if(value == NULL)
-  {
-    return COMPONENT_ERROR;
-  }
+   if (value == NULL)
+   {
+      return COMPONENT_ERROR;
+   }
 
-  if ( driver->Get_AxesRaw == NULL )
-  {
-    return COMPONENT_ERROR;
-  }
+   if (driver->Get_AxesRaw == NULL)
+   {
+      return COMPONENT_ERROR;
+   }
 
-  if ( driver->Get_AxesRaw( ctx, value) == COMPONENT_ERROR )
-  {
-    return COMPONENT_ERROR;
-  }
+   if (driver->Get_AxesRaw(ctx, value) == COMPONENT_ERROR)
+   {
+      return COMPONENT_ERROR;
+   }
 
-  return COMPONENT_OK;
+   return COMPONENT_OK;
 }
 
 
@@ -587,35 +572,34 @@ DrvStatusTypeDef BSP_ACCELERO_Get_AxesRaw( void *handle, SensorAxesRaw_t *value 
  * @retval COMPONENT_OK in case of success
  * @retval COMPONENT_ERROR in case of failure
  */
-DrvStatusTypeDef BSP_ACCELERO_Get_Sensitivity( void *handle, float *sensitivity )
+DrvStatusTypeDef BSP_ACCELERO_Get_Sensitivity(void *handle, float *sensitivity)
 {
+   DrvContextTypeDef *ctx                                = (DrvContextTypeDef *)handle;
+   ACCELERO_Drv_t *driver                                = NULL;
 
-  DrvContextTypeDef *ctx = (DrvContextTypeDef *)handle;
-  ACCELERO_Drv_t *driver = NULL;
+   if (ctx == NULL)
+   {
+      return COMPONENT_ERROR;
+   }
 
-  if(ctx == NULL)
-  {
-    return COMPONENT_ERROR;
-  }
+   driver                                                = (ACCELERO_Drv_t *) ctx->pVTable;
 
-  driver = ( ACCELERO_Drv_t * )ctx->pVTable;
+   if (sensitivity == NULL)
+   {
+      return COMPONENT_ERROR;
+   }
 
-  if(sensitivity == NULL)
-  {
-    return COMPONENT_ERROR;
-  }
+   if (driver->Get_Sensitivity == NULL)
+   {
+      return COMPONENT_ERROR;
+   }
 
-  if ( driver->Get_Sensitivity == NULL )
-  {
-    return COMPONENT_ERROR;
-  }
+   if (driver->Get_Sensitivity(ctx, sensitivity) == COMPONENT_ERROR)
+   {
+      return COMPONENT_ERROR;
+   }
 
-  if ( driver->Get_Sensitivity( ctx, sensitivity ) == COMPONENT_ERROR )
-  {
-    return COMPONENT_ERROR;
-  }
-
-  return COMPONENT_OK;
+   return COMPONENT_OK;
 }
 
 
@@ -627,37 +611,35 @@ DrvStatusTypeDef BSP_ACCELERO_Get_Sensitivity( void *handle, float *sensitivity 
  * @retval COMPONENT_OK in case of success
  * @retval COMPONENT_ERROR in case of failure
  */
-DrvStatusTypeDef BSP_ACCELERO_Get_ODR( void *handle, float *odr )
+DrvStatusTypeDef BSP_ACCELERO_Get_ODR(void *handle, float *odr)
 {
+   DrvContextTypeDef *ctx                                = (DrvContextTypeDef *) handle;
+   ACCELERO_Drv_t *driver                                = NULL;
 
-  DrvContextTypeDef *ctx = (DrvContextTypeDef *)handle;
-  ACCELERO_Drv_t *driver = NULL;
+   if (ctx == NULL)
+   {
+      return COMPONENT_ERROR;
+   }
 
-  if(ctx == NULL)
-  {
-    return COMPONENT_ERROR;
-  }
+   driver                                                = (ACCELERO_Drv_t *) ctx->pVTable;
 
-  driver = ( ACCELERO_Drv_t * )ctx->pVTable;
+   if (odr == NULL)
+   {
+      return COMPONENT_ERROR;
+   }
 
-  if(odr == NULL)
-  {
-    return COMPONENT_ERROR;
-  }
+   if (driver->Get_ODR == NULL)
+   {
+      return COMPONENT_ERROR;
+   }
 
-  if ( driver->Get_ODR == NULL )
-  {
-    return COMPONENT_ERROR;
-  }
+   if (driver->Get_ODR(ctx, odr) == COMPONENT_ERROR)
+   {
+      return COMPONENT_ERROR;
+   }
 
-  if ( driver->Get_ODR( ctx, odr ) == COMPONENT_ERROR )
-  {
-    return COMPONENT_ERROR;
-  }
-
-  return COMPONENT_OK;
+   return COMPONENT_OK;
 }
-
 
 
 /**
@@ -667,29 +649,28 @@ DrvStatusTypeDef BSP_ACCELERO_Get_ODR( void *handle, float *odr )
  * @retval COMPONENT_OK in case of success
  * @retval COMPONENT_ERROR in case of failure
  */
-DrvStatusTypeDef BSP_ACCELERO_Set_ODR( void *handle, SensorOdr_t odr )
+DrvStatusTypeDef BSP_ACCELERO_Set_ODR(void *handle, SensorOdr_t odr)
 {
+   DrvContextTypeDef *ctx                                = (DrvContextTypeDef *) handle;
+   ACCELERO_Drv_t *driver                                = NULL;
 
-  DrvContextTypeDef *ctx = (DrvContextTypeDef *)handle;
-  ACCELERO_Drv_t *driver = NULL;
+   if(ctx == NULL)
+   {
+      return COMPONENT_ERROR;
+   }
 
-  if(ctx == NULL)
-  {
-    return COMPONENT_ERROR;
-  }
+   driver                                                = (ACCELERO_Drv_t *) ctx->pVTable;
 
-  driver = ( ACCELERO_Drv_t * )ctx->pVTable;
+   if (driver->Set_ODR == NULL)
+   {
+      return COMPONENT_ERROR;
+   }
+   if (driver->Set_ODR(ctx, odr) == COMPONENT_ERROR)
+   {
+      return COMPONENT_ERROR;
+   }
 
-  if ( driver->Set_ODR == NULL )
-  {
-    return COMPONENT_ERROR;
-  }
-  if ( driver->Set_ODR( ctx, odr ) == COMPONENT_ERROR )
-  {
-    return COMPONENT_ERROR;
-  }
-
-  return COMPONENT_OK;
+   return COMPONENT_OK;
 }
 
 
@@ -701,32 +682,29 @@ DrvStatusTypeDef BSP_ACCELERO_Set_ODR( void *handle, SensorOdr_t odr )
  * @retval COMPONENT_OK in case of success
  * @retval COMPONENT_ERROR in case of failure
  */
-DrvStatusTypeDef BSP_ACCELERO_Set_ODR_Value( void *handle, float odr )
+DrvStatusTypeDef BSP_ACCELERO_Set_ODR_Value(void *handle, float odr)
 {
+   DrvContextTypeDef *ctx                                = (DrvContextTypeDef *) handle;
+   ACCELERO_Drv_t *driver                                = NULL;
 
-  DrvContextTypeDef *ctx = (DrvContextTypeDef *)handle;
-  ACCELERO_Drv_t *driver = NULL;
+   if (ctx == NULL)
+   {
+      return COMPONENT_ERROR;
+   }
 
-  if(ctx == NULL)
-  {
-    return COMPONENT_ERROR;
-  }
+   driver                                                = (ACCELERO_Drv_t *) ctx->pVTable;
 
-  driver = ( ACCELERO_Drv_t * )ctx->pVTable;
+   if (driver->Set_ODR_Value == NULL)
+   {
+      return COMPONENT_ERROR;
+   }
+   if (driver->Set_ODR_Value( ctx, odr ) == COMPONENT_ERROR)
+   {
+      return COMPONENT_ERROR;
+   }
 
-  if ( driver->Set_ODR_Value == NULL )
-  {
-    return COMPONENT_ERROR;
-  }
-  if ( driver->Set_ODR_Value( ctx, odr ) == COMPONENT_ERROR )
-  {
-    return COMPONENT_ERROR;
-  }
-
-  return COMPONENT_OK;
+   return COMPONENT_OK;
 }
-
-
 
 /**
  * @brief Get the accelerometer sensor full scale
@@ -735,35 +713,34 @@ DrvStatusTypeDef BSP_ACCELERO_Set_ODR_Value( void *handle, float odr )
  * @retval COMPONENT_OK in case of success
  * @retval COMPONENT_ERROR in case of failure
  */
-DrvStatusTypeDef BSP_ACCELERO_Get_FS( void *handle, float *fullScale )
+DrvStatusTypeDef BSP_ACCELERO_Get_FS(void *handle, float *fullScale)
 {
+   DrvContextTypeDef *ctx                                = (DrvContextTypeDef *) handle;
+   ACCELERO_Drv_t *driver                                = NULL;
 
-  DrvContextTypeDef *ctx = (DrvContextTypeDef *)handle;
-  ACCELERO_Drv_t *driver = NULL;
+   if (ctx == NULL)
+   {
+      return COMPONENT_ERROR;
+   }
 
-  if(ctx == NULL)
-  {
-    return COMPONENT_ERROR;
-  }
+   driver                                                = (ACCELERO_Drv_t *) ctx->pVTable;
 
-  driver = ( ACCELERO_Drv_t * )ctx->pVTable;
+   if (fullScale == NULL)
+   {
+      return COMPONENT_ERROR;
+   }
 
-  if(fullScale == NULL)
-  {
-    return COMPONENT_ERROR;
-  }
+   if (driver->Get_FS == NULL)
+   {
+      return COMPONENT_ERROR;
+   }
 
-  if ( driver->Get_FS == NULL )
-  {
-    return COMPONENT_ERROR;
-  }
+   if (driver->Get_FS(ctx, fullScale) == COMPONENT_ERROR)
+   {
+      return COMPONENT_ERROR;
+   }
 
-  if ( driver->Get_FS( ctx, fullScale ) == COMPONENT_ERROR )
-  {
-    return COMPONENT_ERROR;
-  }
-
-  return COMPONENT_OK;
+   return COMPONENT_OK;
 }
 
 
@@ -775,31 +752,29 @@ DrvStatusTypeDef BSP_ACCELERO_Get_FS( void *handle, float *fullScale )
  * @retval COMPONENT_OK in case of success
  * @retval COMPONENT_ERROR in case of failure
  */
-DrvStatusTypeDef BSP_ACCELERO_Set_FS( void *handle, SensorFs_t fullScale )
+DrvStatusTypeDef BSP_ACCELERO_Set_FS(void *handle, SensorFs_t fullScale)
 {
+   DrvContextTypeDef *ctx                                = (DrvContextTypeDef *) handle;
+   ACCELERO_Drv_t *driver                                = NULL;
 
-  DrvContextTypeDef *ctx = (DrvContextTypeDef *)handle;
-  ACCELERO_Drv_t *driver = NULL;
+   if (ctx == NULL)
+   {
+      return COMPONENT_ERROR;
+   }
 
-  if(ctx == NULL)
-  {
-    return COMPONENT_ERROR;
-  }
+   driver                                                = (ACCELERO_Drv_t *) ctx->pVTable;
 
-  driver = ( ACCELERO_Drv_t * )ctx->pVTable;
+   if ( driver->Set_FS == NULL )
+   {
+      return COMPONENT_ERROR;
+   }
+   if (driver->Set_FS(ctx, fullScale) == COMPONENT_ERROR)
+   {
+      return COMPONENT_ERROR;
+   }
 
-  if ( driver->Set_FS == NULL )
-  {
-    return COMPONENT_ERROR;
-  }
-  if ( driver->Set_FS( ctx, fullScale ) == COMPONENT_ERROR )
-  {
-    return COMPONENT_ERROR;
-  }
-
-  return COMPONENT_OK;
+   return COMPONENT_OK;
 }
-
 
 
 /**
@@ -809,32 +784,29 @@ DrvStatusTypeDef BSP_ACCELERO_Set_FS( void *handle, SensorFs_t fullScale )
  * @retval COMPONENT_OK in case of success
  * @retval COMPONENT_ERROR in case of failure
  */
-DrvStatusTypeDef BSP_ACCELERO_Set_FS_Value( void *handle, float fullScale )
+DrvStatusTypeDef BSP_ACCELERO_Set_FS_Value(void *handle, float fullScale)
 {
+   DrvContextTypeDef *ctx                                = (DrvContextTypeDef *) handle;
+   ACCELERO_Drv_t *driver                                = NULL;
 
-  DrvContextTypeDef *ctx = (DrvContextTypeDef *)handle;
-  ACCELERO_Drv_t *driver = NULL;
+   if (ctx == NULL)
+   {
+      return COMPONENT_ERROR;
+   }
 
-  if(ctx == NULL)
-  {
-    return COMPONENT_ERROR;
-  }
+   driver                                                = (ACCELERO_Drv_t *) ctx->pVTable;
 
-  driver = ( ACCELERO_Drv_t * )ctx->pVTable;
+   if (driver->Set_FS_Value == NULL)
+   {
+      return COMPONENT_ERROR;
+   }
+   if (driver->Set_FS_Value(ctx, fullScale) == COMPONENT_ERROR)
+   {
+      return COMPONENT_ERROR;
+   }
 
-  if ( driver->Set_FS_Value == NULL )
-  {
-    return COMPONENT_ERROR;
-  }
-  if ( driver->Set_FS_Value( ctx, fullScale ) == COMPONENT_ERROR )
-  {
-    return COMPONENT_ERROR;
-  }
-
-  return COMPONENT_OK;
+   return COMPONENT_OK;
 }
-
-
 
 /**
  * @brief Get the accelerometer sensor axes status
@@ -843,37 +815,35 @@ DrvStatusTypeDef BSP_ACCELERO_Set_FS_Value( void *handle, float fullScale )
  * @retval COMPONENT_OK in case of success
  * @retval COMPONENT_ERROR in case of failure
  */
-DrvStatusTypeDef BSP_ACCELERO_Get_Axes_Status( void *handle, uint8_t *xyz_enabled )
+DrvStatusTypeDef BSP_ACCELERO_Get_Axes_Status(void *handle, uint8_t *xyz_enabled)
 {
+   DrvContextTypeDef *ctx                                = (DrvContextTypeDef *) handle;
+   ACCELERO_Drv_t *driver                                = NULL;
 
-  DrvContextTypeDef *ctx = (DrvContextTypeDef *)handle;
-  ACCELERO_Drv_t *driver = NULL;
+   if (ctx == NULL)
+   {
+      return COMPONENT_ERROR;
+   }
 
-  if(ctx == NULL)
-  {
-    return COMPONENT_ERROR;
-  }
+   driver                                                = (ACCELERO_Drv_t *) ctx->pVTable;
 
-  driver = ( ACCELERO_Drv_t * )ctx->pVTable;
+   if (xyz_enabled == NULL)
+   {
+      return COMPONENT_ERROR;
+   }
 
-  if(xyz_enabled == NULL)
-  {
-    return COMPONENT_ERROR;
-  }
+   if (driver->Get_Axes_Status == NULL)
+   {
+      return COMPONENT_ERROR;
+   }
 
-  if ( driver->Get_Axes_Status == NULL )
-  {
-    return COMPONENT_ERROR;
-  }
+   if (driver->Get_Axes_Status(ctx, xyz_enabled) == COMPONENT_ERROR)
+   {
+      return COMPONENT_ERROR;
+   }
 
-  if ( driver->Get_Axes_Status( ctx, xyz_enabled ) == COMPONENT_ERROR )
-  {
-    return COMPONENT_ERROR;
-  }
-
-  return COMPONENT_OK;
+   return COMPONENT_OK;
 }
-
 
 
 /**
@@ -883,37 +853,35 @@ DrvStatusTypeDef BSP_ACCELERO_Get_Axes_Status( void *handle, uint8_t *xyz_enable
  * @retval COMPONENT_OK in case of success
  * @retval COMPONENT_ERROR in case of failure
  */
-DrvStatusTypeDef BSP_ACCELERO_Set_Axes_Status( void *handle, uint8_t *enable_xyz )
+DrvStatusTypeDef BSP_ACCELERO_Set_Axes_Status(void *handle, uint8_t *enable_xyz)
 {
+   DrvContextTypeDef *ctx                                = (DrvContextTypeDef *) handle;
+   ACCELERO_Drv_t *driver                                = NULL;
 
-  DrvContextTypeDef *ctx = (DrvContextTypeDef *)handle;
-  ACCELERO_Drv_t *driver = NULL;
+   if (ctx == NULL)
+   {
+      return COMPONENT_ERROR;
+   }
 
-  if(ctx == NULL)
-  {
-    return COMPONENT_ERROR;
-  }
+   driver                                                = (ACCELERO_Drv_t *) ctx->pVTable;
 
-  driver = ( ACCELERO_Drv_t * )ctx->pVTable;
+   if (enable_xyz == NULL)
+   {
+      return COMPONENT_ERROR;
+   }
 
-  if(enable_xyz == NULL)
-  {
-    return COMPONENT_ERROR;
-  }
+   if (driver->Set_Axes_Status == NULL)
+   {
+      return COMPONENT_ERROR;
+   }
 
-  if ( driver->Set_Axes_Status == NULL )
-  {
-    return COMPONENT_ERROR;
-  }
+   if (driver->Set_Axes_Status( ctx, enable_xyz ) == COMPONENT_ERROR)
+   {
+      return COMPONENT_ERROR;
+   }
 
-  if ( driver->Set_Axes_Status( ctx, enable_xyz ) == COMPONENT_ERROR )
-  {
-    return COMPONENT_ERROR;
-  }
-
-  return COMPONENT_OK;
+   return COMPONENT_OK;
 }
-
 
 /**
  * @brief Read the data from register
@@ -923,35 +891,34 @@ DrvStatusTypeDef BSP_ACCELERO_Set_Axes_Status( void *handle, uint8_t *enable_xyz
  * @retval COMPONENT_OK in case of success
  * @retval COMPONENT_ERROR in case of failure
  */
-DrvStatusTypeDef BSP_ACCELERO_Read_Reg( void *handle, uint8_t reg, uint8_t *data )
+DrvStatusTypeDef BSP_ACCELERO_Read_Reg(void *handle, uint8_t reg, uint8_t *data)
 {
+   DrvContextTypeDef *ctx                                = (DrvContextTypeDef *) handle;
+   ACCELERO_Drv_t *driver                                = NULL;
 
-  DrvContextTypeDef *ctx = (DrvContextTypeDef *)handle;
-  ACCELERO_Drv_t *driver = NULL;
+   if (ctx == NULL)
+   {
+      return COMPONENT_ERROR;
+   }
 
-  if(ctx == NULL)
-  {
-    return COMPONENT_ERROR;
-  }
+   driver                                                = (ACCELERO_Drv_t *) ctx->pVTable;
 
-  driver = ( ACCELERO_Drv_t * )ctx->pVTable;
+   if (data == NULL)
+   {
+      return COMPONENT_ERROR;
+   }
 
-  if(data == NULL)
-  {
-    return COMPONENT_ERROR;
-  }
+   if (driver->Read_Reg == NULL)
+   {
+      return COMPONENT_ERROR;
+   }
 
-  if ( driver->Read_Reg == NULL )
-  {
-    return COMPONENT_ERROR;
-  }
+   if (driver->Read_Reg(ctx, reg, data) == COMPONENT_ERROR)
+   {
+      return COMPONENT_ERROR;
+   }
 
-  if ( driver->Read_Reg( ctx, reg, data ) == COMPONENT_ERROR )
-  {
-    return COMPONENT_ERROR;
-  }
-
-  return COMPONENT_OK;
+   return COMPONENT_OK;
 }
 
 
@@ -964,32 +931,30 @@ DrvStatusTypeDef BSP_ACCELERO_Read_Reg( void *handle, uint8_t reg, uint8_t *data
  * @retval COMPONENT_OK in case of success
  * @retval COMPONENT_ERROR in case of failure
  */
-DrvStatusTypeDef BSP_ACCELERO_Write_Reg( void *handle, uint8_t reg, uint8_t data )
+DrvStatusTypeDef BSP_ACCELERO_Write_Reg(void *handle, uint8_t reg, uint8_t data)
 {
+   DrvContextTypeDef *ctx                                = (DrvContextTypeDef *) handle;
+   ACCELERO_Drv_t *driver                                = NULL;
 
-  DrvContextTypeDef *ctx = (DrvContextTypeDef *)handle;
-  ACCELERO_Drv_t *driver = NULL;
+   if (ctx == NULL)
+   {
+      return COMPONENT_ERROR;
+   }
 
-  if(ctx == NULL)
-  {
-    return COMPONENT_ERROR;
-  }
+   driver                                                = (ACCELERO_Drv_t *) ctx->pVTable;
 
-  driver = ( ACCELERO_Drv_t * )ctx->pVTable;
+   if (driver->Write_Reg == NULL)
+   {
+      return COMPONENT_ERROR;
+   }
 
-  if ( driver->Write_Reg == NULL )
-  {
-    return COMPONENT_ERROR;
-  }
+   if (driver->Write_Reg(ctx, reg, data) == COMPONENT_ERROR)
+   {
+      return COMPONENT_ERROR;
+   }
 
-  if ( driver->Write_Reg( ctx, reg, data ) == COMPONENT_ERROR )
-  {
-    return COMPONENT_ERROR;
-  }
-
-  return COMPONENT_OK;
+   return COMPONENT_OK;
 }
-
 
 
 /**
@@ -999,30 +964,29 @@ DrvStatusTypeDef BSP_ACCELERO_Write_Reg( void *handle, uint8_t reg, uint8_t data
  * @retval COMPONENT_OK in case of success
  * @retval COMPONENT_ERROR in case of failure
  */
-DrvStatusTypeDef BSP_ACCELERO_Get_DRDY_Status( void *handle, uint8_t *status )
+DrvStatusTypeDef BSP_ACCELERO_Get_DRDY_Status(void *handle, uint8_t *status)
 {
+   DrvContextTypeDef *ctx                                = (DrvContextTypeDef *) handle;
+   ACCELERO_Drv_t *driver                                = NULL;
 
-  DrvContextTypeDef *ctx = (DrvContextTypeDef *)handle;
-  ACCELERO_Drv_t *driver = NULL;
+   if (ctx == NULL)
+   {
+      return COMPONENT_ERROR;
+   }
 
-  if(ctx == NULL)
-  {
-    return COMPONENT_ERROR;
-  }
+   driver                                                = (ACCELERO_Drv_t *) ctx->pVTable;
 
-  driver = ( ACCELERO_Drv_t * )ctx->pVTable;
+   if (driver->Get_DRDY_Status == NULL)
+   {
+      return COMPONENT_ERROR;
+   }
 
-  if ( driver->Get_DRDY_Status == NULL )
-  {
-    return COMPONENT_ERROR;
-  }
+   if (driver->Get_DRDY_Status(ctx, status) == COMPONENT_ERROR)
+   {
+      return COMPONENT_ERROR;
+   }
 
-  if ( driver->Get_DRDY_Status( ctx, status ) == COMPONENT_ERROR )
-  {
-    return COMPONENT_ERROR;
-  }
-
-  return COMPONENT_OK;
+   return COMPONENT_OK;
 }
 
 
@@ -1034,41 +998,38 @@ DrvStatusTypeDef BSP_ACCELERO_Get_DRDY_Status( void *handle, uint8_t *status )
  * @retval COMPONENT_OK in case of success
  * @retval COMPONENT_ERROR in case of failure
  */
-DrvStatusTypeDef BSP_ACCELERO_Enable_Free_Fall_Detection_Ext( void *handle )
+DrvStatusTypeDef BSP_ACCELERO_Enable_Free_Fall_Detection_Ext(void *handle)
 {
+   DrvContextTypeDef *ctx                                = (DrvContextTypeDef *) handle;
 
-  DrvContextTypeDef *ctx = (DrvContextTypeDef *)handle;
-
-  if(ctx == NULL)
-  {
-    return COMPONENT_ERROR;
-  }
-
-  if ( ctx->pExtVTable == NULL )
-  {
-    return COMPONENT_ERROR;
-  }
-
-  /* At the moment this feature is only implemented for LSM6DSL */
-  if ( ctx->who_am_i == LSM6DSL_ACC_GYRO_WHO_AM_I )
-  {
-    LSM6DSL_X_ExtDrv_t *extDriver = ( LSM6DSL_X_ExtDrv_t * )ctx->pExtVTable;
-
-    if ( extDriver->Enable_Free_Fall_Detection == NULL )
-    {
+   if (ctx == NULL)
+   {
       return COMPONENT_ERROR;
-    }
+   }
 
-    else
-    {
-      return extDriver->Enable_Free_Fall_Detection( ctx );
-    }
-  }
+   if (ctx->pExtVTable == NULL)
+   {
+      return COMPONENT_ERROR;
+   }
 
-  else
-  {
-    return COMPONENT_ERROR;
-  }
+   /* At the moment this feature is only implemented for LSM6DSL */
+   if (ctx->who_am_i == LSM6DSL_ACC_GYRO_WHO_AM_I)
+   {
+      LSM6DSL_X_ExtDrv_t *extDriver                      = (LSM6DSL_X_ExtDrv_t *) ctx->pExtVTable;
+
+      if (extDriver->Enable_Free_Fall_Detection == NULL)
+      {
+         return COMPONENT_ERROR;
+      }
+      else
+      {
+         return extDriver->Enable_Free_Fall_Detection(ctx);
+      }
+   }
+   else
+   {
+      return COMPONENT_ERROR;
+   }
 }
 
 
@@ -1079,43 +1040,39 @@ DrvStatusTypeDef BSP_ACCELERO_Enable_Free_Fall_Detection_Ext( void *handle )
  * @retval COMPONENT_OK in case of success
  * @retval COMPONENT_ERROR in case of failure
  */
-DrvStatusTypeDef BSP_ACCELERO_Disable_Free_Fall_Detection_Ext( void *handle )
+DrvStatusTypeDef BSP_ACCELERO_Disable_Free_Fall_Detection_Ext(void *handle)
 {
+   DrvContextTypeDef *ctx                                = (DrvContextTypeDef *) handle;
 
-  DrvContextTypeDef *ctx = (DrvContextTypeDef *)handle;
-
-  if(ctx == NULL)
-  {
-    return COMPONENT_ERROR;
-  }
-
-  if ( ctx->pExtVTable == NULL )
-  {
-    return COMPONENT_ERROR;
-  }
-
-  /* At the moment this feature is only implemented for LSM6DSL */
-  if ( ctx->who_am_i == LSM6DSL_ACC_GYRO_WHO_AM_I )
-  {
-    LSM6DSL_X_ExtDrv_t *extDriver = ( LSM6DSL_X_ExtDrv_t * )ctx->pExtVTable;
-
-    if ( extDriver->Disable_Free_Fall_Detection == NULL )
-    {
+   if (ctx == NULL)
+   {
       return COMPONENT_ERROR;
-    }
+   }
 
-    else
-    {
-      return extDriver->Disable_Free_Fall_Detection( ctx );
-    }
-  }
+   if (ctx->pExtVTable == NULL)
+   {
+      return COMPONENT_ERROR;
+   }
 
-  else
-  {
-    return COMPONENT_ERROR;
-  }
+   /* At the moment this feature is only implemented for LSM6DSL */
+   if (ctx->who_am_i == LSM6DSL_ACC_GYRO_WHO_AM_I)
+   {
+      LSM6DSL_X_ExtDrv_t *extDriver                      = (LSM6DSL_X_ExtDrv_t *) ctx->pExtVTable;
+
+      if (extDriver->Disable_Free_Fall_Detection == NULL)
+      {
+         return COMPONENT_ERROR;
+      }
+      else
+      {
+         return extDriver->Disable_Free_Fall_Detection(ctx);
+      }
+   }
+   else
+   {
+      return COMPONENT_ERROR;
+   }
 }
-
 
 
 /**
@@ -1125,48 +1082,44 @@ DrvStatusTypeDef BSP_ACCELERO_Disable_Free_Fall_Detection_Ext( void *handle )
  * @retval COMPONENT_OK in case of success
  * @retval COMPONENT_ERROR in case of failure
  */
-DrvStatusTypeDef BSP_ACCELERO_Get_Free_Fall_Detection_Status_Ext( void *handle, uint8_t *status )
+DrvStatusTypeDef BSP_ACCELERO_Get_Free_Fall_Detection_Status_Ext(void *handle, uint8_t *status)
 {
+   DrvContextTypeDef *ctx                                = (DrvContextTypeDef *) handle;
 
-  DrvContextTypeDef *ctx = (DrvContextTypeDef *)handle;
-
-  if(ctx == NULL)
-  {
-    return COMPONENT_ERROR;
-  }
-
-  if ( ctx->pExtVTable == NULL )
-  {
-    return COMPONENT_ERROR;
-  }
-
-  if ( status == NULL )
-  {
-    return COMPONENT_ERROR;
-  }
-
-  /* At the moment this feature is only implemented for LSM6DSL */
-  if ( ctx->who_am_i == LSM6DSL_ACC_GYRO_WHO_AM_I )
-  {
-    LSM6DSL_X_ExtDrv_t *extDriver = ( LSM6DSL_X_ExtDrv_t * )ctx->pExtVTable;
-
-    if ( extDriver->Get_Free_Fall_Detection_Status == NULL )
-    {
+   if (ctx == NULL)
+   {
       return COMPONENT_ERROR;
-    }
+   }
 
-    else
-    {
-      return extDriver->Get_Free_Fall_Detection_Status( ctx, status );
-    }
-  }
+   if (ctx->pExtVTable == NULL)
+   {
+      return COMPONENT_ERROR;
+   }
 
-  else
-  {
-    return COMPONENT_ERROR;
-  }
+   if (status == NULL)
+   {
+      return COMPONENT_ERROR;
+   }
+
+   /* At the moment this feature is only implemented for LSM6DSL */
+   if (ctx->who_am_i == LSM6DSL_ACC_GYRO_WHO_AM_I)
+   {
+      LSM6DSL_X_ExtDrv_t *extDriver                      = (LSM6DSL_X_ExtDrv_t *) ctx->pExtVTable;
+
+      if (extDriver->Get_Free_Fall_Detection_Status == NULL)
+      {
+         return COMPONENT_ERROR;
+      }
+      else
+      {
+         return extDriver->Get_Free_Fall_Detection_Status(ctx, status);
+      }
+   }
+   else
+   {
+      return COMPONENT_ERROR;
+   }
 }
-
 
 
 /**
@@ -1176,43 +1129,39 @@ DrvStatusTypeDef BSP_ACCELERO_Get_Free_Fall_Detection_Status_Ext( void *handle, 
  * @retval COMPONENT_OK in case of success
  * @retval COMPONENT_ERROR in case of failure
  */
-DrvStatusTypeDef BSP_ACCELERO_Set_Free_Fall_Threshold_Ext( void *handle, uint8_t thr )
+DrvStatusTypeDef BSP_ACCELERO_Set_Free_Fall_Threshold_Ext(void *handle, uint8_t thr)
 {
+   DrvContextTypeDef *ctx                                = (DrvContextTypeDef *)handle;
 
-  DrvContextTypeDef *ctx = (DrvContextTypeDef *)handle;
-
-  if(ctx == NULL)
-  {
-    return COMPONENT_ERROR;
-  }
-
-  if ( ctx->pExtVTable == NULL )
-  {
-    return COMPONENT_ERROR;
-  }
-
-  /* At the moment this feature is only implemented for LSM6DSL */
-  if ( ctx->who_am_i == LSM6DSL_ACC_GYRO_WHO_AM_I )
-  {
-    LSM6DSL_X_ExtDrv_t *extDriver = ( LSM6DSL_X_ExtDrv_t * )ctx->pExtVTable;
-
-    if ( extDriver->Set_Free_Fall_Threshold == NULL )
-    {
+   if (ctx == NULL)
+   {
       return COMPONENT_ERROR;
-    }
+   }
 
-    else
-    {
-      return extDriver->Set_Free_Fall_Threshold( ctx, thr );
-    }
-  }
+   if (ctx->pExtVTable == NULL)
+   {
+      return COMPONENT_ERROR;
+   }
 
-  else
-  {
-    return COMPONENT_ERROR;
-  }
+   /* At the moment this feature is only implemented for LSM6DSL */
+   if (ctx->who_am_i == LSM6DSL_ACC_GYRO_WHO_AM_I)
+   {
+      LSM6DSL_X_ExtDrv_t *extDriver                      = (LSM6DSL_X_ExtDrv_t *) ctx->pExtVTable;
+
+      if (extDriver->Set_Free_Fall_Threshold == NULL)
+      {
+         return COMPONENT_ERROR;
+      }
+      else
+      {
+         return extDriver->Set_Free_Fall_Threshold(ctx, thr);
+      }
+   }
+   else
+   {
+      return COMPONENT_ERROR;
+   }
 }
-
 
 
 /**
@@ -1222,43 +1171,39 @@ DrvStatusTypeDef BSP_ACCELERO_Set_Free_Fall_Threshold_Ext( void *handle, uint8_t
  * @retval COMPONENT_OK in case of success
  * @retval COMPONENT_ERROR in case of failure
  */
-DrvStatusTypeDef BSP_ACCELERO_Enable_Pedometer_Ext( void *handle )
+DrvStatusTypeDef BSP_ACCELERO_Enable_Pedometer_Ext(void *handle)
 {
+   DrvContextTypeDef *ctx                                = (DrvContextTypeDef *) handle;
 
-  DrvContextTypeDef *ctx = (DrvContextTypeDef *)handle;
-
-  if(ctx == NULL)
-  {
-    return COMPONENT_ERROR;
-  }
-
-  if ( ctx->pExtVTable == NULL )
-  {
-    return COMPONENT_ERROR;
-  }
-
-  /* At the moment this feature is only implemented for LSM6DSL */
-  if ( ctx->who_am_i == LSM6DSL_ACC_GYRO_WHO_AM_I )
-  {
-    LSM6DSL_X_ExtDrv_t *extDriver = ( LSM6DSL_X_ExtDrv_t * )ctx->pExtVTable;
-
-    if ( extDriver->Enable_Pedometer == NULL )
-    {
+   if (ctx == NULL)
+   {
       return COMPONENT_ERROR;
-    }
+   }
 
-    else
-    {
-      return extDriver->Enable_Pedometer( ctx );
-    }
-  }
+   if (ctx->pExtVTable == NULL)
+   {
+      return COMPONENT_ERROR;
+   }
 
-  else
-  {
-    return COMPONENT_ERROR;
-  }
+   /* At the moment this feature is only implemented for LSM6DSL */
+   if (ctx->who_am_i == LSM6DSL_ACC_GYRO_WHO_AM_I)
+   {
+      LSM6DSL_X_ExtDrv_t *extDriver                      = (LSM6DSL_X_ExtDrv_t *) ctx->pExtVTable;
+
+      if (extDriver->Enable_Pedometer == NULL)
+      {
+         return COMPONENT_ERROR;
+      }
+      else
+      {
+         return extDriver->Enable_Pedometer( ctx );
+      }
+   }
+   else
+   {
+      return COMPONENT_ERROR;
+   }
 }
-
 
 
 /**
@@ -1267,43 +1212,39 @@ DrvStatusTypeDef BSP_ACCELERO_Enable_Pedometer_Ext( void *handle )
  * @retval COMPONENT_OK in case of success
  * @retval COMPONENT_ERROR in case of failure
  */
-DrvStatusTypeDef BSP_ACCELERO_Disable_Pedometer_Ext( void *handle )
+DrvStatusTypeDef BSP_ACCELERO_Disable_Pedometer_Ext(void *handle)
 {
+   DrvContextTypeDef *ctx                                = (DrvContextTypeDef *) handle;
 
-  DrvContextTypeDef *ctx = (DrvContextTypeDef *)handle;
-
-  if(ctx == NULL)
-  {
-    return COMPONENT_ERROR;
-  }
-
-  if ( ctx->pExtVTable == NULL )
-  {
-    return COMPONENT_ERROR;
-  }
-
-  /* At the moment this feature is only implemented for LSM6DSL */
-  if ( ctx->who_am_i == LSM6DSL_ACC_GYRO_WHO_AM_I )
-  {
-    LSM6DSL_X_ExtDrv_t *extDriver = ( LSM6DSL_X_ExtDrv_t * )ctx->pExtVTable;
-
-    if ( extDriver->Disable_Pedometer == NULL )
-    {
+   if (ctx == NULL)
+   {
       return COMPONENT_ERROR;
-    }
+   }
 
-    else
-    {
-      return extDriver->Disable_Pedometer( ctx );
-    }
-  }
+   if (ctx->pExtVTable == NULL)
+   {
+      return COMPONENT_ERROR;
+   }
 
-  else
-  {
-    return COMPONENT_ERROR;
-  }
+   /* At the moment this feature is only implemented for LSM6DSL */
+   if (ctx->who_am_i == LSM6DSL_ACC_GYRO_WHO_AM_I)
+   {
+      LSM6DSL_X_ExtDrv_t *extDriver                      = (LSM6DSL_X_ExtDrv_t *) ctx->pExtVTable;
+
+      if (extDriver->Disable_Pedometer == NULL)
+      {
+         return COMPONENT_ERROR;
+      }
+      else
+      {
+         return extDriver->Disable_Pedometer(ctx);
+      }
+   }
+   else
+   {
+      return COMPONENT_ERROR;
+   }
 }
-
 
 
 /**
@@ -1313,48 +1254,44 @@ DrvStatusTypeDef BSP_ACCELERO_Disable_Pedometer_Ext( void *handle )
  * @retval COMPONENT_OK in case of success
  * @retval COMPONENT_ERROR in case of failure
  */
-DrvStatusTypeDef BSP_ACCELERO_Get_Pedometer_Status_Ext( void *handle, uint8_t *status )
+DrvStatusTypeDef BSP_ACCELERO_Get_Pedometer_Status_Ext(void *handle, uint8_t *status)
 {
+   DrvContextTypeDef *ctx                             = (DrvContextTypeDef *) handle;
 
-  DrvContextTypeDef *ctx = (DrvContextTypeDef *)handle;
-
-  if(ctx == NULL)
-  {
-    return COMPONENT_ERROR;
-  }
-
-  if ( ctx->pExtVTable == NULL )
-  {
-    return COMPONENT_ERROR;
-  }
-
-  if ( status == NULL )
-  {
-    return COMPONENT_ERROR;
-  }
-
-  /* At the moment this feature is only implemented for LSM6DSL */
-  if ( ctx->who_am_i == LSM6DSL_ACC_GYRO_WHO_AM_I )
-  {
-    LSM6DSL_X_ExtDrv_t *extDriver = ( LSM6DSL_X_ExtDrv_t * )ctx->pExtVTable;
-
-    if ( extDriver->Get_Pedometer_Status == NULL )
-    {
+   if (ctx == NULL)
+   {
       return COMPONENT_ERROR;
-    }
+   }
 
-    else
-    {
-      return extDriver->Get_Pedometer_Status( ctx, status );
-    }
-  }
+   if (ctx->pExtVTable == NULL)
+   {
+      return COMPONENT_ERROR;
+   }
 
-  else
-  {
-    return COMPONENT_ERROR;
-  }
+   if (status == NULL)
+   {
+      return COMPONENT_ERROR;
+   }
+
+   /* At the moment this feature is only implemented for LSM6DSL */
+   if (ctx->who_am_i == LSM6DSL_ACC_GYRO_WHO_AM_I)
+   {
+      LSM6DSL_X_ExtDrv_t *extDriver                      = (LSM6DSL_X_ExtDrv_t *) ctx->pExtVTable;
+
+      if (extDriver->Get_Pedometer_Status == NULL)
+      {
+         return COMPONENT_ERROR;
+      }
+      else
+      {
+         return extDriver->Get_Pedometer_Status( ctx, status );
+      }
+   }
+   else
+   {
+      return COMPONENT_ERROR;
+   }
 }
-
 
 
 /**
@@ -1364,48 +1301,44 @@ DrvStatusTypeDef BSP_ACCELERO_Get_Pedometer_Status_Ext( void *handle, uint8_t *s
  * @retval COMPONENT_OK in case of success
  * @retval COMPONENT_ERROR in case of failure
  */
-DrvStatusTypeDef BSP_ACCELERO_Get_Step_Count_Ext( void *handle, uint16_t *step_count )
+DrvStatusTypeDef BSP_ACCELERO_Get_Step_Count_Ext(void *handle, uint16_t *step_count)
 {
+   DrvContextTypeDef *ctx                                = (DrvContextTypeDef *) handle;
 
-  DrvContextTypeDef *ctx = (DrvContextTypeDef *)handle;
-
-  if(ctx == NULL)
-  {
-    return COMPONENT_ERROR;
-  }
-
-  if ( ctx->pExtVTable == NULL )
-  {
-    return COMPONENT_ERROR;
-  }
-
-  if ( step_count == NULL )
-  {
-    return COMPONENT_ERROR;
-  }
-
-  /* At the moment this feature is only implemented for LSM6DSL */
-  if ( ctx->who_am_i == LSM6DSL_ACC_GYRO_WHO_AM_I )
-  {
-    LSM6DSL_X_ExtDrv_t *extDriver = ( LSM6DSL_X_ExtDrv_t * )ctx->pExtVTable;
-
-    if ( extDriver->Get_Step_Count == NULL )
-    {
+   if (ctx == NULL)
+   {
       return COMPONENT_ERROR;
-    }
+   }
 
-    else
-    {
-      return extDriver->Get_Step_Count( ctx, step_count );
-    }
-  }
+   if (ctx->pExtVTable == NULL)
+   {
+      return COMPONENT_ERROR;
+   }
 
-  else
-  {
-    return COMPONENT_ERROR;
-  }
+   if (step_count == NULL)
+   {
+      return COMPONENT_ERROR;
+   }
+
+   /* At the moment this feature is only implemented for LSM6DSL */
+   if (ctx->who_am_i == LSM6DSL_ACC_GYRO_WHO_AM_I)
+   {
+      LSM6DSL_X_ExtDrv_t *extDriver                      = (LSM6DSL_X_ExtDrv_t *) ctx->pExtVTable;
+
+      if (extDriver->Get_Step_Count == NULL)
+      {
+         return COMPONENT_ERROR;
+      }
+      else
+      {
+         return extDriver->Get_Step_Count(ctx, step_count);
+      }
+   }
+   else
+   {
+      return COMPONENT_ERROR;
+   }
 }
-
 
 
 /**
@@ -1414,53 +1347,50 @@ DrvStatusTypeDef BSP_ACCELERO_Get_Step_Count_Ext( void *handle, uint16_t *step_c
  * @retval COMPONENT_OK in case of success
  * @retval COMPONENT_ERROR in case of failure
  */
-DrvStatusTypeDef BSP_ACCELERO_Reset_Step_Counter_Ext( void *handle )
+DrvStatusTypeDef BSP_ACCELERO_Reset_Step_Counter_Ext(void *handle)
 {
+   DrvContextTypeDef *ctx                                = (DrvContextTypeDef *) handle;
 
-  DrvContextTypeDef *ctx = (DrvContextTypeDef *)handle;
-
-  if(ctx == NULL)
-  {
-    return COMPONENT_ERROR;
-  }
-
-  if ( ctx->pExtVTable == NULL )
-  {
-    return COMPONENT_ERROR;
-  }
-
-  /* At the moment this feature is only implemented for LSM6DSL */
-  if ( ctx->who_am_i == LSM6DSL_ACC_GYRO_WHO_AM_I )
-  {
-    LSM6DSL_X_ExtDrv_t *extDriver = ( LSM6DSL_X_ExtDrv_t * )ctx->pExtVTable;
-
-    if ( extDriver->Enable_Step_Counter_Reset == NULL || extDriver->Disable_Step_Counter_Reset == NULL )
-    {
+   if (ctx == NULL)
+   {
       return COMPONENT_ERROR;
-    }
+   }
 
-    else
-    {
-      if( extDriver->Enable_Step_Counter_Reset( ctx ) == COMPONENT_ERROR )
+   if (ctx->pExtVTable == NULL)
+   {
+      return COMPONENT_ERROR;
+   }
+
+   /* At the moment this feature is only implemented for LSM6DSL */
+   if (ctx->who_am_i == LSM6DSL_ACC_GYRO_WHO_AM_I)
+   {
+      LSM6DSL_X_ExtDrv_t *extDriver                      = (LSM6DSL_X_ExtDrv_t *) ctx->pExtVTable;
+
+      if (extDriver->Enable_Step_Counter_Reset == NULL || extDriver->Disable_Step_Counter_Reset == NULL)
       {
-        return COMPONENT_ERROR;
+         return COMPONENT_ERROR;
       }
-
-      HAL_Delay( 10 );
-
-      if( extDriver->Disable_Step_Counter_Reset( ctx ) == COMPONENT_ERROR )
+      else
       {
-        return COMPONENT_ERROR;
+         if (extDriver->Enable_Step_Counter_Reset(ctx) == COMPONENT_ERROR)
+         {
+            return COMPONENT_ERROR;
+         }
+
+         HAL_Delay(10);
+
+         if (extDriver->Disable_Step_Counter_Reset(ctx) == COMPONENT_ERROR)
+         {
+            return COMPONENT_ERROR;
+         }
       }
-    }
-  }
+   }
+   else
+   {
+      return COMPONENT_ERROR;
+   }
 
-  else
-  {
-    return COMPONENT_ERROR;
-  }
-
-  return COMPONENT_OK;
+   return COMPONENT_OK;
 }
 
 
@@ -1472,44 +1402,39 @@ DrvStatusTypeDef BSP_ACCELERO_Reset_Step_Counter_Ext( void *handle )
  * @retval COMPONENT_OK in case of success
  * @retval COMPONENT_ERROR in case of failure
  */
-DrvStatusTypeDef BSP_ACCELERO_Set_Pedometer_Threshold_Ext( void *handle, uint8_t thr )
+DrvStatusTypeDef BSP_ACCELERO_Set_Pedometer_Threshold_Ext(void *handle, uint8_t thr)
 {
+   DrvContextTypeDef *ctx                                = (DrvContextTypeDef *) handle;
 
-  DrvContextTypeDef *ctx = (DrvContextTypeDef *)handle;
-
-  if(ctx == NULL)
-  {
-    return COMPONENT_ERROR;
-  }
-
-  if ( ctx->pExtVTable == NULL )
-  {
-    return COMPONENT_ERROR;
-  }
-
-  /* At the moment this feature is only implemented for LSM6DSL */
-  if ( ctx->who_am_i == LSM6DSL_ACC_GYRO_WHO_AM_I )
-  {
-    LSM6DSL_X_ExtDrv_t *extDriver = ( LSM6DSL_X_ExtDrv_t * )ctx->pExtVTable;
-
-    if ( extDriver->Set_Pedometer_Threshold == NULL )
-    {
+   if (ctx == NULL)
+   {
       return COMPONENT_ERROR;
-    }
+   }
 
-    else
-    {
-      return extDriver->Set_Pedometer_Threshold( ctx, thr );
-    }
-  }
+   if (ctx->pExtVTable == NULL)
+   {
+      return COMPONENT_ERROR;
+   }
 
-  else
-  {
-    return COMPONENT_ERROR;
-  }
+   /* At the moment this feature is only implemented for LSM6DSL */
+   if (ctx->who_am_i == LSM6DSL_ACC_GYRO_WHO_AM_I)
+   {
+      LSM6DSL_X_ExtDrv_t *extDriver                      = ( LSM6DSL_X_ExtDrv_t * ) ctx->pExtVTable;
+
+      if (extDriver->Set_Pedometer_Threshold == NULL)
+      {
+         return COMPONENT_ERROR;
+      }
+      else
+      {
+         return extDriver->Set_Pedometer_Threshold(ctx, thr);
+      }
+   }
+   else
+   {
+      return COMPONENT_ERROR;
+   }
 }
-
-
 
 /**
  * @brief Enable the tilt detection (available only for LSM6DSL sensor)
@@ -1518,41 +1443,38 @@ DrvStatusTypeDef BSP_ACCELERO_Set_Pedometer_Threshold_Ext( void *handle, uint8_t
  * @retval COMPONENT_OK in case of success
  * @retval COMPONENT_ERROR in case of failure
  */
-DrvStatusTypeDef BSP_ACCELERO_Enable_Tilt_Detection_Ext( void *handle )
+DrvStatusTypeDef BSP_ACCELERO_Enable_Tilt_Detection_Ext(void *handle)
 {
+   DrvContextTypeDef *ctx                                = (DrvContextTypeDef *) handle;
 
-  DrvContextTypeDef *ctx = (DrvContextTypeDef *)handle;
-
-  if(ctx == NULL)
-  {
-    return COMPONENT_ERROR;
-  }
-
-  if ( ctx->pExtVTable == NULL )
-  {
-    return COMPONENT_ERROR;
-  }
-
-  /* At the moment this feature is only implemented for LSM6DSL */
-  if ( ctx->who_am_i == LSM6DSL_ACC_GYRO_WHO_AM_I )
-  {
-    LSM6DSL_X_ExtDrv_t *extDriver = ( LSM6DSL_X_ExtDrv_t * )ctx->pExtVTable;
-
-    if ( extDriver->Enable_Tilt_Detection == NULL )
-    {
+   if (ctx == NULL)
+   {
       return COMPONENT_ERROR;
-    }
+   }
 
-    else
-    {
-      return extDriver->Enable_Tilt_Detection( ctx );
-    }
-  }
+   if (ctx->pExtVTable == NULL)
+   {
+      return COMPONENT_ERROR;
+   }
 
-  else
-  {
-    return COMPONENT_ERROR;
-  }
+   /* At the moment this feature is only implemented for LSM6DSL */
+   if (ctx->who_am_i == LSM6DSL_ACC_GYRO_WHO_AM_I)
+   {
+      LSM6DSL_X_ExtDrv_t *extDriver                      = (LSM6DSL_X_ExtDrv_t *) ctx->pExtVTable;
+
+      if (extDriver->Enable_Tilt_Detection == NULL)
+      {
+         return COMPONENT_ERROR;
+      }
+      else
+      {
+         return extDriver->Enable_Tilt_Detection(ctx);
+      }
+   }
+   else
+   {
+      return COMPONENT_ERROR;
+   }
 }
 
 
@@ -1563,43 +1485,39 @@ DrvStatusTypeDef BSP_ACCELERO_Enable_Tilt_Detection_Ext( void *handle )
  * @retval COMPONENT_OK in case of success
  * @retval COMPONENT_ERROR in case of failure
  */
-DrvStatusTypeDef BSP_ACCELERO_Disable_Tilt_Detection_Ext( void *handle )
+DrvStatusTypeDef BSP_ACCELERO_Disable_Tilt_Detection_Ext(void *handle)
 {
+   DrvContextTypeDef *ctx                                = (DrvContextTypeDef *) handle;
 
-  DrvContextTypeDef *ctx = (DrvContextTypeDef *)handle;
-
-  if(ctx == NULL)
-  {
-    return COMPONENT_ERROR;
-  }
-
-  if ( ctx->pExtVTable == NULL )
-  {
-    return COMPONENT_ERROR;
-  }
-
-  /* At the moment this feature is only implemented for LSM6DSL */
-  if ( ctx->who_am_i == LSM6DSL_ACC_GYRO_WHO_AM_I )
-  {
-    LSM6DSL_X_ExtDrv_t *extDriver = ( LSM6DSL_X_ExtDrv_t * )ctx->pExtVTable;
-
-    if ( extDriver->Disable_Tilt_Detection == NULL )
-    {
+   if (ctx == NULL)
+   {
       return COMPONENT_ERROR;
-    }
+   }
 
-    else
-    {
-      return extDriver->Disable_Tilt_Detection( ctx );
-    }
-  }
+   if (ctx->pExtVTable == NULL)
+   {
+      return COMPONENT_ERROR;
+   }
 
-  else
-  {
-    return COMPONENT_ERROR;
-  }
+   /* At the moment this feature is only implemented for LSM6DSL */
+   if (ctx->who_am_i == LSM6DSL_ACC_GYRO_WHO_AM_I)
+   {
+      LSM6DSL_X_ExtDrv_t *extDriver                      = (LSM6DSL_X_ExtDrv_t *) ctx->pExtVTable;
+
+      if (extDriver->Disable_Tilt_Detection == NULL)
+      {
+         return COMPONENT_ERROR;
+      }
+      else
+      {
+         return extDriver->Disable_Tilt_Detection(ctx);
+      }
+   }
+   else
+   {
+      return COMPONENT_ERROR;
+   }
 }
-
 
 
 /**
@@ -1609,49 +1527,44 @@ DrvStatusTypeDef BSP_ACCELERO_Disable_Tilt_Detection_Ext( void *handle )
  * @retval COMPONENT_OK in case of success
  * @retval COMPONENT_ERROR in case of failure
  */
-DrvStatusTypeDef BSP_ACCELERO_Get_Tilt_Detection_Status_Ext( void *handle, uint8_t *status )
+DrvStatusTypeDef BSP_ACCELERO_Get_Tilt_Detection_Status_Ext(void *handle, uint8_t *status)
 {
+   DrvContextTypeDef *ctx                                = (DrvContextTypeDef *) handle;
 
-  DrvContextTypeDef *ctx = (DrvContextTypeDef *)handle;
-
-  if(ctx == NULL)
-  {
-    return COMPONENT_ERROR;
-  }
-
-  if ( ctx->pExtVTable == NULL )
-  {
-    return COMPONENT_ERROR;
-  }
-
-  if ( status == NULL )
-  {
-    return COMPONENT_ERROR;
-  }
-
-  /* At the moment this feature is only implemented for LSM6DSL */
-  if ( ctx->who_am_i == LSM6DSL_ACC_GYRO_WHO_AM_I )
-  {
-    LSM6DSL_X_ExtDrv_t *extDriver = ( LSM6DSL_X_ExtDrv_t * )ctx->pExtVTable;
-
-    if ( extDriver->Get_Tilt_Detection_Status == NULL )
-    {
+   if (ctx == NULL)
+   {
       return COMPONENT_ERROR;
-    }
+   }
 
-    else
-    {
-      return extDriver->Get_Tilt_Detection_Status( ctx, status );
-    }
-  }
+   if (ctx->pExtVTable == NULL)
+   {
+      return COMPONENT_ERROR;
+   }
 
-  else
-  {
-    return COMPONENT_ERROR;
-  }
+   if (status == NULL)
+   {
+      return COMPONENT_ERROR;
+   }
+
+   /* At the moment this feature is only implemented for LSM6DSL */
+   if (ctx->who_am_i == LSM6DSL_ACC_GYRO_WHO_AM_I)
+   {
+      LSM6DSL_X_ExtDrv_t *extDriver                      = (LSM6DSL_X_ExtDrv_t *) ctx->pExtVTable;
+
+      if (extDriver->Get_Tilt_Detection_Status == NULL)
+      {
+         return COMPONENT_ERROR;
+      }
+      else
+      {
+         return extDriver->Get_Tilt_Detection_Status(ctx, status);
+      }
+   }
+   else
+   {
+      return COMPONENT_ERROR;
+   }
 }
-
-
 
 /**
  * @brief Enable the wake up detection (available only for LSM6DSL sensor)
@@ -1660,44 +1573,39 @@ DrvStatusTypeDef BSP_ACCELERO_Get_Tilt_Detection_Status_Ext( void *handle, uint8
  * @retval COMPONENT_OK in case of success
  * @retval COMPONENT_ERROR in case of failure
  */
-DrvStatusTypeDef BSP_ACCELERO_Enable_Wake_Up_Detection_Ext( void *handle )
+DrvStatusTypeDef BSP_ACCELERO_Enable_Wake_Up_Detection_Ext(void *handle)
 {
+   DrvContextTypeDef *ctx                                = (DrvContextTypeDef *) handle;
 
-  DrvContextTypeDef *ctx = (DrvContextTypeDef *)handle;
-
-  if(ctx == NULL)
-  {
-    return COMPONENT_ERROR;
-  }
-
-  if ( ctx->pExtVTable == NULL )
-  {
-    return COMPONENT_ERROR;
-  }
-
-  /* At the moment this feature is only implemented for LSM6DSL */
-  if ( ctx->who_am_i == LSM6DSL_ACC_GYRO_WHO_AM_I )
-  {
-    LSM6DSL_X_ExtDrv_t *extDriver = ( LSM6DSL_X_ExtDrv_t * )ctx->pExtVTable;
-
-    if ( extDriver->Enable_Wake_Up_Detection == NULL )
-    {
+   if (ctx == NULL)
+   {
       return COMPONENT_ERROR;
-    }
+   }
 
-    else
-    {
-      return extDriver->Enable_Wake_Up_Detection( ctx );
-    }
-  }
+   if (ctx->pExtVTable == NULL)
+   {
+      return COMPONENT_ERROR;
+   }
 
-  else
-  {
-    return COMPONENT_ERROR;
-  }
+   /* At the moment this feature is only implemented for LSM6DSL */
+   if (ctx->who_am_i == LSM6DSL_ACC_GYRO_WHO_AM_I)
+   {
+      LSM6DSL_X_ExtDrv_t *extDriver                      = (LSM6DSL_X_ExtDrv_t *) ctx->pExtVTable;
+
+      if (extDriver->Enable_Wake_Up_Detection == NULL)
+      {
+         return COMPONENT_ERROR;
+      }
+      else
+      {
+         return extDriver->Enable_Wake_Up_Detection(ctx);
+      }
+   }
+   else
+   {
+      return COMPONENT_ERROR;
+   }
 }
-
-
 
 /**
  * @brief Disable the wake up detection (available only for LSM6DSL sensor)
@@ -1705,44 +1613,39 @@ DrvStatusTypeDef BSP_ACCELERO_Enable_Wake_Up_Detection_Ext( void *handle )
  * @retval COMPONENT_OK in case of success
  * @retval COMPONENT_ERROR in case of failure
  */
-DrvStatusTypeDef BSP_ACCELERO_Disable_Wake_Up_Detection_Ext( void *handle )
+DrvStatusTypeDef BSP_ACCELERO_Disable_Wake_Up_Detection_Ext(void *handle)
 {
+   DrvContextTypeDef *ctx                                = (DrvContextTypeDef *) handle;
 
-  DrvContextTypeDef *ctx = (DrvContextTypeDef *)handle;
-
-  if(ctx == NULL)
-  {
-    return COMPONENT_ERROR;
-  }
-
-  if ( ctx->pExtVTable == NULL )
-  {
-    return COMPONENT_ERROR;
-  }
-
-  /* At the moment this feature is only implemented for LSM6DSL */
-  if ( ctx->who_am_i == LSM6DSL_ACC_GYRO_WHO_AM_I )
-  {
-    LSM6DSL_X_ExtDrv_t *extDriver = ( LSM6DSL_X_ExtDrv_t * )ctx->pExtVTable;
-
-    if ( extDriver->Disable_Wake_Up_Detection == NULL )
-    {
+   if (ctx == NULL)
+   {
       return COMPONENT_ERROR;
-    }
+   }
 
-    else
-    {
-      return extDriver->Disable_Wake_Up_Detection( ctx );
-    }
-  }
+   if (ctx->pExtVTable == NULL)
+   {
+      return COMPONENT_ERROR;
+   }
 
-  else
-  {
-    return COMPONENT_ERROR;
-  }
+   /* At the moment this feature is only implemented for LSM6DSL */
+   if (ctx->who_am_i == LSM6DSL_ACC_GYRO_WHO_AM_I)
+   {
+      LSM6DSL_X_ExtDrv_t *extDriver                      = (LSM6DSL_X_ExtDrv_t *) ctx->pExtVTable;
+
+      if (extDriver->Disable_Wake_Up_Detection == NULL)
+      {
+         return COMPONENT_ERROR;
+      }
+      else
+      {
+         return extDriver->Disable_Wake_Up_Detection( ctx );
+      }
+   }
+   else
+   {
+      return COMPONENT_ERROR;
+   }
 }
-
-
 
 /**
  * @brief Get the status of the wake up detection (available only for LSM6DSL sensor)
@@ -1751,48 +1654,44 @@ DrvStatusTypeDef BSP_ACCELERO_Disable_Wake_Up_Detection_Ext( void *handle )
  * @retval COMPONENT_OK in case of success
  * @retval COMPONENT_ERROR in case of failure
  */
-DrvStatusTypeDef BSP_ACCELERO_Get_Wake_Up_Detection_Status_Ext( void *handle, uint8_t *status )
+DrvStatusTypeDef BSP_ACCELERO_Get_Wake_Up_Detection_Status_Ext(void *handle, uint8_t *status)
 {
+   DrvContextTypeDef *ctx                                = (DrvContextTypeDef *) handle;
 
-  DrvContextTypeDef *ctx = (DrvContextTypeDef *)handle;
-
-  if(ctx == NULL)
-  {
-    return COMPONENT_ERROR;
-  }
-
-  if ( ctx->pExtVTable == NULL )
-  {
-    return COMPONENT_ERROR;
-  }
-
-  if ( status == NULL )
-  {
-    return COMPONENT_ERROR;
-  }
-
-  /* At the moment this feature is only implemented for LSM6DSL */
-  if ( ctx->who_am_i == LSM6DSL_ACC_GYRO_WHO_AM_I )
-  {
-    LSM6DSL_X_ExtDrv_t *extDriver = ( LSM6DSL_X_ExtDrv_t * )ctx->pExtVTable;
-
-    if ( extDriver->Get_Wake_Up_Detection_Status == NULL )
-    {
+   if (ctx == NULL)
+   {
       return COMPONENT_ERROR;
-    }
+   }
 
-    else
-    {
-      return extDriver->Get_Wake_Up_Detection_Status( ctx, status );
-    }
-  }
+   if (ctx->pExtVTable == NULL)
+   {
+      return COMPONENT_ERROR;
+   }
 
-  else
-  {
-    return COMPONENT_ERROR;
-  }
+   if (status == NULL)
+   {
+      return COMPONENT_ERROR;
+   }
+
+   /* At the moment this feature is only implemented for LSM6DSL */
+   if (ctx->who_am_i == LSM6DSL_ACC_GYRO_WHO_AM_I)
+   {
+      LSM6DSL_X_ExtDrv_t *extDriver                      = (LSM6DSL_X_ExtDrv_t *) ctx->pExtVTable;
+
+      if (extDriver->Get_Wake_Up_Detection_Status == NULL)
+      {
+         return COMPONENT_ERROR;
+      }
+      else
+      {
+         return extDriver->Get_Wake_Up_Detection_Status( ctx, status );
+      }
+   }
+   else
+   {
+      return COMPONENT_ERROR;
+   }
 }
-
 
 
 /**
@@ -1802,43 +1701,39 @@ DrvStatusTypeDef BSP_ACCELERO_Get_Wake_Up_Detection_Status_Ext( void *handle, ui
  * @retval COMPONENT_OK in case of success
  * @retval COMPONENT_ERROR in case of failure
  */
-DrvStatusTypeDef BSP_ACCELERO_Set_Wake_Up_Threshold_Ext( void *handle, uint8_t thr )
+DrvStatusTypeDef BSP_ACCELERO_Set_Wake_Up_Threshold_Ext(void *handle, uint8_t thr)
 {
+   DrvContextTypeDef *ctx                                = (DrvContextTypeDef *) handle;
 
-  DrvContextTypeDef *ctx = (DrvContextTypeDef *)handle;
-
-  if(ctx == NULL)
-  {
-    return COMPONENT_ERROR;
-  }
-
-  if ( ctx->pExtVTable == NULL )
-  {
-    return COMPONENT_ERROR;
-  }
-
-  /* At the moment this feature is only implemented for LSM6DSL */
-  if ( ctx->who_am_i == LSM6DSL_ACC_GYRO_WHO_AM_I )
-  {
-    LSM6DSL_X_ExtDrv_t *extDriver = ( LSM6DSL_X_ExtDrv_t * )ctx->pExtVTable;
-
-    if ( extDriver->Set_Wake_Up_Threshold == NULL )
-    {
+   if (ctx == NULL)
+   {
       return COMPONENT_ERROR;
-    }
+   }
 
-    else
-    {
-      return extDriver->Set_Wake_Up_Threshold( ctx, thr );
-    }
-  }
+   if (ctx->pExtVTable == NULL)
+   {
+      return COMPONENT_ERROR;
+   }
 
-  else
-  {
-    return COMPONENT_ERROR;
-  }
+   /* At the moment this feature is only implemented for LSM6DSL */
+   if (ctx->who_am_i == LSM6DSL_ACC_GYRO_WHO_AM_I)
+   {
+      LSM6DSL_X_ExtDrv_t *extDriver                      = (LSM6DSL_X_ExtDrv_t *) ctx->pExtVTable;
+
+      if (extDriver->Set_Wake_Up_Threshold == NULL)
+      {
+         return COMPONENT_ERROR;
+      }
+      else
+      {
+         return extDriver->Set_Wake_Up_Threshold( ctx, thr );
+      }
+   }
+   else
+   {
+      return COMPONENT_ERROR;
+   }
 }
-
 
 
 /**
@@ -1848,43 +1743,39 @@ DrvStatusTypeDef BSP_ACCELERO_Set_Wake_Up_Threshold_Ext( void *handle, uint8_t t
  * @retval COMPONENT_OK in case of success
  * @retval COMPONENT_ERROR in case of failure
  */
-DrvStatusTypeDef BSP_ACCELERO_Enable_Single_Tap_Detection_Ext( void *handle )
+DrvStatusTypeDef BSP_ACCELERO_Enable_Single_Tap_Detection_Ext(void *handle)
 {
+   DrvContextTypeDef *ctx                                = (DrvContextTypeDef *) handle;
 
-  DrvContextTypeDef *ctx = (DrvContextTypeDef *)handle;
-
-  if(ctx == NULL)
-  {
-    return COMPONENT_ERROR;
-  }
-
-  if ( ctx->pExtVTable == NULL )
-  {
-    return COMPONENT_ERROR;
-  }
-
-  /* At the moment this feature is only implemented for LSM6DSL */
-  if ( ctx->who_am_i == LSM6DSL_ACC_GYRO_WHO_AM_I )
-  {
-    LSM6DSL_X_ExtDrv_t *extDriver = ( LSM6DSL_X_ExtDrv_t * )ctx->pExtVTable;
-
-    if ( extDriver->Enable_Single_Tap_Detection == NULL )
-    {
+   if (ctx == NULL)
+   {
       return COMPONENT_ERROR;
-    }
+   }
 
-    else
-    {
-      return extDriver->Enable_Single_Tap_Detection( ctx );
-    }
-  }
+   if (ctx->pExtVTable == NULL)
+   {
+      return COMPONENT_ERROR;
+   }
 
-  else
-  {
-    return COMPONENT_ERROR;
-  }
+   /* At the moment this feature is only implemented for LSM6DSL */
+   if (ctx->who_am_i == LSM6DSL_ACC_GYRO_WHO_AM_I)
+   {
+      LSM6DSL_X_ExtDrv_t *extDriver                      = (LSM6DSL_X_ExtDrv_t *) ctx->pExtVTable;
+
+      if (extDriver->Enable_Single_Tap_Detection == NULL)
+      {
+         return COMPONENT_ERROR;
+      }
+      else
+      {
+         return extDriver->Enable_Single_Tap_Detection(ctx);
+      }
+   }
+   else
+   {
+      return COMPONENT_ERROR;
+   }
 }
-
 
 
 /**
@@ -1893,43 +1784,39 @@ DrvStatusTypeDef BSP_ACCELERO_Enable_Single_Tap_Detection_Ext( void *handle )
  * @retval COMPONENT_OK in case of success
  * @retval COMPONENT_ERROR in case of failure
  */
-DrvStatusTypeDef BSP_ACCELERO_Disable_Single_Tap_Detection_Ext( void *handle )
+DrvStatusTypeDef BSP_ACCELERO_Disable_Single_Tap_Detection_Ext(void *handle)
 {
+   DrvContextTypeDef *ctx                                = (DrvContextTypeDef *) handle;
 
-  DrvContextTypeDef *ctx = (DrvContextTypeDef *)handle;
-
-  if(ctx == NULL)
-  {
-    return COMPONENT_ERROR;
-  }
-
-  if ( ctx->pExtVTable == NULL )
-  {
-    return COMPONENT_ERROR;
-  }
-
-  /* At the moment this feature is only implemented for LSM6DSL */
-  if ( ctx->who_am_i == LSM6DSL_ACC_GYRO_WHO_AM_I )
-  {
-    LSM6DSL_X_ExtDrv_t *extDriver = ( LSM6DSL_X_ExtDrv_t * )ctx->pExtVTable;
-
-    if ( extDriver->Disable_Single_Tap_Detection == NULL )
-    {
+   if (ctx == NULL)
+   {
       return COMPONENT_ERROR;
-    }
+   }
 
-    else
-    {
-      return extDriver->Disable_Single_Tap_Detection( ctx );
-    }
-  }
+   if (ctx->pExtVTable == NULL)
+   {
+      return COMPONENT_ERROR;
+   }
 
-  else
-  {
-    return COMPONENT_ERROR;
-  }
+   /* At the moment this feature is only implemented for LSM6DSL */
+   if (ctx->who_am_i == LSM6DSL_ACC_GYRO_WHO_AM_I)
+   {
+      LSM6DSL_X_ExtDrv_t *extDriver                      = (LSM6DSL_X_ExtDrv_t *) ctx->pExtVTable;
+
+      if (extDriver->Disable_Single_Tap_Detection == NULL)
+      {
+         return COMPONENT_ERROR;
+      }
+      else
+      {
+         return extDriver->Disable_Single_Tap_Detection(ctx);
+      }
+   }
+   else
+   {
+      return COMPONENT_ERROR;
+   }
 }
-
 
 
 /**
@@ -1939,48 +1826,44 @@ DrvStatusTypeDef BSP_ACCELERO_Disable_Single_Tap_Detection_Ext( void *handle )
  * @retval COMPONENT_OK in case of success
  * @retval COMPONENT_ERROR in case of failure
  */
-DrvStatusTypeDef BSP_ACCELERO_Get_Single_Tap_Detection_Status_Ext( void *handle, uint8_t *status )
+DrvStatusTypeDef BSP_ACCELERO_Get_Single_Tap_Detection_Status_Ext(void *handle, uint8_t *status)
 {
+   DrvContextTypeDef *ctx                                = (DrvContextTypeDef *) handle;
 
-  DrvContextTypeDef *ctx = (DrvContextTypeDef *)handle;
-
-  if(ctx == NULL)
-  {
-    return COMPONENT_ERROR;
-  }
-
-  if ( ctx->pExtVTable == NULL )
-  {
-    return COMPONENT_ERROR;
-  }
-
-  if ( status == NULL )
-  {
-    return COMPONENT_ERROR;
-  }
-
-  /* At the moment this feature is only implemented for LSM6DSL */
-  if ( ctx->who_am_i == LSM6DSL_ACC_GYRO_WHO_AM_I )
-  {
-    LSM6DSL_X_ExtDrv_t *extDriver = ( LSM6DSL_X_ExtDrv_t * )ctx->pExtVTable;
-
-    if ( extDriver->Get_Single_Tap_Detection_Status == NULL )
-    {
+   if (ctx == NULL)
+   {
       return COMPONENT_ERROR;
-    }
+   }
 
-    else
-    {
-      return extDriver->Get_Single_Tap_Detection_Status( ctx, status );
-    }
-  }
+   if (ctx->pExtVTable == NULL)
+   {
+      return COMPONENT_ERROR;
+   }
 
-  else
-  {
-    return COMPONENT_ERROR;
-  }
+   if (status == NULL)
+   {
+      return COMPONENT_ERROR;
+   }
+
+   /* At the moment this feature is only implemented for LSM6DSL */
+   if (ctx->who_am_i == LSM6DSL_ACC_GYRO_WHO_AM_I)
+   {
+      LSM6DSL_X_ExtDrv_t *extDriver                      = (LSM6DSL_X_ExtDrv_t *) ctx->pExtVTable;
+
+      if (extDriver->Get_Single_Tap_Detection_Status == NULL)
+      {
+         return COMPONENT_ERROR;
+      }
+      else
+      {
+         return extDriver->Get_Single_Tap_Detection_Status(ctx, status);
+      }
+   }
+   else
+   {
+      return COMPONENT_ERROR;
+   }
 }
-
 
 
 /**
@@ -1990,43 +1873,39 @@ DrvStatusTypeDef BSP_ACCELERO_Get_Single_Tap_Detection_Status_Ext( void *handle,
  * @retval COMPONENT_OK in case of success
  * @retval COMPONENT_ERROR in case of failure
  */
-DrvStatusTypeDef BSP_ACCELERO_Enable_Double_Tap_Detection_Ext( void *handle )
+DrvStatusTypeDef BSP_ACCELERO_Enable_Double_Tap_Detection_Ext(void *handle)
 {
+   DrvContextTypeDef *ctx                                = (DrvContextTypeDef *) handle;
 
-  DrvContextTypeDef *ctx = (DrvContextTypeDef *)handle;
-
-  if(ctx == NULL)
-  {
-    return COMPONENT_ERROR;
-  }
-
-  if ( ctx->pExtVTable == NULL )
-  {
-    return COMPONENT_ERROR;
-  }
-
-  /* At the moment this feature is only implemented for LSM6DSL */
-  if ( ctx->who_am_i == LSM6DSL_ACC_GYRO_WHO_AM_I )
-  {
-    LSM6DSL_X_ExtDrv_t *extDriver = ( LSM6DSL_X_ExtDrv_t * )ctx->pExtVTable;
-
-    if ( extDriver->Enable_Double_Tap_Detection == NULL )
-    {
+   if (ctx == NULL)
+   {
       return COMPONENT_ERROR;
-    }
+   }
 
-    else
-    {
-      return extDriver->Enable_Double_Tap_Detection( ctx );
-    }
-  }
+   if (ctx->pExtVTable == NULL)
+   {
+      return COMPONENT_ERROR;
+   }
 
-  else
-  {
-    return COMPONENT_ERROR;
-  }
+   /* At the moment this feature is only implemented for LSM6DSL */
+   if (ctx->who_am_i == LSM6DSL_ACC_GYRO_WHO_AM_I)
+   {
+      LSM6DSL_X_ExtDrv_t *extDriver                      = (LSM6DSL_X_ExtDrv_t *) ctx->pExtVTable;
+
+      if (extDriver->Enable_Double_Tap_Detection == NULL)
+      {
+         return COMPONENT_ERROR;
+      }
+      else
+      {
+         return extDriver->Enable_Double_Tap_Detection(ctx);
+      }
+   }
+   else
+   {
+      return COMPONENT_ERROR;
+   }
 }
-
 
 
 /**
@@ -2035,44 +1914,39 @@ DrvStatusTypeDef BSP_ACCELERO_Enable_Double_Tap_Detection_Ext( void *handle )
  * @retval COMPONENT_OK in case of success
  * @retval COMPONENT_ERROR in case of failure
  */
-DrvStatusTypeDef BSP_ACCELERO_Disable_Double_Tap_Detection_Ext( void *handle )
+DrvStatusTypeDef BSP_ACCELERO_Disable_Double_Tap_Detection_Ext(void *handle)
 {
+   DrvContextTypeDef *ctx                                = (DrvContextTypeDef *) handle;
 
-  DrvContextTypeDef *ctx = (DrvContextTypeDef *)handle;
-
-  if(ctx == NULL)
-  {
-    return COMPONENT_ERROR;
-  }
-
-  if ( ctx->pExtVTable == NULL )
-  {
-    return COMPONENT_ERROR;
-  }
-
-  /* At the moment this feature is only implemented for LSM6DSL */
-  if ( ctx->who_am_i == LSM6DSL_ACC_GYRO_WHO_AM_I )
-  {
-    LSM6DSL_X_ExtDrv_t *extDriver = ( LSM6DSL_X_ExtDrv_t * )ctx->pExtVTable;
-
-    if ( extDriver->Disable_Double_Tap_Detection == NULL )
-    {
+   if (ctx == NULL)
+   {
       return COMPONENT_ERROR;
-    }
+   }
 
-    else
-    {
-      return extDriver->Disable_Double_Tap_Detection( ctx );
-    }
-  }
+   if (ctx->pExtVTable == NULL)
+   {
+      return COMPONENT_ERROR;
+   }
 
-  else
-  {
-    return COMPONENT_ERROR;
-  }
+   /* At the moment this feature is only implemented for LSM6DSL */
+   if (ctx->who_am_i == LSM6DSL_ACC_GYRO_WHO_AM_I)
+   {
+      LSM6DSL_X_ExtDrv_t *extDriver                      = (LSM6DSL_X_ExtDrv_t *) ctx->pExtVTable;
+
+      if (extDriver->Disable_Double_Tap_Detection == NULL)
+      {
+         return COMPONENT_ERROR;
+      }
+      else
+      {
+         return extDriver->Disable_Double_Tap_Detection(ctx);
+      }
+   }
+   else
+   {
+      return COMPONENT_ERROR;
+   }
 }
-
-
 
 /**
  * @brief Get the double tap detection status (available only for LSM6DSL sensor)
@@ -2081,48 +1955,44 @@ DrvStatusTypeDef BSP_ACCELERO_Disable_Double_Tap_Detection_Ext( void *handle )
  * @retval COMPONENT_OK in case of success
  * @retval COMPONENT_ERROR in case of failure
  */
-DrvStatusTypeDef BSP_ACCELERO_Get_Double_Tap_Detection_Status_Ext( void *handle, uint8_t *status )
+DrvStatusTypeDef BSP_ACCELERO_Get_Double_Tap_Detection_Status_Ext(void *handle, uint8_t *status)
 {
+   DrvContextTypeDef *ctx                                = (DrvContextTypeDef *) handle;
 
-  DrvContextTypeDef *ctx = (DrvContextTypeDef *)handle;
-
-  if(ctx == NULL)
-  {
-    return COMPONENT_ERROR;
-  }
-
-  if ( ctx->pExtVTable == NULL )
-  {
-    return COMPONENT_ERROR;
-  }
-
-  if ( status == NULL )
-  {
-    return COMPONENT_ERROR;
-  }
-
-  /* At the moment this feature is only implemented for LSM6DSL */
-  if ( ctx->who_am_i == LSM6DSL_ACC_GYRO_WHO_AM_I )
-  {
-    LSM6DSL_X_ExtDrv_t *extDriver = ( LSM6DSL_X_ExtDrv_t * )ctx->pExtVTable;
-
-    if ( extDriver->Get_Double_Tap_Detection_Status == NULL )
-    {
+   if (ctx == NULL)
+   {
       return COMPONENT_ERROR;
-    }
+   }
 
-    else
-    {
-      return extDriver->Get_Double_Tap_Detection_Status( ctx, status );
-    }
-  }
+   if (ctx->pExtVTable == NULL)
+   {
+      return COMPONENT_ERROR;
+   }
 
-  else
-  {
-    return COMPONENT_ERROR;
-  }
+   if (status == NULL)
+   {
+      return COMPONENT_ERROR;
+   }
+
+   /* At the moment this feature is only implemented for LSM6DSL */
+   if (ctx->who_am_i == LSM6DSL_ACC_GYRO_WHO_AM_I)
+   {
+      LSM6DSL_X_ExtDrv_t *extDriver                      = (LSM6DSL_X_ExtDrv_t *) ctx->pExtVTable;
+
+      if (extDriver->Get_Double_Tap_Detection_Status == NULL)
+      {
+         return COMPONENT_ERROR;
+      }
+      else
+      {
+         return extDriver->Get_Double_Tap_Detection_Status(ctx, status);
+      }
+   }
+   else
+   {
+      return COMPONENT_ERROR;
+   }
 }
-
 
 
 /**
@@ -2132,43 +2002,39 @@ DrvStatusTypeDef BSP_ACCELERO_Get_Double_Tap_Detection_Status_Ext( void *handle,
  * @retval COMPONENT_OK in case of success
  * @retval COMPONENT_ERROR in case of failure
  */
-DrvStatusTypeDef BSP_ACCELERO_Set_Tap_Threshold_Ext( void *handle, uint8_t thr )
+DrvStatusTypeDef BSP_ACCELERO_Set_Tap_Threshold_Ext(void *handle, uint8_t thr)
 {
+   DrvContextTypeDef *ctx                                = (DrvContextTypeDef *) handle;
 
-  DrvContextTypeDef *ctx = (DrvContextTypeDef *)handle;
-
-  if(ctx == NULL)
-  {
-    return COMPONENT_ERROR;
-  }
-
-  if ( ctx->pExtVTable == NULL )
-  {
-    return COMPONENT_ERROR;
-  }
-
-  /* At the moment this feature is only implemented for LSM6DSL */
-  if ( ctx->who_am_i == LSM6DSL_ACC_GYRO_WHO_AM_I )
-  {
-    LSM6DSL_X_ExtDrv_t *extDriver = ( LSM6DSL_X_ExtDrv_t * )ctx->pExtVTable;
-
-    if ( extDriver->Set_Tap_Threshold == NULL )
-    {
+   if (ctx == NULL)
+   {
       return COMPONENT_ERROR;
-    }
+   }
 
-    else
-    {
-      return extDriver->Set_Tap_Threshold( ctx, thr );
-    }
-  }
+   if (ctx->pExtVTable == NULL)
+   {
+      return COMPONENT_ERROR;
+   }
 
-  else
-  {
-    return COMPONENT_ERROR;
-  }
+   /* At the moment this feature is only implemented for LSM6DSL */
+   if (ctx->who_am_i == LSM6DSL_ACC_GYRO_WHO_AM_I)
+   {
+      LSM6DSL_X_ExtDrv_t *extDriver                      = (LSM6DSL_X_ExtDrv_t *) ctx->pExtVTable;
+
+      if (extDriver->Set_Tap_Threshold == NULL)
+      {
+         return COMPONENT_ERROR;
+      }
+      else
+      {
+         return extDriver->Set_Tap_Threshold(ctx, thr);
+      }
+   }
+   else
+   {
+      return COMPONENT_ERROR;
+   }
 }
-
 
 
 /**
@@ -2178,43 +2044,39 @@ DrvStatusTypeDef BSP_ACCELERO_Set_Tap_Threshold_Ext( void *handle, uint8_t thr )
  * @retval COMPONENT_OK in case of success
  * @retval COMPONENT_ERROR in case of failure
  */
-DrvStatusTypeDef BSP_ACCELERO_Set_Tap_Shock_Time_Ext( void *handle, uint8_t time )
+DrvStatusTypeDef BSP_ACCELERO_Set_Tap_Shock_Time_Ext(void *handle, uint8_t time)
 {
+   DrvContextTypeDef *ctx                                = (DrvContextTypeDef *) handle;
 
-  DrvContextTypeDef *ctx = (DrvContextTypeDef *)handle;
-
-  if(ctx == NULL)
-  {
-    return COMPONENT_ERROR;
-  }
-
-  if ( ctx->pExtVTable == NULL )
-  {
-    return COMPONENT_ERROR;
-  }
-
-  /* At the moment this feature is only implemented for LSM6DSL */
-  if ( ctx->who_am_i == LSM6DSL_ACC_GYRO_WHO_AM_I )
-  {
-    LSM6DSL_X_ExtDrv_t *extDriver = ( LSM6DSL_X_ExtDrv_t * )ctx->pExtVTable;
-
-    if ( extDriver->Set_Tap_Shock_Time == NULL )
-    {
+   if (ctx == NULL)
+   {
       return COMPONENT_ERROR;
-    }
+   }
 
-    else
-    {
-      return extDriver->Set_Tap_Shock_Time( ctx, time );
-    }
-  }
+   if (ctx->pExtVTable == NULL)
+   {
+      return COMPONENT_ERROR;
+   }
 
-  else
-  {
-    return COMPONENT_ERROR;
-  }
+   /* At the moment this feature is only implemented for LSM6DSL */
+   if (ctx->who_am_i == LSM6DSL_ACC_GYRO_WHO_AM_I)
+   {
+      LSM6DSL_X_ExtDrv_t *extDriver                      = (LSM6DSL_X_ExtDrv_t *) ctx->pExtVTable;
+
+      if (extDriver->Set_Tap_Shock_Time == NULL)
+      {
+         return COMPONENT_ERROR;
+      }
+      else
+      {
+         return extDriver->Set_Tap_Shock_Time(ctx, time);
+      }
+   }
+   else
+   {
+      return COMPONENT_ERROR;
+   }
 }
-
 
 
 /**
@@ -2224,43 +2086,39 @@ DrvStatusTypeDef BSP_ACCELERO_Set_Tap_Shock_Time_Ext( void *handle, uint8_t time
  * @retval COMPONENT_OK in case of success
  * @retval COMPONENT_ERROR in case of failure
  */
-DrvStatusTypeDef BSP_ACCELERO_Set_Tap_Quiet_Time_Ext( void *handle, uint8_t time )
+DrvStatusTypeDef BSP_ACCELERO_Set_Tap_Quiet_Time_Ext(void *handle, uint8_t time)
 {
+   DrvContextTypeDef *ctx                                = (DrvContextTypeDef *) handle;
 
-  DrvContextTypeDef *ctx = (DrvContextTypeDef *)handle;
-
-  if(ctx == NULL)
-  {
-    return COMPONENT_ERROR;
-  }
-
-  if ( ctx->pExtVTable == NULL )
-  {
-    return COMPONENT_ERROR;
-  }
-
-  /* At the moment this feature is only implemented for LSM6DSL */
-  if ( ctx->who_am_i == LSM6DSL_ACC_GYRO_WHO_AM_I )
-  {
-    LSM6DSL_X_ExtDrv_t *extDriver = ( LSM6DSL_X_ExtDrv_t * )ctx->pExtVTable;
-
-    if ( extDriver->Set_Tap_Quiet_Time == NULL )
-    {
+   if (ctx == NULL)
+   {
       return COMPONENT_ERROR;
-    }
+   }
 
-    else
-    {
-      return extDriver->Set_Tap_Quiet_Time( ctx, time );
-    }
-  }
+   if (ctx->pExtVTable == NULL)
+   {
+      return COMPONENT_ERROR;
+   }
 
-  else
-  {
-    return COMPONENT_ERROR;
-  }
+   /* At the moment this feature is only implemented for LSM6DSL */
+   if (ctx->who_am_i == LSM6DSL_ACC_GYRO_WHO_AM_I)
+   {
+      LSM6DSL_X_ExtDrv_t *extDriver                      = (LSM6DSL_X_ExtDrv_t *) ctx->pExtVTable;
+
+      if (extDriver->Set_Tap_Quiet_Time == NULL)
+      {
+         return COMPONENT_ERROR;
+      }
+      else
+      {
+         return extDriver->Set_Tap_Quiet_Time(ctx, time);
+      }
+   }
+   else
+   {
+      return COMPONENT_ERROR;
+   }
 }
-
 
 
 /**
@@ -2270,43 +2128,39 @@ DrvStatusTypeDef BSP_ACCELERO_Set_Tap_Quiet_Time_Ext( void *handle, uint8_t time
  * @retval COMPONENT_OK in case of success
  * @retval COMPONENT_ERROR in case of failure
  */
-DrvStatusTypeDef BSP_ACCELERO_Set_Tap_Duration_Time_Ext( void *handle, uint8_t time )
+DrvStatusTypeDef BSP_ACCELERO_Set_Tap_Duration_Time_Ext(void *handle, uint8_t time)
 {
+   DrvContextTypeDef *ctx                                = (DrvContextTypeDef *) handle;
 
-  DrvContextTypeDef *ctx = (DrvContextTypeDef *)handle;
-
-  if(ctx == NULL)
-  {
-    return COMPONENT_ERROR;
-  }
-
-  if ( ctx->pExtVTable == NULL )
-  {
-    return COMPONENT_ERROR;
-  }
-
-  /* At the moment this feature is only implemented for LSM6DSL */
-  if ( ctx->who_am_i == LSM6DSL_ACC_GYRO_WHO_AM_I )
-  {
-    LSM6DSL_X_ExtDrv_t *extDriver = ( LSM6DSL_X_ExtDrv_t * )ctx->pExtVTable;
-
-    if ( extDriver->Set_Tap_Duration_Time == NULL )
-    {
+   if (ctx == NULL)
+   {
       return COMPONENT_ERROR;
-    }
+   }
 
-    else
-    {
-      return extDriver->Set_Tap_Duration_Time( ctx, time );
-    }
-  }
+   if (ctx->pExtVTable == NULL)
+   {
+      return COMPONENT_ERROR;
+   }
 
-  else
-  {
-    return COMPONENT_ERROR;
-  }
+   /* At the moment this feature is only implemented for LSM6DSL */
+   if (ctx->who_am_i == LSM6DSL_ACC_GYRO_WHO_AM_I)
+   {
+      LSM6DSL_X_ExtDrv_t *extDriver                      = (LSM6DSL_X_ExtDrv_t *) ctx->pExtVTable;
+
+      if (extDriver->Set_Tap_Duration_Time == NULL)
+      {
+         return COMPONENT_ERROR;
+      }
+      else
+      {
+         return extDriver->Set_Tap_Duration_Time(ctx, time);
+      }
+   }
+   else
+   {
+      return COMPONENT_ERROR;
+   }
 }
-
 
 
 /**
@@ -2316,43 +2170,39 @@ DrvStatusTypeDef BSP_ACCELERO_Set_Tap_Duration_Time_Ext( void *handle, uint8_t t
  * @retval COMPONENT_OK in case of success
  * @retval COMPONENT_ERROR in case of failure
  */
-DrvStatusTypeDef BSP_ACCELERO_Enable_6D_Orientation_Ext( void *handle )
+DrvStatusTypeDef BSP_ACCELERO_Enable_6D_Orientation_Ext(void *handle)
 {
+   DrvContextTypeDef *ctx                                = (DrvContextTypeDef *) handle;
 
-  DrvContextTypeDef *ctx = (DrvContextTypeDef *)handle;
-
-  if(ctx == NULL)
-  {
-    return COMPONENT_ERROR;
-  }
-
-  if ( ctx->pExtVTable == NULL )
-  {
-    return COMPONENT_ERROR;
-  }
-
-  /* At the moment this feature is only implemented for LSM6DSL */
-  if ( ctx->who_am_i == LSM6DSL_ACC_GYRO_WHO_AM_I )
-  {
-    LSM6DSL_X_ExtDrv_t *extDriver = ( LSM6DSL_X_ExtDrv_t * )ctx->pExtVTable;
-
-    if ( extDriver->Enable_6D_Orientation == NULL )
-    {
+   if (ctx == NULL)
+   {
       return COMPONENT_ERROR;
-    }
+   }
 
-    else
-    {
-      return extDriver->Enable_6D_Orientation( ctx );
-    }
-  }
+   if (ctx->pExtVTable == NULL)
+   {
+      return COMPONENT_ERROR;
+   }
 
-  else
-  {
-    return COMPONENT_ERROR;
-  }
+   /* At the moment this feature is only implemented for LSM6DSL */
+   if (ctx->who_am_i == LSM6DSL_ACC_GYRO_WHO_AM_I)
+   {
+      LSM6DSL_X_ExtDrv_t *extDriver                      = (LSM6DSL_X_ExtDrv_t *) ctx->pExtVTable;
+
+      if (extDriver->Enable_6D_Orientation == NULL)
+      {
+         return COMPONENT_ERROR;
+      }
+      else
+      {
+         return extDriver->Enable_6D_Orientation(ctx);
+      }
+   }
+   else
+   {
+      return COMPONENT_ERROR;
+   }
 }
-
 
 
 /**
@@ -2361,41 +2211,38 @@ DrvStatusTypeDef BSP_ACCELERO_Enable_6D_Orientation_Ext( void *handle )
  * @retval COMPONENT_OK in case of success
  * @retval COMPONENT_ERROR in case of failure
  */
-DrvStatusTypeDef BSP_ACCELERO_Disable_6D_Orientation_Ext( void *handle )
+DrvStatusTypeDef BSP_ACCELERO_Disable_6D_Orientation_Ext(void *handle)
 {
+   DrvContextTypeDef *ctx                                = (DrvContextTypeDef *) handle;
 
-  DrvContextTypeDef *ctx = (DrvContextTypeDef *)handle;
-
-  if(ctx == NULL)
-  {
-    return COMPONENT_ERROR;
-  }
-
-  if ( ctx->pExtVTable == NULL )
-  {
-    return COMPONENT_ERROR;
-  }
-
-  /* At the moment this feature is only implemented for LSM6DSL */
-  if ( ctx->who_am_i == LSM6DSL_ACC_GYRO_WHO_AM_I )
-  {
-    LSM6DSL_X_ExtDrv_t *extDriver = ( LSM6DSL_X_ExtDrv_t * )ctx->pExtVTable;
-
-    if ( extDriver->Disable_6D_Orientation == NULL )
-    {
+   if (ctx == NULL)
+   {
       return COMPONENT_ERROR;
-    }
+   }
 
-    else
-    {
-      return extDriver->Disable_6D_Orientation( ctx );
-    }
-  }
+   if (ctx->pExtVTable == NULL)
+   {
+      return COMPONENT_ERROR;
+   }
 
-  else
-  {
-    return COMPONENT_ERROR;
-  }
+   /* At the moment this feature is only implemented for LSM6DSL */
+   if (ctx->who_am_i == LSM6DSL_ACC_GYRO_WHO_AM_I)
+   {
+      LSM6DSL_X_ExtDrv_t *extDriver                      = (LSM6DSL_X_ExtDrv_t *) ctx->pExtVTable;
+
+      if (extDriver->Disable_6D_Orientation == NULL)
+      {
+         return COMPONENT_ERROR;
+      }
+      else
+      {
+         return extDriver->Disable_6D_Orientation(ctx);
+      }
+   }
+   else
+   {
+      return COMPONENT_ERROR;
+   }
 }
 
 

@@ -43,56 +43,27 @@
 extern "C" {
 #endif
 
-
-
 /* Includes ------------------------------------------------------------------*/
 #include "LSM6DSL_ACC_GYRO_driver_HL.h"
 #include "LSM303AGR_ACC_driver_HL.h"
 #include "steval_fcu001_v1.h"
 
 
-
-/** @addtogroup BSP BSP
- * @{
- */
-
-/** @addtogroup STEVAL_FCU001_V1 STEVAL_FCU001_V1
- * @{
- */
-
-/** @addtogroup STEVAL_FCU001_V1_ACCELERO Accelero
- * @{
- */
-
-/** @addtogroup STEVAL_FCU001_V1_ACCELERO_Public_Types Public types
-  * @{
-  */
-
 typedef enum
 {
-  ACCELERO_SENSORS_AUTO = -1,    /* Always first element and equal to -1 */
-  LSM6DSL_X_0,                   /* Default on board. */
-  LSM303AGR_X_0                  /* Default on board. */
+   ACCELERO_SENSORS_AUTO                                 = -1,    /* Always first element and equal to -1 */
+   LSM6DSL_X_0,                                                   /* Default on board. */
+   LSM303AGR_X_0                                                  /* Default on board. */
 } ACCELERO_ID_t;
-
-/**
- * @}
- */
 
 /** @addtogroup STEVAL_FCU001_V1_ACCELERO_Public_Defines Public defines
   * @{
   */
 
-#define ACCELERO_SENSORS_MAX_NUM 2
+#define ACCELERO_SENSORS_MAX_NUM                         2
 
-/**
- * @}
- */
 
-/** @addtogroup STEVAL_FCU001_V1_ACCELERO_Public_Function_Prototypes Public function prototypes
- * @{
- */
-
+// @addtogroup STEVAL_FCU001_V1_ACCELERO_Public_Function_Prototypes Public function prototypes
 /* Sensor Configuration Functions */
 DrvStatusTypeDef BSP_ACCELERO_Init( ACCELERO_ID_t id, void **handle );
 DrvStatusTypeDef BSP_ACCELERO_DeInit( void **handle );
@@ -177,22 +148,6 @@ DrvStatusTypeDef BSP_ACCELERO_FIFO_Set_Stop_On_Fth_Ext( void *handle, uint8_t st
 
 DrvStatusTypeDef BSP_ACCELERO_Set_Interrupt_Latch_Ext( void *handle, uint8_t status );
 DrvStatusTypeDef BSP_ACCELERO_Set_SelfTest_Ext( void *handle, uint8_t status );
-
-/**
- * @}
- */
-
-/**
- * @}
- */
-
-/**
- * @}
- */
-
-/**
- * @}
- */
 
 #ifdef __cplusplus
 }
