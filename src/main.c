@@ -1007,7 +1007,7 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 * @param  None
 * @retval None
 */
-static void initializeAllSensors( void )
+static void initializeAllSensors(void)
 {
    if (BSP_ACCELERO_Init(LSM6DSL_X_0, &LSM6DSL_X_0_handle) != COMPONENT_OK)
    {
