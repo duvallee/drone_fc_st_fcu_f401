@@ -240,7 +240,9 @@ for each packet used for Console Service */
 // static int HCI_ProcessEvent=0;
 // static volatile uint32_t HCI_ProcessEvent=0;
 extern volatile uint32_t HCI_ProcessEvent;  
+#if 0
 #define MCR_BLUEMS_F2I_2D(in, out_int, out_dec)          { out_int = (int32_t) in; out_dec = (int32_t)((in-out_int) * 100);};
+#endif
 
 extern uint8_t BufferToWrite[256];
 extern int32_t BytesToWrite;

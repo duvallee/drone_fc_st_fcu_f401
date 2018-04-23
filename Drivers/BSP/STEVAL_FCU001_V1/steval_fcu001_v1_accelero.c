@@ -2245,8 +2245,6 @@ DrvStatusTypeDef BSP_ACCELERO_Disable_6D_Orientation_Ext(void *handle)
    }
 }
 
-
-
 /**
  * @brief Get the status of the 6D orientation detection (available only for LSM6DSL sensor)
  * @param handle the device handle
@@ -2254,48 +2252,44 @@ DrvStatusTypeDef BSP_ACCELERO_Disable_6D_Orientation_Ext(void *handle)
  * @retval COMPONENT_OK in case of success
  * @retval COMPONENT_ERROR in case of failure
  */
-DrvStatusTypeDef BSP_ACCELERO_Get_6D_Orientation_Status_Ext( void *handle, uint8_t *status )
+DrvStatusTypeDef BSP_ACCELERO_Get_6D_Orientation_Status_Ext(void *handle, uint8_t *status)
 {
+   DrvContextTypeDef *ctx                                = (DrvContextTypeDef *) handle;
 
-  DrvContextTypeDef *ctx = (DrvContextTypeDef *)handle;
-
-  if(ctx == NULL)
-  {
-    return COMPONENT_ERROR;
-  }
-
-  if ( ctx->pExtVTable == NULL )
-  {
-    return COMPONENT_ERROR;
-  }
-
-  if ( status == NULL )
-  {
-    return COMPONENT_ERROR;
-  }
-
-  /* At the moment this feature is only implemented for LSM6DSL */
-  if ( ctx->who_am_i == LSM6DSL_ACC_GYRO_WHO_AM_I )
-  {
-    LSM6DSL_X_ExtDrv_t *extDriver = ( LSM6DSL_X_ExtDrv_t * )ctx->pExtVTable;
-
-    if ( extDriver->Get_6D_Orientation_Status == NULL )
-    {
+   if (ctx == NULL)
+   {
       return COMPONENT_ERROR;
-    }
+   }
 
-    else
-    {
-      return extDriver->Get_6D_Orientation_Status( ctx, status );
-    }
-  }
+   if (ctx->pExtVTable == NULL)
+   {
+      return COMPONENT_ERROR;
+   }
 
-  else
-  {
-    return COMPONENT_ERROR;
-  }
+   if (status == NULL)
+   {
+      return COMPONENT_ERROR;
+   }
+
+   // At the moment this feature is only implemented for LSM6DSL
+   if (ctx->who_am_i == LSM6DSL_ACC_GYRO_WHO_AM_I)
+   {
+      LSM6DSL_X_ExtDrv_t *extDriver                      = (LSM6DSL_X_ExtDrv_t *) ctx->pExtVTable;
+
+      if (extDriver->Get_6D_Orientation_Status == NULL)
+      {
+         return COMPONENT_ERROR;
+      }
+      else
+      {
+         return extDriver->Get_6D_Orientation_Status(ctx, status);
+      }
+   }
+   else
+   {
+      return COMPONENT_ERROR;
+   }
 }
-
 
 
 /**
@@ -2305,48 +2299,44 @@ DrvStatusTypeDef BSP_ACCELERO_Get_6D_Orientation_Status_Ext( void *handle, uint8
  * @retval COMPONENT_OK in case of success
  * @retval COMPONENT_ERROR in case of failure
  */
-DrvStatusTypeDef BSP_ACCELERO_Get_6D_Orientation_XL_Ext( void *handle, uint8_t *xl )
+DrvStatusTypeDef BSP_ACCELERO_Get_6D_Orientation_XL_Ext(void *handle, uint8_t *xl)
 {
+   DrvContextTypeDef *ctx                                = (DrvContextTypeDef *) handle;
 
-  DrvContextTypeDef *ctx = (DrvContextTypeDef *)handle;
-
-  if(ctx == NULL)
-  {
-    return COMPONENT_ERROR;
-  }
-
-  if ( ctx->pExtVTable == NULL )
-  {
-    return COMPONENT_ERROR;
-  }
-
-  if ( xl == NULL )
-  {
-    return COMPONENT_ERROR;
-  }
-
-  /* At the moment this feature is only implemented for LSM6DSL */
-  if ( ctx->who_am_i == LSM6DSL_ACC_GYRO_WHO_AM_I )
-  {
-    LSM6DSL_X_ExtDrv_t *extDriver = ( LSM6DSL_X_ExtDrv_t * )ctx->pExtVTable;
-
-    if ( extDriver->Get_6D_Orientation_XL == NULL )
-    {
+   if (ctx == NULL)
+   {
       return COMPONENT_ERROR;
-    }
+   }
 
-    else
-    {
-      return extDriver->Get_6D_Orientation_XL( ctx, xl );
-    }
-  }
+   if (ctx->pExtVTable == NULL)
+   {
+      return COMPONENT_ERROR;
+   }
 
-  else
-  {
-    return COMPONENT_ERROR;
-  }
+   if (xl == NULL)
+   {
+      return COMPONENT_ERROR;
+   }
+
+   // At the moment this feature is only implemented for LSM6DSL
+   if (ctx->who_am_i == LSM6DSL_ACC_GYRO_WHO_AM_I)
+   {
+      LSM6DSL_X_ExtDrv_t *extDriver                      = (LSM6DSL_X_ExtDrv_t *) ctx->pExtVTable;
+
+      if (extDriver->Get_6D_Orientation_XL == NULL)
+      {
+         return COMPONENT_ERROR;
+      }
+      else
+      {
+         return extDriver->Get_6D_Orientation_XL(ctx, xl);
+      }
+   }
+   else
+   {
+      return COMPONENT_ERROR;
+   }
 }
-
 
 
 /**
@@ -2356,48 +2346,44 @@ DrvStatusTypeDef BSP_ACCELERO_Get_6D_Orientation_XL_Ext( void *handle, uint8_t *
  * @retval COMPONENT_OK in case of success
  * @retval COMPONENT_ERROR in case of failure
  */
-DrvStatusTypeDef BSP_ACCELERO_Get_6D_Orientation_XH_Ext( void *handle, uint8_t *xh )
+DrvStatusTypeDef BSP_ACCELERO_Get_6D_Orientation_XH_Ext(void *handle, uint8_t *xh)
 {
+   DrvContextTypeDef *ctx                                = (DrvContextTypeDef *) handle;
 
-  DrvContextTypeDef *ctx = (DrvContextTypeDef *)handle;
-
-  if(ctx == NULL)
-  {
-    return COMPONENT_ERROR;
-  }
-
-  if ( ctx->pExtVTable == NULL )
-  {
-    return COMPONENT_ERROR;
-  }
-
-  if ( xh == NULL )
-  {
-    return COMPONENT_ERROR;
-  }
-
-  /* At the moment this feature is only implemented for LSM6DSL */
-  if ( ctx->who_am_i == LSM6DSL_ACC_GYRO_WHO_AM_I )
-  {
-    LSM6DSL_X_ExtDrv_t *extDriver = ( LSM6DSL_X_ExtDrv_t * )ctx->pExtVTable;
-
-    if ( extDriver->Get_6D_Orientation_XH == NULL )
-    {
+   if (ctx == NULL)
+   {
       return COMPONENT_ERROR;
-    }
+   }
 
-    else
-    {
-      return extDriver->Get_6D_Orientation_XH( ctx, xh );
-    }
-  }
+   if (ctx->pExtVTable == NULL)
+   {
+      return COMPONENT_ERROR;
+   }
 
-  else
-  {
-    return COMPONENT_ERROR;
-  }
+   if (xh == NULL)
+   {
+      return COMPONENT_ERROR;
+   }
+
+   // At the moment this feature is only implemented for LSM6DSL
+   if (ctx->who_am_i == LSM6DSL_ACC_GYRO_WHO_AM_I)
+   {
+      LSM6DSL_X_ExtDrv_t *extDriver                      = (LSM6DSL_X_ExtDrv_t *) ctx->pExtVTable;
+
+      if (extDriver->Get_6D_Orientation_XH == NULL)
+      {
+         return COMPONENT_ERROR;
+      }
+      else
+      {
+         return extDriver->Get_6D_Orientation_XH(ctx, xh);
+      }
+   }
+   else
+   {
+      return COMPONENT_ERROR;
+   }
 }
-
 
 
 /**
@@ -2407,48 +2393,44 @@ DrvStatusTypeDef BSP_ACCELERO_Get_6D_Orientation_XH_Ext( void *handle, uint8_t *
  * @retval COMPONENT_OK in case of success
  * @retval COMPONENT_ERROR in case of failure
  */
-DrvStatusTypeDef BSP_ACCELERO_Get_6D_Orientation_YL_Ext( void *handle, uint8_t *yl )
+DrvStatusTypeDef BSP_ACCELERO_Get_6D_Orientation_YL_Ext(void *handle, uint8_t *yl)
 {
+   DrvContextTypeDef *ctx                                = (DrvContextTypeDef *) handle;
 
-  DrvContextTypeDef *ctx = (DrvContextTypeDef *)handle;
-
-  if(ctx == NULL)
-  {
-    return COMPONENT_ERROR;
-  }
-
-  if ( ctx->pExtVTable == NULL )
-  {
-    return COMPONENT_ERROR;
-  }
-
-  if ( yl == NULL )
-  {
-    return COMPONENT_ERROR;
-  }
-
-  /* At the moment this feature is only implemented for LSM6DSL */
-  if ( ctx->who_am_i == LSM6DSL_ACC_GYRO_WHO_AM_I )
-  {
-    LSM6DSL_X_ExtDrv_t *extDriver = ( LSM6DSL_X_ExtDrv_t * )ctx->pExtVTable;
-
-    if ( extDriver->Get_6D_Orientation_YL == NULL )
-    {
+   if (ctx == NULL)
+   {
       return COMPONENT_ERROR;
-    }
+   }
 
-    else
-    {
-      return extDriver->Get_6D_Orientation_YL( ctx, yl );
-    }
-  }
+   if (ctx->pExtVTable == NULL)
+   {
+      return COMPONENT_ERROR;
+   }
 
-  else
-  {
-    return COMPONENT_ERROR;
-  }
+   if (yl == NULL)
+   {
+      return COMPONENT_ERROR;
+   }
+
+   // At the moment this feature is only implemented for LSM6DSL
+   if (ctx->who_am_i == LSM6DSL_ACC_GYRO_WHO_AM_I)
+   {
+      LSM6DSL_X_ExtDrv_t *extDriver                      = (LSM6DSL_X_ExtDrv_t *) ctx->pExtVTable;
+
+      if (extDriver->Get_6D_Orientation_YL == NULL)
+      {
+         return COMPONENT_ERROR;
+      }
+      else
+      {
+         return extDriver->Get_6D_Orientation_YL(ctx, yl);
+      }
+   }
+   else
+   {
+      return COMPONENT_ERROR;
+   }
 }
-
 
 
 /**
@@ -2458,48 +2440,44 @@ DrvStatusTypeDef BSP_ACCELERO_Get_6D_Orientation_YL_Ext( void *handle, uint8_t *
  * @retval COMPONENT_OK in case of success
  * @retval COMPONENT_ERROR in case of failure
  */
-DrvStatusTypeDef BSP_ACCELERO_Get_6D_Orientation_YH_Ext( void *handle, uint8_t *yh )
+DrvStatusTypeDef BSP_ACCELERO_Get_6D_Orientation_YH_Ext(void *handle, uint8_t *yh)
 {
+   DrvContextTypeDef *ctx                                = (DrvContextTypeDef *) handle;
 
-  DrvContextTypeDef *ctx = (DrvContextTypeDef *)handle;
-
-  if(ctx == NULL)
-  {
-    return COMPONENT_ERROR;
-  }
-
-  if ( ctx->pExtVTable == NULL )
-  {
-    return COMPONENT_ERROR;
-  }
-
-  if ( yh == NULL )
-  {
-    return COMPONENT_ERROR;
-  }
-
-  /* At the moment this feature is only implemented for LSM6DSL */
-  if ( ctx->who_am_i == LSM6DSL_ACC_GYRO_WHO_AM_I )
-  {
-    LSM6DSL_X_ExtDrv_t *extDriver = ( LSM6DSL_X_ExtDrv_t * )ctx->pExtVTable;
-
-    if ( extDriver->Get_6D_Orientation_YH == NULL )
-    {
+   if (ctx == NULL)
+   {
       return COMPONENT_ERROR;
-    }
+   }
 
-    else
-    {
-      return extDriver->Get_6D_Orientation_YH( ctx, yh );
-    }
-  }
+   if (ctx->pExtVTable == NULL)
+   {
+      return COMPONENT_ERROR;
+   }
 
-  else
-  {
-    return COMPONENT_ERROR;
-  }
+   if (yh == NULL)
+   {
+      return COMPONENT_ERROR;
+   }
+
+   // At the moment this feature is only implemented for LSM6DSL
+   if (ctx->who_am_i == LSM6DSL_ACC_GYRO_WHO_AM_I)
+   {
+      LSM6DSL_X_ExtDrv_t *extDriver                      = (LSM6DSL_X_ExtDrv_t *) ctx->pExtVTable;
+
+      if (extDriver->Get_6D_Orientation_YH == NULL)
+      {
+         return COMPONENT_ERROR;
+      }
+      else
+      {
+         return extDriver->Get_6D_Orientation_YH(ctx, yh);
+      }
+   }
+   else
+   {
+      return COMPONENT_ERROR;
+   }
 }
-
 
 
 /**
@@ -2509,48 +2487,44 @@ DrvStatusTypeDef BSP_ACCELERO_Get_6D_Orientation_YH_Ext( void *handle, uint8_t *
  * @retval COMPONENT_OK in case of success
  * @retval COMPONENT_ERROR in case of failure
  */
-DrvStatusTypeDef BSP_ACCELERO_Get_6D_Orientation_ZL_Ext( void *handle, uint8_t *zl )
+DrvStatusTypeDef BSP_ACCELERO_Get_6D_Orientation_ZL_Ext(void *handle, uint8_t *zl)
 {
+   DrvContextTypeDef *ctx                                = (DrvContextTypeDef *) handle;
 
-  DrvContextTypeDef *ctx = (DrvContextTypeDef *)handle;
-
-  if(ctx == NULL)
-  {
-    return COMPONENT_ERROR;
-  }
-
-  if ( ctx->pExtVTable == NULL )
-  {
-    return COMPONENT_ERROR;
-  }
-
-  if ( zl == NULL )
-  {
-    return COMPONENT_ERROR;
-  }
-
-  /* At the moment this feature is only implemented for LSM6DSL */
-  if ( ctx->who_am_i == LSM6DSL_ACC_GYRO_WHO_AM_I )
-  {
-    LSM6DSL_X_ExtDrv_t *extDriver = ( LSM6DSL_X_ExtDrv_t * )ctx->pExtVTable;
-
-    if ( extDriver->Get_6D_Orientation_ZL == NULL )
-    {
+   if (ctx == NULL)
+   {
       return COMPONENT_ERROR;
-    }
+   }
 
-    else
-    {
-      return extDriver->Get_6D_Orientation_ZL( ctx, zl );
-    }
-  }
+   if (ctx->pExtVTable == NULL)
+   {
+      return COMPONENT_ERROR;
+   }
 
-  else
-  {
-    return COMPONENT_ERROR;
-  }
+   if (zl == NULL)
+   {
+      return COMPONENT_ERROR;
+   }
+
+   // At the moment this feature is only implemented for LSM6DSL
+   if (ctx->who_am_i == LSM6DSL_ACC_GYRO_WHO_AM_I)
+   {
+      LSM6DSL_X_ExtDrv_t *extDriver                      = (LSM6DSL_X_ExtDrv_t *) ctx->pExtVTable;
+
+      if (extDriver->Get_6D_Orientation_ZL == NULL)
+      {
+         return COMPONENT_ERROR;
+      }
+      else
+      {
+         return extDriver->Get_6D_Orientation_ZL(ctx, zl);
+      }
+   }
+   else
+   {
+      return COMPONENT_ERROR;
+   }
 }
-
 
 
 /**
@@ -2560,46 +2534,43 @@ DrvStatusTypeDef BSP_ACCELERO_Get_6D_Orientation_ZL_Ext( void *handle, uint8_t *
  * @retval COMPONENT_OK in case of success
  * @retval COMPONENT_ERROR in case of failure
  */
-DrvStatusTypeDef BSP_ACCELERO_Get_6D_Orientation_ZH_Ext( void *handle, uint8_t *zh )
+DrvStatusTypeDef BSP_ACCELERO_Get_6D_Orientation_ZH_Ext(void *handle, uint8_t *zh)
 {
+   DrvContextTypeDef *ctx                                = (DrvContextTypeDef *) handle;
 
-  DrvContextTypeDef *ctx = (DrvContextTypeDef *)handle;
-
-  if(ctx == NULL)
-  {
-    return COMPONENT_ERROR;
-  }
-
-  if ( ctx->pExtVTable == NULL )
-  {
-    return COMPONENT_ERROR;
-  }
-
-  if ( zh == NULL )
-  {
-    return COMPONENT_ERROR;
-  }
-
-  /* At the moment this feature is only implemented for LSM6DSL */
-  if ( ctx->who_am_i == LSM6DSL_ACC_GYRO_WHO_AM_I )
-  {
-    LSM6DSL_X_ExtDrv_t *extDriver = ( LSM6DSL_X_ExtDrv_t * )ctx->pExtVTable;
-
-    if ( extDriver->Get_6D_Orientation_ZH == NULL )
-    {
+   if (ctx == NULL)
+   {
       return COMPONENT_ERROR;
-    }
+   }
 
-    else
-    {
-      return extDriver->Get_6D_Orientation_ZH( ctx, zh );
-    }
-  }
+   if (ctx->pExtVTable == NULL)
+   {
+      return COMPONENT_ERROR;
+   }
 
-  else
-  {
-    return COMPONENT_ERROR;
-  }
+   if (zh == NULL)
+   {
+      return COMPONENT_ERROR;
+   }
+
+   // At the moment this feature is only implemented for LSM6DSL
+   if (ctx->who_am_i == LSM6DSL_ACC_GYRO_WHO_AM_I)
+   {
+      LSM6DSL_X_ExtDrv_t *extDriver                      = (LSM6DSL_X_ExtDrv_t *) ctx->pExtVTable;
+
+      if (extDriver->Get_6D_Orientation_ZH == NULL)
+      {
+         return COMPONENT_ERROR;
+      }
+      else
+      {
+         return extDriver->Get_6D_Orientation_ZH(ctx, zh);
+      }
+   }
+   else
+   {
+      return COMPONENT_ERROR;
+   }
 }
 
 
@@ -2610,43 +2581,39 @@ DrvStatusTypeDef BSP_ACCELERO_Get_6D_Orientation_ZH_Ext( void *handle, uint8_t *
  * @retval COMPONENT_OK in case of success
  * @retval COMPONENT_ERROR in case of failure
  */
-DrvStatusTypeDef BSP_ACCELERO_FIFO_Set_ODR_Value_Ext( void *handle, float odr )
+DrvStatusTypeDef BSP_ACCELERO_FIFO_Set_ODR_Value_Ext(void *handle, float odr)
 {
+   DrvContextTypeDef *ctx                                = (DrvContextTypeDef *) handle;
 
-  DrvContextTypeDef *ctx = (DrvContextTypeDef *)handle;
-
-  if ( ctx == NULL )
-  {
-    return COMPONENT_ERROR;
-  }
-
-  if ( ctx->pExtVTable == NULL )
-  {
-    return COMPONENT_ERROR;
-  }
-
-  /* At the moment this feature is only implemented for LSM6DSL */
-  if ( ctx->who_am_i == LSM6DSL_ACC_GYRO_WHO_AM_I )
-  {
-    LSM6DSL_X_ExtDrv_t *extDriver = ( LSM6DSL_X_ExtDrv_t * )ctx->pExtVTable;
-
-    if ( extDriver->FIFO_Set_ODR_Value == NULL )
-    {
+   if (ctx == NULL)
+   {
       return COMPONENT_ERROR;
-    }
+   }
 
-    else
-    {
-      return extDriver->FIFO_Set_ODR_Value( handle, odr );
-    }
-  }
+   if (ctx->pExtVTable == NULL)
+   {
+      return COMPONENT_ERROR;
+   }
 
-  else
-  {
-    return COMPONENT_ERROR;
-  }
+   // At the moment this feature is only implemented for LSM6DSL
+   if (ctx->who_am_i == LSM6DSL_ACC_GYRO_WHO_AM_I)
+   {
+      LSM6DSL_X_ExtDrv_t *extDriver                      = (LSM6DSL_X_ExtDrv_t *) ctx->pExtVTable;
+
+      if (extDriver->FIFO_Set_ODR_Value == NULL)
+      {
+         return COMPONENT_ERROR;
+      }
+      else
+      {
+         return extDriver->FIFO_Set_ODR_Value(handle, odr);
+      }
+   }
+   else
+   {
+      return COMPONENT_ERROR;
+   }
 }
-
 
 
 /**
@@ -2656,48 +2623,44 @@ DrvStatusTypeDef BSP_ACCELERO_FIFO_Set_ODR_Value_Ext( void *handle, float odr )
  * @retval COMPONENT_OK in case of success
  * @retval COMPONENT_ERROR in case of failure
  */
-DrvStatusTypeDef BSP_ACCELERO_FIFO_Get_Full_Status_Ext( void *handle, uint8_t *status )
+DrvStatusTypeDef BSP_ACCELERO_FIFO_Get_Full_Status_Ext(void *handle, uint8_t *status)
 {
+   DrvContextTypeDef *ctx                                = (DrvContextTypeDef *) handle;
 
-  DrvContextTypeDef *ctx = (DrvContextTypeDef *)handle;
-
-  if ( ctx == NULL )
-  {
-    return COMPONENT_ERROR;
-  }
-
-  if ( ctx->pExtVTable == NULL )
-  {
-    return COMPONENT_ERROR;
-  }
-
-  if ( status == NULL )
-  {
-    return COMPONENT_ERROR;
-  }
-
-  /* At the moment this feature is only implemented for LSM6DSL */
-  if ( ctx->who_am_i == LSM6DSL_ACC_GYRO_WHO_AM_I )
-  {
-    LSM6DSL_X_ExtDrv_t *extDriver = ( LSM6DSL_X_ExtDrv_t * )ctx->pExtVTable;
-
-    if ( extDriver->FIFO_Get_Full_Status == NULL )
-    {
+   if (ctx == NULL)
+   {
       return COMPONENT_ERROR;
-    }
+   }
 
-    else
-    {
-      return extDriver->FIFO_Get_Full_Status( handle, status );
-    }
-  }
+   if (ctx->pExtVTable == NULL)
+   {
+      return COMPONENT_ERROR;
+   }
 
-  else
-  {
-    return COMPONENT_ERROR;
-  }
+   if (status == NULL)
+   {
+      return COMPONENT_ERROR;
+   }
+
+   // At the moment this feature is only implemented for LSM6DSL
+   if (ctx->who_am_i == LSM6DSL_ACC_GYRO_WHO_AM_I)
+   {
+      LSM6DSL_X_ExtDrv_t *extDriver                      = (LSM6DSL_X_ExtDrv_t *) ctx->pExtVTable;
+
+      if (extDriver->FIFO_Get_Full_Status == NULL)
+      {
+         return COMPONENT_ERROR;
+      }
+      else
+      {
+         return extDriver->FIFO_Get_Full_Status(handle, status);
+      }
+   }
+   else
+   {
+      return COMPONENT_ERROR;
+   }
 }
-
 
 
 /**
@@ -2707,48 +2670,44 @@ DrvStatusTypeDef BSP_ACCELERO_FIFO_Get_Full_Status_Ext( void *handle, uint8_t *s
  * @retval COMPONENT_OK in case of success
  * @retval COMPONENT_ERROR in case of failure
  */
-DrvStatusTypeDef BSP_ACCELERO_FIFO_Get_Empty_Status_Ext( void *handle, uint8_t *status )
+DrvStatusTypeDef BSP_ACCELERO_FIFO_Get_Empty_Status_Ext(void *handle, uint8_t *status)
 {
+   DrvContextTypeDef *ctx                                = (DrvContextTypeDef *) handle;
 
-  DrvContextTypeDef *ctx = (DrvContextTypeDef *)handle;
-
-  if ( ctx == NULL )
-  {
-    return COMPONENT_ERROR;
-  }
-
-  if ( ctx->pExtVTable == NULL )
-  {
-    return COMPONENT_ERROR;
-  }
-
-  if ( status == NULL )
-  {
-    return COMPONENT_ERROR;
-  }
-
-  /* At the moment this feature is only implemented for LSM6DSL */
-  if ( ctx->who_am_i == LSM6DSL_ACC_GYRO_WHO_AM_I )
-  {
-    LSM6DSL_X_ExtDrv_t *extDriver = ( LSM6DSL_X_ExtDrv_t * )ctx->pExtVTable;
-
-    if ( extDriver->FIFO_Get_Empty_Status == NULL )
-    {
+   if (ctx == NULL)
+   {
       return COMPONENT_ERROR;
-    }
+   }
 
-    else
-    {
-      return extDriver->FIFO_Get_Empty_Status( handle, status );
-    }
-  }
+   if (ctx->pExtVTable == NULL)
+   {
+      return COMPONENT_ERROR;
+   }
 
-  else
-  {
-    return COMPONENT_ERROR;
-  }
+   if (status == NULL)
+   {
+      return COMPONENT_ERROR;
+   }
+
+   // At the moment this feature is only implemented for LSM6DSL
+   if (ctx->who_am_i == LSM6DSL_ACC_GYRO_WHO_AM_I)
+   {
+      LSM6DSL_X_ExtDrv_t *extDriver                      = (LSM6DSL_X_ExtDrv_t *) ctx->pExtVTable;
+
+      if (extDriver->FIFO_Get_Empty_Status == NULL)
+      {
+         return COMPONENT_ERROR;
+      }
+      else
+      {
+         return extDriver->FIFO_Get_Empty_Status(handle, status);
+      }
+   }
+   else
+   {
+      return COMPONENT_ERROR;
+   }
 }
-
 
 
 /**
@@ -2758,47 +2717,43 @@ DrvStatusTypeDef BSP_ACCELERO_FIFO_Get_Empty_Status_Ext( void *handle, uint8_t *
  * @retval COMPONENT_OK in case of success
  * @retval COMPONENT_ERROR in case of failure
  */
-DrvStatusTypeDef BSP_ACCELERO_FIFO_Get_Overrun_Status_Ext( void *handle, uint8_t *status )
+DrvStatusTypeDef BSP_ACCELERO_FIFO_Get_Overrun_Status_Ext(void *handle, uint8_t *status)
 {
+   DrvContextTypeDef *ctx                                = (DrvContextTypeDef *) handle;
+   void *extDriver                                       = ctx->pExtVTable;
 
-  DrvContextTypeDef *ctx = (DrvContextTypeDef *)handle;
-  void *extDriver = ctx->pExtVTable;
-
-  if ( ctx == NULL )
-  {
-    return COMPONENT_ERROR;
-  }
-
-  if ( ctx->pExtVTable == NULL )
-  {
-    return COMPONENT_ERROR;
-  }
-
-  if ( status == NULL )
-  {
-    return COMPONENT_ERROR;
-  }
-
-  /* At the moment this feature is only implemented for LSM6DSL and LIS2DH12 */
-  if ( ctx->who_am_i == LSM6DSL_ACC_GYRO_WHO_AM_I )
-  {
-    if ( (( LSM6DSL_X_ExtDrv_t * )extDriver)->FIFO_Get_Overrun_Status == NULL )
-    {
+   if (ctx == NULL)
+   {
       return COMPONENT_ERROR;
-    }
+   }
 
-    else
-    {
-      return (( LSM6DSL_X_ExtDrv_t * )extDriver)->FIFO_Get_Overrun_Status( handle, status );
-    }
-  }
+   if (ctx->pExtVTable == NULL)
+   {
+      return COMPONENT_ERROR;
+   }
 
-  else
-  {
-    return COMPONENT_ERROR;
-  }
+   if (status == NULL)
+   {
+      return COMPONENT_ERROR;
+   }
+
+   // At the moment this feature is only implemented for LSM6DSL and LIS2DH12
+   if (ctx->who_am_i == LSM6DSL_ACC_GYRO_WHO_AM_I)
+   {
+      if (((LSM6DSL_X_ExtDrv_t *) extDriver)->FIFO_Get_Overrun_Status == NULL)
+      {
+         return COMPONENT_ERROR;
+      }
+      else
+      {
+         return ((LSM6DSL_X_ExtDrv_t *) extDriver)->FIFO_Get_Overrun_Status(handle, status);
+      }
+   }
+   else
+   {
+      return COMPONENT_ERROR;
+   }
 }
-
 
 
 /**
@@ -2808,49 +2763,44 @@ DrvStatusTypeDef BSP_ACCELERO_FIFO_Get_Overrun_Status_Ext( void *handle, uint8_t
  * @retval COMPONENT_OK in case of success
  * @retval COMPONENT_ERROR in case of failure
  */
-DrvStatusTypeDef BSP_ACCELERO_FIFO_Get_Pattern_Ext( void *handle, uint16_t *pattern )
+DrvStatusTypeDef BSP_ACCELERO_FIFO_Get_Pattern_Ext(void *handle, uint16_t *pattern)
 {
+   DrvContextTypeDef *ctx                                = (DrvContextTypeDef *) handle;
 
-  DrvContextTypeDef *ctx = (DrvContextTypeDef *)handle;
-
-  if ( ctx == NULL )
-  {
-    return COMPONENT_ERROR;
-  }
-
-  if ( ctx->pExtVTable == NULL )
-  {
-    return COMPONENT_ERROR;
-  }
-
-  if ( pattern == NULL )
-  {
-    return COMPONENT_ERROR;
-  }
-
-  /* At the moment this feature is only implemented for LSM6DSL */
-  if ( ctx->who_am_i == LSM6DSL_ACC_GYRO_WHO_AM_I )
-  {
-    LSM6DSL_X_ExtDrv_t *extDriver = ( LSM6DSL_X_ExtDrv_t * )ctx->pExtVTable;
-
-    if ( extDriver->FIFO_Get_Pattern == NULL )
-    {
+   if (ctx == NULL)
+   {
       return COMPONENT_ERROR;
-    }
+   }
 
-    else
-    {
-      return extDriver->FIFO_Get_Pattern( handle, pattern );
-    }
-  }
+   if (ctx->pExtVTable == NULL)
+   {
+      return COMPONENT_ERROR;
+   }
 
-  else
-  {
-    return COMPONENT_ERROR;
-  }
+   if (pattern == NULL)
+   {
+      return COMPONENT_ERROR;
+   }
+
+   // At the moment this feature is only implemented for LSM6DSL
+   if (ctx->who_am_i == LSM6DSL_ACC_GYRO_WHO_AM_I)
+   {
+      LSM6DSL_X_ExtDrv_t *extDriver                      = (LSM6DSL_X_ExtDrv_t *) ctx->pExtVTable;
+
+      if (extDriver->FIFO_Get_Pattern == NULL)
+      {
+         return COMPONENT_ERROR;
+      }
+      else
+      {
+         return extDriver->FIFO_Get_Pattern(handle, pattern);
+      }
+   }
+   else
+   {
+      return COMPONENT_ERROR;
+   }
 }
-
-
 
 /**
  * @brief Get FIFO data (available only for LSM6DSL sensor)
@@ -2859,48 +2809,44 @@ DrvStatusTypeDef BSP_ACCELERO_FIFO_Get_Pattern_Ext( void *handle, uint16_t *patt
  * @retval COMPONENT_OK in case of success
  * @retval COMPONENT_ERROR in case of failure
  */
-DrvStatusTypeDef BSP_ACCELERO_FIFO_Get_Data_Ext( void *handle, uint8_t *aData )
+DrvStatusTypeDef BSP_ACCELERO_FIFO_Get_Data_Ext(void *handle, uint8_t *aData)
 {
+   DrvContextTypeDef *ctx                                = (DrvContextTypeDef *) handle;
 
-  DrvContextTypeDef *ctx = (DrvContextTypeDef *)handle;
-
-  if ( ctx == NULL )
-  {
-    return COMPONENT_ERROR;
-  }
-
-  if ( ctx->pExtVTable == NULL )
-  {
-    return COMPONENT_ERROR;
-  }
-
-  if ( aData == NULL )
-  {
-    return COMPONENT_ERROR;
-  }
-
-  /* At the moment this feature is only implemented for LSM6DSL */
-  if ( ctx->who_am_i == LSM6DSL_ACC_GYRO_WHO_AM_I )
-  {
-    LSM6DSL_X_ExtDrv_t *extDriver = ( LSM6DSL_X_ExtDrv_t * )ctx->pExtVTable;
-
-    if ( extDriver->FIFO_Get_Data == NULL )
-    {
+   if (ctx == NULL)
+   {
       return COMPONENT_ERROR;
-    }
+   }
 
-    else
-    {
-      return extDriver->FIFO_Get_Data( handle, aData );
-    }
-  }
+   if (ctx->pExtVTable == NULL)
+   {
+      return COMPONENT_ERROR;
+   }
 
-  else
-  {
-    return COMPONENT_ERROR;
-  }
+   if (aData == NULL)
+   {
+      return COMPONENT_ERROR;
+   }
+
+   // At the moment this feature is only implemented for LSM6DSL
+   if (ctx->who_am_i == LSM6DSL_ACC_GYRO_WHO_AM_I)
+   {
+      LSM6DSL_X_ExtDrv_t *extDriver                      = (LSM6DSL_X_ExtDrv_t *) ctx->pExtVTable;
+
+      if (extDriver->FIFO_Get_Data == NULL)
+      {
+         return COMPONENT_ERROR;
+      }
+      else
+      {
+         return extDriver->FIFO_Get_Data(handle, aData);
+      }
+   }
+   else
+   {
+      return COMPONENT_ERROR;
+   }
 }
-
 
 
 /**
@@ -2910,46 +2856,43 @@ DrvStatusTypeDef BSP_ACCELERO_FIFO_Get_Data_Ext( void *handle, uint8_t *aData )
  * @retval COMPONENT_OK in case of success
  * @retval COMPONENT_ERROR in case of failure
  */
-DrvStatusTypeDef BSP_ACCELERO_FIFO_Get_Num_Of_Samples_Ext( void *handle, uint16_t *nSamples )
+DrvStatusTypeDef BSP_ACCELERO_FIFO_Get_Num_Of_Samples_Ext(void *handle, uint16_t *nSamples)
 {
+   DrvContextTypeDef *ctx                                = (DrvContextTypeDef *) handle;
+   void *extDriver                                       = ctx->pExtVTable;
 
-  DrvContextTypeDef *ctx = (DrvContextTypeDef *)handle;
-  void *extDriver = ctx->pExtVTable;
-
-  if ( ctx == NULL )
-  {
-    return COMPONENT_ERROR;
-  }
-
-  if ( ctx->pExtVTable == NULL )
-  {
-    return COMPONENT_ERROR;
-  }
-
-  if ( nSamples == NULL )
-  {
-    return COMPONENT_ERROR;
-  }
-
-  /* At the moment this feature is only implemented for LSM6DSL and LIS2DH12 */
-  if ( ctx->who_am_i == LSM6DSL_ACC_GYRO_WHO_AM_I )
-  {
-    if ( (( LSM6DSL_X_ExtDrv_t * )extDriver)->FIFO_Get_Num_Of_Samples == NULL )
-    {
+   if (ctx == NULL)
+   {
       return COMPONENT_ERROR;
-    }
+   }
 
-    else
-    {
-      return (( LSM6DSL_X_ExtDrv_t * )extDriver)->FIFO_Get_Num_Of_Samples( handle, nSamples );
-    }
-  }
-  else
-  {
-    return COMPONENT_ERROR;
-  }
+   if (ctx->pExtVTable == NULL)
+   {
+      return COMPONENT_ERROR;
+   }
+
+   if (nSamples == NULL)
+   {
+      return COMPONENT_ERROR;
+   }
+
+   // At the moment this feature is only implemented for LSM6DSL and LIS2DH12
+   if (ctx->who_am_i == LSM6DSL_ACC_GYRO_WHO_AM_I)
+   {
+      if (((LSM6DSL_X_ExtDrv_t *) extDriver)->FIFO_Get_Num_Of_Samples == NULL)
+      {
+         return COMPONENT_ERROR;
+      }
+      else
+      {
+         return ((LSM6DSL_X_ExtDrv_t *) extDriver)->FIFO_Get_Num_Of_Samples(handle, nSamples);
+      }
+   }
+   else
+   {
+      return COMPONENT_ERROR;
+   }
 }
-
 
 
 /**
@@ -2959,43 +2902,39 @@ DrvStatusTypeDef BSP_ACCELERO_FIFO_Get_Num_Of_Samples_Ext( void *handle, uint16_
  * @retval COMPONENT_OK in case of success
  * @retval COMPONENT_ERROR in case of failure
  */
-DrvStatusTypeDef BSP_ACCELERO_FIFO_Set_Decimation_Ext( void *handle, uint8_t decimation )
+DrvStatusTypeDef BSP_ACCELERO_FIFO_Set_Decimation_Ext(void *handle, uint8_t decimation)
 {
+   DrvContextTypeDef *ctx                                = (DrvContextTypeDef *) handle;
 
-  DrvContextTypeDef *ctx = (DrvContextTypeDef *)handle;
-
-  if ( ctx == NULL )
-  {
-    return COMPONENT_ERROR;
-  }
-
-  if ( ctx->pExtVTable == NULL )
-  {
-    return COMPONENT_ERROR;
-  }
-
-  /* At the moment this feature is only implemented for LSM6DSL */
-  if ( ctx->who_am_i == LSM6DSL_ACC_GYRO_WHO_AM_I )
-  {
-    LSM6DSL_X_ExtDrv_t *extDriver = ( LSM6DSL_X_ExtDrv_t * )ctx->pExtVTable;
-
-    if ( extDriver->FIFO_X_Set_Decimation == NULL )
-    {
+   if (ctx == NULL)
+   {
       return COMPONENT_ERROR;
-    }
+   }
 
-    else
-    {
-      return extDriver->FIFO_X_Set_Decimation( handle, decimation );
-    }
-  }
+   if (ctx->pExtVTable == NULL)
+   {
+      return COMPONENT_ERROR;
+   }
 
-  else
-  {
-    return COMPONENT_ERROR;
-  }
+   // At the moment this feature is only implemented for LSM6DSL
+   if ( ctx->who_am_i == LSM6DSL_ACC_GYRO_WHO_AM_I )
+   {
+      LSM6DSL_X_ExtDrv_t *extDriver                      = (LSM6DSL_X_ExtDrv_t *) ctx->pExtVTable;
+
+      if (extDriver->FIFO_X_Set_Decimation == NULL)
+      {
+         return COMPONENT_ERROR;
+      }
+      else
+      {
+         return extDriver->FIFO_X_Set_Decimation(handle, decimation);
+      }
+   }
+   else
+   {
+      return COMPONENT_ERROR;
+   }
 }
-
 
 
 /**
@@ -3005,48 +2944,44 @@ DrvStatusTypeDef BSP_ACCELERO_FIFO_Set_Decimation_Ext( void *handle, uint8_t dec
  * @retval COMPONENT_OK in case of success
  * @retval COMPONENT_ERROR in case of failure
  */
-DrvStatusTypeDef BSP_ACCELERO_FIFO_Get_Axis_Ext( void *handle, int32_t *acceleration )
+DrvStatusTypeDef BSP_ACCELERO_FIFO_Get_Axis_Ext(void *handle, int32_t *acceleration)
 {
+   DrvContextTypeDef *ctx                                = (DrvContextTypeDef *) handle;
 
-  DrvContextTypeDef *ctx = (DrvContextTypeDef *)handle;
-
-  if ( ctx == NULL )
-  {
-    return COMPONENT_ERROR;
-  }
-
-  if ( ctx->pExtVTable == NULL )
-  {
-    return COMPONENT_ERROR;
-  }
-
-  if ( acceleration == NULL )
-  {
-    return COMPONENT_ERROR;
-  }
-
-  /* At the moment this feature is only implemented for LSM6DSL */
-  if ( ctx->who_am_i == LSM6DSL_ACC_GYRO_WHO_AM_I )
-  {
-    LSM6DSL_X_ExtDrv_t *extDriver = ( LSM6DSL_X_ExtDrv_t * )ctx->pExtVTable;
-
-    if ( extDriver->FIFO_X_Get_Axis == NULL )
-    {
+   if (ctx == NULL)
+   {
       return COMPONENT_ERROR;
-    }
+   }
 
-    else
-    {
-      return extDriver->FIFO_X_Get_Axis( handle, acceleration );
-    }
-  }
+   if (ctx->pExtVTable == NULL)
+   {
+      return COMPONENT_ERROR;
+   }
 
-  else
-  {
-    return COMPONENT_ERROR;
-  }
+   if (acceleration == NULL)
+   {
+      return COMPONENT_ERROR;
+   }
+
+   // At the moment this feature is only implemented for LSM6DSL
+   if (ctx->who_am_i == LSM6DSL_ACC_GYRO_WHO_AM_I)
+   {
+      LSM6DSL_X_ExtDrv_t *extDriver                      = (LSM6DSL_X_ExtDrv_t *) ctx->pExtVTable;
+
+      if (extDriver->FIFO_X_Get_Axis == NULL)
+      {
+         return COMPONENT_ERROR;
+      }
+      else
+      {
+         return extDriver->FIFO_X_Get_Axis(handle, acceleration);
+      }
+   }
+   else
+   {
+      return COMPONENT_ERROR;
+   }
 }
-
 
 
 /**
@@ -3056,42 +2991,38 @@ DrvStatusTypeDef BSP_ACCELERO_FIFO_Get_Axis_Ext( void *handle, int32_t *accelera
  * @retval COMPONENT_OK in case of success
  * @retval COMPONENT_ERROR in case of failure
  */
-DrvStatusTypeDef BSP_ACCELERO_FIFO_Set_Mode_Ext( void *handle, uint8_t mode )
+DrvStatusTypeDef BSP_ACCELERO_FIFO_Set_Mode_Ext(void *handle, uint8_t mode)
 {
+   DrvContextTypeDef *ctx                                = (DrvContextTypeDef *) handle;
+   void *extDriver                                       = ctx->pExtVTable;
 
-  DrvContextTypeDef *ctx = (DrvContextTypeDef *)handle;
-  void *extDriver = ctx->pExtVTable;
-
-  if ( ctx == NULL )
-  {
-    return COMPONENT_ERROR;
-  }
-
-  if ( ctx->pExtVTable == NULL )
-  {
-    return COMPONENT_ERROR;
-  }
-
-  /* At the moment this feature is only implemented for LSM6DSL and LIS2DH12 */
-  if ( ctx->who_am_i == LSM6DSL_ACC_GYRO_WHO_AM_I )
-  {
-    if ( (( LSM6DSL_X_ExtDrv_t * )extDriver)->FIFO_Set_Mode == NULL )
-    {
+   if (ctx == NULL)
+   {
       return COMPONENT_ERROR;
-    }
+   }
 
-    else
-    {
-      return (( LSM6DSL_X_ExtDrv_t * )extDriver)->FIFO_Set_Mode( handle, mode );
-    }
-  }
+   if (ctx->pExtVTable == NULL)
+   {
+      return COMPONENT_ERROR;
+   }
 
-  else
-  {
-    return COMPONENT_ERROR;
-  }
+   // At the moment this feature is only implemented for LSM6DSL and LIS2DH12
+   if (ctx->who_am_i == LSM6DSL_ACC_GYRO_WHO_AM_I)
+   {
+      if (((LSM6DSL_X_ExtDrv_t *) extDriver)->FIFO_Set_Mode == NULL)
+      {
+         return COMPONENT_ERROR;
+      }
+      else
+      {
+         return ((LSM6DSL_X_ExtDrv_t *) extDriver)->FIFO_Set_Mode(handle, mode);
+      }
+   }
+   else
+   {
+      return COMPONENT_ERROR;
+   }
 }
-
 
 
 /**
@@ -3101,43 +3032,39 @@ DrvStatusTypeDef BSP_ACCELERO_FIFO_Set_Mode_Ext( void *handle, uint8_t mode )
  * @retval COMPONENT_OK in case of success
  * @retval COMPONENT_ERROR in case of failure
  */
-DrvStatusTypeDef BSP_ACCELERO_FIFO_Set_INT1_FIFO_Full_Ext( void *handle, uint8_t status )
+DrvStatusTypeDef BSP_ACCELERO_FIFO_Set_INT1_FIFO_Full_Ext(void *handle, uint8_t status)
 {
+   DrvContextTypeDef *ctx                                = (DrvContextTypeDef *) handle;
 
-  DrvContextTypeDef *ctx = (DrvContextTypeDef *)handle;
-
-  if ( ctx == NULL )
-  {
-    return COMPONENT_ERROR;
-  }
-
-  if ( ctx->pExtVTable == NULL )
-  {
-    return COMPONENT_ERROR;
-  }
-
-  /* At the moment this feature is only implemented for LSM6DSL */
-  if ( ctx->who_am_i == LSM6DSL_ACC_GYRO_WHO_AM_I )
-  {
-    LSM6DSL_X_ExtDrv_t *extDriver = ( LSM6DSL_X_ExtDrv_t * )ctx->pExtVTable;
-
-    if ( extDriver->FIFO_Set_INT1_FIFO_Full == NULL )
-    {
+   if (ctx == NULL)
+   {
       return COMPONENT_ERROR;
-    }
+   }
 
-    else
-    {
-      return extDriver->FIFO_Set_INT1_FIFO_Full( handle, status );
-    }
-  }
+   if (ctx->pExtVTable == NULL)
+   {
+      return COMPONENT_ERROR;
+   }
 
-  else
-  {
-    return COMPONENT_ERROR;
-  }
+   // At the moment this feature is only implemented for LSM6DSL
+   if (ctx->who_am_i == LSM6DSL_ACC_GYRO_WHO_AM_I)
+   {
+      LSM6DSL_X_ExtDrv_t *extDriver                      = (LSM6DSL_X_ExtDrv_t *) ctx->pExtVTable;
+
+      if (extDriver->FIFO_Set_INT1_FIFO_Full == NULL)
+      {
+         return COMPONENT_ERROR;
+      }
+      else
+      {
+         return extDriver->FIFO_Set_INT1_FIFO_Full(handle, status);
+      }
+   }
+   else
+   {
+      return COMPONENT_ERROR;
+   }
 }
-
 
 
 /**
@@ -3147,43 +3074,39 @@ DrvStatusTypeDef BSP_ACCELERO_FIFO_Set_INT1_FIFO_Full_Ext( void *handle, uint8_t
  * @retval COMPONENT_OK in case of success
  * @retval COMPONENT_ERROR in case of failure
  */
-DrvStatusTypeDef BSP_ACCELERO_FIFO_Set_Watermark_Level_Ext( void *handle, uint16_t watermark )
+DrvStatusTypeDef BSP_ACCELERO_FIFO_Set_Watermark_Level_Ext(void *handle, uint16_t watermark)
 {
+   DrvContextTypeDef *ctx                                = (DrvContextTypeDef *) handle;
 
-  DrvContextTypeDef *ctx = (DrvContextTypeDef *)handle;
-
-  if ( ctx == NULL )
-  {
-    return COMPONENT_ERROR;
-  }
-
-  if ( ctx->pExtVTable == NULL )
-  {
-    return COMPONENT_ERROR;
-  }
-
-  /* At the moment this feature is only implemented for LSM6DSL */
-  if ( ctx->who_am_i == LSM6DSL_ACC_GYRO_WHO_AM_I )
-  {
-    LSM6DSL_X_ExtDrv_t *extDriver = ( LSM6DSL_X_ExtDrv_t * )ctx->pExtVTable;
-
-    if ( extDriver->FIFO_Set_Watermark_Level == NULL )
-    {
+   if (ctx == NULL)
+   {
       return COMPONENT_ERROR;
-    }
+   }
 
-    else
-    {
-      return extDriver->FIFO_Set_Watermark_Level( handle, watermark );
-    }
-  }
+   if (ctx->pExtVTable == NULL)
+   {
+      return COMPONENT_ERROR;
+   }
 
-  else
-  {
-    return COMPONENT_ERROR;
-  }
+   // At the moment this feature is only implemented for LSM6DSL
+   if (ctx->who_am_i == LSM6DSL_ACC_GYRO_WHO_AM_I)
+   {
+      LSM6DSL_X_ExtDrv_t *extDriver                      = (LSM6DSL_X_ExtDrv_t *) ctx->pExtVTable;
+
+      if (extDriver->FIFO_Set_Watermark_Level == NULL)
+      {
+         return COMPONENT_ERROR;
+      }
+      else
+      {
+         return extDriver->FIFO_Set_Watermark_Level(handle, watermark);
+      }
+   }
+   else
+   {
+      return COMPONENT_ERROR;
+   }
 }
-
 
 
 /**
@@ -3193,43 +3116,39 @@ DrvStatusTypeDef BSP_ACCELERO_FIFO_Set_Watermark_Level_Ext( void *handle, uint16
  * @retval COMPONENT_OK in case of success
  * @retval COMPONENT_ERROR in case of failure
  */
-DrvStatusTypeDef BSP_ACCELERO_FIFO_Set_Stop_On_Fth_Ext( void *handle, uint8_t status )
+DrvStatusTypeDef BSP_ACCELERO_FIFO_Set_Stop_On_Fth_Ext(void *handle, uint8_t status)
 {
+   DrvContextTypeDef *ctx                                = (DrvContextTypeDef *) handle;
 
-  DrvContextTypeDef *ctx = (DrvContextTypeDef *)handle;
-
-  if ( ctx == NULL )
-  {
-    return COMPONENT_ERROR;
-  }
-
-  if ( ctx->pExtVTable == NULL )
-  {
-    return COMPONENT_ERROR;
-  }
-
-  /* At the moment this feature is only implemented for LSM6DSL */
-  if ( ctx->who_am_i == LSM6DSL_ACC_GYRO_WHO_AM_I )
-  {
-    LSM6DSL_X_ExtDrv_t *extDriver = ( LSM6DSL_X_ExtDrv_t * )ctx->pExtVTable;
-
-    if ( extDriver->FIFO_Set_Stop_On_Fth == NULL )
-    {
+   if (ctx == NULL)
+   {
       return COMPONENT_ERROR;
-    }
+   }
 
-    else
-    {
-      return extDriver->FIFO_Set_Stop_On_Fth( handle, status );
-    }
-  }
+   if (ctx->pExtVTable == NULL)
+   {
+      return COMPONENT_ERROR;
+   }
 
-  else
-  {
-    return COMPONENT_ERROR;
-  }
+   // At the moment this feature is only implemented for LSM6DSL
+   if (ctx->who_am_i == LSM6DSL_ACC_GYRO_WHO_AM_I)
+   {
+      LSM6DSL_X_ExtDrv_t *extDriver                      = (LSM6DSL_X_ExtDrv_t *) ctx->pExtVTable;
+
+      if (extDriver->FIFO_Set_Stop_On_Fth == NULL)
+      {
+         return COMPONENT_ERROR;
+      }
+      else
+      {
+         return extDriver->FIFO_Set_Stop_On_Fth(handle, status);
+      }
+   }
+   else
+   {
+      return COMPONENT_ERROR;
+   }
 }
-
 
 
 /**
@@ -3239,43 +3158,39 @@ DrvStatusTypeDef BSP_ACCELERO_FIFO_Set_Stop_On_Fth_Ext( void *handle, uint8_t st
  * @retval COMPONENT_OK in case of success
  * @retval COMPONENT_ERROR in case of failure
  */
-DrvStatusTypeDef BSP_ACCELERO_Set_Interrupt_Latch_Ext( void *handle, uint8_t status )
+DrvStatusTypeDef BSP_ACCELERO_Set_Interrupt_Latch_Ext(void *handle, uint8_t status)
 {
+   DrvContextTypeDef *ctx                                = (DrvContextTypeDef *) handle;
 
-  DrvContextTypeDef *ctx = (DrvContextTypeDef *)handle;
-
-  if ( ctx == NULL )
-  {
-    return COMPONENT_ERROR;
-  }
-
-  if ( ctx->pExtVTable == NULL )
-  {
-    return COMPONENT_ERROR;
-  }
-
-  /* At the moment this feature is only implemented for LSM6DSL */
-  if ( ctx->who_am_i == LSM6DSL_ACC_GYRO_WHO_AM_I )
-  {
-    LSM6DSL_X_ExtDrv_t *extDriver = ( LSM6DSL_X_ExtDrv_t * )ctx->pExtVTable;
-
-    if ( extDriver->Set_Interrupt_Latch == NULL )
-    {
+   if (ctx == NULL)
+   {
       return COMPONENT_ERROR;
-    }
+   }
 
-    else
-    {
-      return extDriver->Set_Interrupt_Latch( handle, status );
-    }
-  }
+   if (ctx->pExtVTable == NULL)
+   {
+      return COMPONENT_ERROR;
+   }
 
-  else
-  {
-    return COMPONENT_ERROR;
-  }
+   // At the moment this feature is only implemented for LSM6DSL
+   if (ctx->who_am_i == LSM6DSL_ACC_GYRO_WHO_AM_I)
+   {
+      LSM6DSL_X_ExtDrv_t *extDriver                      = (LSM6DSL_X_ExtDrv_t *) ctx->pExtVTable;
+
+      if (extDriver->Set_Interrupt_Latch == NULL)
+      {
+         return COMPONENT_ERROR;
+      }
+      else
+      {
+         return extDriver->Set_Interrupt_Latch(handle, status);
+      }
+   }
+   else
+   {
+      return COMPONENT_ERROR;
+   }
 }
-
 
 /**
  * @brief Set accelero self-test
@@ -3284,57 +3199,38 @@ DrvStatusTypeDef BSP_ACCELERO_Set_Interrupt_Latch_Ext( void *handle, uint8_t sta
  * @retval COMPONENT_OK in case of success
  * @retval COMPONENT_ERROR in case of failure
  */
-DrvStatusTypeDef BSP_ACCELERO_Set_SelfTest_Ext( void *handle, uint8_t status )
+DrvStatusTypeDef BSP_ACCELERO_Set_SelfTest_Ext(void *handle, uint8_t status)
 {
+   DrvContextTypeDef *ctx                                = (DrvContextTypeDef *) handle;
 
-  DrvContextTypeDef *ctx = (DrvContextTypeDef *)handle;
-
-  if ( ctx == NULL )
-  {
-    return COMPONENT_ERROR;
-  }
-
-  if ( ctx->pExtVTable == NULL )
-  {
-    return COMPONENT_ERROR;
-  }
-
-  /* At the moment this feature is only implemented for LSM6DSL */
-  if ( ctx->who_am_i == LSM6DSL_ACC_GYRO_WHO_AM_I )
-  {
-    LSM6DSL_X_ExtDrv_t *extDriver = ( LSM6DSL_X_ExtDrv_t * )ctx->pExtVTable;
-
-    if ( extDriver->Set_SelfTest == NULL )
-    {
+   if (ctx == NULL)
+   {
       return COMPONENT_ERROR;
-    }
+   }
 
-    else
-    {
-      return extDriver->Set_SelfTest( handle, status );
-    }
-  }
+   if (ctx->pExtVTable == NULL)
+   {
+      return COMPONENT_ERROR;
+   }
 
-  else
-  {
-    return COMPONENT_ERROR;
-  }
+   // At the moment this feature is only implemented for LSM6DSL
+   if (ctx->who_am_i == LSM6DSL_ACC_GYRO_WHO_AM_I)
+   {
+      LSM6DSL_X_ExtDrv_t *extDriver                      = (LSM6DSL_X_ExtDrv_t *) ctx->pExtVTable;
+
+      if (extDriver->Set_SelfTest == NULL)
+      {
+         return COMPONENT_ERROR;
+      }
+      else
+      {
+         return extDriver->Set_SelfTest(handle, status);
+      }
+   }
+   else
+   {
+      return COMPONENT_ERROR;
+   }
 }
 
-/**
- * @}
- */
 
-/**
- * @}
- */
-
-/**
- * @}
- */
-
-/**
- * @}
- */
-
-/************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/
