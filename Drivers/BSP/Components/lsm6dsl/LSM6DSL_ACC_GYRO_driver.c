@@ -341,7 +341,7 @@ status_t LSM6DSL_ACC_GYRO_R_ODR_XL(void *handle, LSM6DSL_ACC_GYRO_ODR_XL_t *valu
       return MEMS_ERROR;
    }
 
-   *value                                                &= LSM6DSL_ACC_GYRO_ODR_XL_MASK;       / /mask
+   *value                                                &= LSM6DSL_ACC_GYRO_ODR_XL_MASK;       // mask
 
    return MEMS_SUCCESS;
 }
