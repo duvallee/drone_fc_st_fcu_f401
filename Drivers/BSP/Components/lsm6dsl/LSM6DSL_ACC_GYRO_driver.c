@@ -6081,12 +6081,13 @@ status_t  LSM6DSL_ACC_GYRO_W_TapEvOnInt1(void *handle, LSM6DSL_ACC_GYRO_INT1_TAP
 *******************************************************************************/
 status_t LSM6DSL_ACC_GYRO_R_TapEvOnInt1(void *handle, LSM6DSL_ACC_GYRO_INT1_TAP_t *value)
 {
-  if( !LSM6DSL_ACC_GYRO_ReadReg(handle, LSM6DSL_ACC_GYRO_MD1_CFG, (u8_t *)value, 1) )
-    return MEMS_ERROR;
+   if (!LSM6DSL_ACC_GYRO_ReadReg(handle, LSM6DSL_ACC_GYRO_MD1_CFG, (u8_t *) value, 1))
+   {
+      return MEMS_ERROR;
+   }
+   *value                                                &= LSM6DSL_ACC_GYRO_INT1_TAP_MASK; //mask
 
-  *value &= LSM6DSL_ACC_GYRO_INT1_TAP_MASK; //mask
-
-  return MEMS_SUCCESS;
+   return MEMS_SUCCESS;
 }
 
 /*******************************************************************************
@@ -6096,20 +6097,23 @@ status_t LSM6DSL_ACC_GYRO_R_TapEvOnInt1(void *handle, LSM6DSL_ACC_GYRO_INT1_TAP_
 * Output         : None
 * Return         : Status [MEMS_ERROR, MEMS_SUCCESS]
 *******************************************************************************/
-status_t  LSM6DSL_ACC_GYRO_W_FFEvOnInt1(void *handle, LSM6DSL_ACC_GYRO_INT1_FF_t newValue)
+status_t LSM6DSL_ACC_GYRO_W_FFEvOnInt1(void *handle, LSM6DSL_ACC_GYRO_INT1_FF_t newValue)
 {
-  u8_t value;
+   u8_t value;
 
-  if( !LSM6DSL_ACC_GYRO_ReadReg(handle, LSM6DSL_ACC_GYRO_MD1_CFG, &value, 1) )
-    return MEMS_ERROR;
+   if (!LSM6DSL_ACC_GYRO_ReadReg(handle, LSM6DSL_ACC_GYRO_MD1_CFG, &value, 1))
+   {
+      return MEMS_ERROR;
+   }
 
-  value &= ~LSM6DSL_ACC_GYRO_INT1_FF_MASK;
-  value |= newValue;
+   value                                                 &= ~LSM6DSL_ACC_GYRO_INT1_FF_MASK;
+   value                                                 |= newValue;
 
-  if( !LSM6DSL_ACC_GYRO_WriteReg(handle, LSM6DSL_ACC_GYRO_MD1_CFG, &value, 1) )
-    return MEMS_ERROR;
-
-  return MEMS_SUCCESS;
+   if (!LSM6DSL_ACC_GYRO_WriteReg(handle, LSM6DSL_ACC_GYRO_MD1_CFG, &value, 1))
+   {
+      return MEMS_ERROR;
+   }
+   return MEMS_SUCCESS;
 }
 
 /*******************************************************************************
@@ -6121,12 +6125,13 @@ status_t  LSM6DSL_ACC_GYRO_W_FFEvOnInt1(void *handle, LSM6DSL_ACC_GYRO_INT1_FF_t
 *******************************************************************************/
 status_t LSM6DSL_ACC_GYRO_R_FFEvOnInt1(void *handle, LSM6DSL_ACC_GYRO_INT1_FF_t *value)
 {
-  if( !LSM6DSL_ACC_GYRO_ReadReg(handle, LSM6DSL_ACC_GYRO_MD1_CFG, (u8_t *)value, 1) )
-    return MEMS_ERROR;
+   if (!LSM6DSL_ACC_GYRO_ReadReg(handle, LSM6DSL_ACC_GYRO_MD1_CFG, (u8_t *) value, 1))
+   {
+      return MEMS_ERROR;
+   }
+   *value                                                &= LSM6DSL_ACC_GYRO_INT1_FF_MASK; //mask
 
-  *value &= LSM6DSL_ACC_GYRO_INT1_FF_MASK; //mask
-
-  return MEMS_SUCCESS;
+   return MEMS_SUCCESS;
 }
 
 /*******************************************************************************
@@ -6136,20 +6141,23 @@ status_t LSM6DSL_ACC_GYRO_R_FFEvOnInt1(void *handle, LSM6DSL_ACC_GYRO_INT1_FF_t 
 * Output         : None
 * Return         : Status [MEMS_ERROR, MEMS_SUCCESS]
 *******************************************************************************/
-status_t  LSM6DSL_ACC_GYRO_W_WUEvOnInt1(void *handle, LSM6DSL_ACC_GYRO_INT1_WU_t newValue)
+status_t LSM6DSL_ACC_GYRO_W_WUEvOnInt1(void *handle, LSM6DSL_ACC_GYRO_INT1_WU_t newValue)
 {
-  u8_t value;
+   u8_t value;
 
-  if( !LSM6DSL_ACC_GYRO_ReadReg(handle, LSM6DSL_ACC_GYRO_MD1_CFG, &value, 1) )
-    return MEMS_ERROR;
+   if (!LSM6DSL_ACC_GYRO_ReadReg(handle, LSM6DSL_ACC_GYRO_MD1_CFG, &value, 1))
+   {
+      return MEMS_ERROR;
+   }
 
-  value &= ~LSM6DSL_ACC_GYRO_INT1_WU_MASK;
-  value |= newValue;
+   value                                                 &= ~LSM6DSL_ACC_GYRO_INT1_WU_MASK;
+   value                                                 |= newValue;
 
-  if( !LSM6DSL_ACC_GYRO_WriteReg(handle, LSM6DSL_ACC_GYRO_MD1_CFG, &value, 1) )
-    return MEMS_ERROR;
-
-  return MEMS_SUCCESS;
+   if (!LSM6DSL_ACC_GYRO_WriteReg(handle, LSM6DSL_ACC_GYRO_MD1_CFG, &value, 1))
+   {
+      return MEMS_ERROR;
+   }
+   return MEMS_SUCCESS;
 }
 
 /*******************************************************************************
@@ -6161,12 +6169,14 @@ status_t  LSM6DSL_ACC_GYRO_W_WUEvOnInt1(void *handle, LSM6DSL_ACC_GYRO_INT1_WU_t
 *******************************************************************************/
 status_t LSM6DSL_ACC_GYRO_R_WUEvOnInt1(void *handle, LSM6DSL_ACC_GYRO_INT1_WU_t *value)
 {
-  if( !LSM6DSL_ACC_GYRO_ReadReg(handle, LSM6DSL_ACC_GYRO_MD1_CFG, (u8_t *)value, 1) )
-    return MEMS_ERROR;
+   if (!LSM6DSL_ACC_GYRO_ReadReg(handle, LSM6DSL_ACC_GYRO_MD1_CFG, (u8_t *) value, 1))
+   {
+      return MEMS_ERROR;
+   }
 
-  *value &= LSM6DSL_ACC_GYRO_INT1_WU_MASK; //mask
+   *value                                                &= LSM6DSL_ACC_GYRO_INT1_WU_MASK; //mask
 
-  return MEMS_SUCCESS;
+   return MEMS_SUCCESS;
 }
 
 /*******************************************************************************
@@ -6178,18 +6188,20 @@ status_t LSM6DSL_ACC_GYRO_R_WUEvOnInt1(void *handle, LSM6DSL_ACC_GYRO_INT1_WU_t 
 *******************************************************************************/
 status_t  LSM6DSL_ACC_GYRO_W_SingleTapOnInt1(void *handle, LSM6DSL_ACC_GYRO_INT1_SINGLE_TAP_t newValue)
 {
-  u8_t value;
+   u8_t value;
 
-  if( !LSM6DSL_ACC_GYRO_ReadReg(handle, LSM6DSL_ACC_GYRO_MD1_CFG, &value, 1) )
-    return MEMS_ERROR;
+   if (!LSM6DSL_ACC_GYRO_ReadReg(handle, LSM6DSL_ACC_GYRO_MD1_CFG, &value, 1))
+   {
+      return MEMS_ERROR;
+   }
+   value                                                 &= ~LSM6DSL_ACC_GYRO_INT1_SINGLE_TAP_MASK;
+   value                                                 |= newValue;
 
-  value &= ~LSM6DSL_ACC_GYRO_INT1_SINGLE_TAP_MASK;
-  value |= newValue;
-
-  if( !LSM6DSL_ACC_GYRO_WriteReg(handle, LSM6DSL_ACC_GYRO_MD1_CFG, &value, 1) )
-    return MEMS_ERROR;
-
-  return MEMS_SUCCESS;
+   if (!LSM6DSL_ACC_GYRO_WriteReg(handle, LSM6DSL_ACC_GYRO_MD1_CFG, &value, 1))
+   {
+      return MEMS_ERROR;
+   }
+   return MEMS_SUCCESS;
 }
 
 /*******************************************************************************
@@ -6201,12 +6213,13 @@ status_t  LSM6DSL_ACC_GYRO_W_SingleTapOnInt1(void *handle, LSM6DSL_ACC_GYRO_INT1
 *******************************************************************************/
 status_t LSM6DSL_ACC_GYRO_R_SingleTapOnInt1(void *handle, LSM6DSL_ACC_GYRO_INT1_SINGLE_TAP_t *value)
 {
-  if( !LSM6DSL_ACC_GYRO_ReadReg(handle, LSM6DSL_ACC_GYRO_MD1_CFG, (u8_t *)value, 1) )
-    return MEMS_ERROR;
+   if (!LSM6DSL_ACC_GYRO_ReadReg(handle, LSM6DSL_ACC_GYRO_MD1_CFG, (u8_t *) value, 1))
+   {
+      return MEMS_ERROR;
+   }
+   *value                                                &= LSM6DSL_ACC_GYRO_INT1_SINGLE_TAP_MASK; //mask
 
-  *value &= LSM6DSL_ACC_GYRO_INT1_SINGLE_TAP_MASK; //mask
-
-  return MEMS_SUCCESS;
+   return MEMS_SUCCESS;
 }
 
 /*******************************************************************************
@@ -6218,18 +6231,20 @@ status_t LSM6DSL_ACC_GYRO_R_SingleTapOnInt1(void *handle, LSM6DSL_ACC_GYRO_INT1_
 *******************************************************************************/
 status_t  LSM6DSL_ACC_GYRO_W_SleepEvOnInt1(void *handle, LSM6DSL_ACC_GYRO_INT1_SLEEP_t newValue)
 {
-  u8_t value;
+   u8_t value;
 
-  if( !LSM6DSL_ACC_GYRO_ReadReg(handle, LSM6DSL_ACC_GYRO_MD1_CFG, &value, 1) )
-    return MEMS_ERROR;
+   if (!LSM6DSL_ACC_GYRO_ReadReg(handle, LSM6DSL_ACC_GYRO_MD1_CFG, &value, 1))
+   {
+      return MEMS_ERROR;
+   }
+   value                                                 &= ~LSM6DSL_ACC_GYRO_INT1_SLEEP_MASK;
+   value                                                 |= newValue;
 
-  value &= ~LSM6DSL_ACC_GYRO_INT1_SLEEP_MASK;
-  value |= newValue;
-
-  if( !LSM6DSL_ACC_GYRO_WriteReg(handle, LSM6DSL_ACC_GYRO_MD1_CFG, &value, 1) )
-    return MEMS_ERROR;
-
-  return MEMS_SUCCESS;
+   if (!LSM6DSL_ACC_GYRO_WriteReg(handle, LSM6DSL_ACC_GYRO_MD1_CFG, &value, 1))
+   {
+      return MEMS_ERROR;
+   }
+   return MEMS_SUCCESS;
 }
 
 /*******************************************************************************
@@ -6241,12 +6256,13 @@ status_t  LSM6DSL_ACC_GYRO_W_SleepEvOnInt1(void *handle, LSM6DSL_ACC_GYRO_INT1_S
 *******************************************************************************/
 status_t LSM6DSL_ACC_GYRO_R_SleepEvOnInt1(void *handle, LSM6DSL_ACC_GYRO_INT1_SLEEP_t *value)
 {
-  if( !LSM6DSL_ACC_GYRO_ReadReg(handle, LSM6DSL_ACC_GYRO_MD1_CFG, (u8_t *)value, 1) )
-    return MEMS_ERROR;
+   if (!LSM6DSL_ACC_GYRO_ReadReg(handle, LSM6DSL_ACC_GYRO_MD1_CFG, (u8_t *) value, 1))
+   {
+      return MEMS_ERROR;
+   }
+   *value                                                &= LSM6DSL_ACC_GYRO_INT1_SLEEP_MASK; //mask
 
-  *value &= LSM6DSL_ACC_GYRO_INT1_SLEEP_MASK; //mask
-
-  return MEMS_SUCCESS;
+   return MEMS_SUCCESS;
 }
 
 /*******************************************************************************
@@ -6258,18 +6274,21 @@ status_t LSM6DSL_ACC_GYRO_R_SleepEvOnInt1(void *handle, LSM6DSL_ACC_GYRO_INT1_SL
 *******************************************************************************/
 status_t  LSM6DSL_ACC_GYRO_W_MagCorrection_Int2(void *handle, LSM6DSL_ACC_GYRO_INT2_IRON_t newValue)
 {
-  u8_t value;
+   u8_t value;
 
-  if( !LSM6DSL_ACC_GYRO_ReadReg(handle, LSM6DSL_ACC_GYRO_MD2_CFG, &value, 1) )
-    return MEMS_ERROR;
+   if (!LSM6DSL_ACC_GYRO_ReadReg(handle, LSM6DSL_ACC_GYRO_MD2_CFG, &value, 1))
+   {
+      return MEMS_ERROR;
+   }
 
-  value &= ~LSM6DSL_ACC_GYRO_INT2_IRON_MASK;
-  value |= newValue;
+   value                                                 &= ~LSM6DSL_ACC_GYRO_INT2_IRON_MASK;
+   value                                                 |= newValue;
 
-  if( !LSM6DSL_ACC_GYRO_WriteReg(handle, LSM6DSL_ACC_GYRO_MD2_CFG, &value, 1) )
-    return MEMS_ERROR;
-
-  return MEMS_SUCCESS;
+   if (!LSM6DSL_ACC_GYRO_WriteReg(handle, LSM6DSL_ACC_GYRO_MD2_CFG, &value, 1))
+   {
+      return MEMS_ERROR;
+   }
+   return MEMS_SUCCESS;
 }
 
 /*******************************************************************************
@@ -6281,12 +6300,13 @@ status_t  LSM6DSL_ACC_GYRO_W_MagCorrection_Int2(void *handle, LSM6DSL_ACC_GYRO_I
 *******************************************************************************/
 status_t LSM6DSL_ACC_GYRO_R_MagCorrection_Int2(void *handle, LSM6DSL_ACC_GYRO_INT2_IRON_t *value)
 {
-  if( !LSM6DSL_ACC_GYRO_ReadReg(handle, LSM6DSL_ACC_GYRO_MD2_CFG, (u8_t *)value, 1) )
-    return MEMS_ERROR;
+   if (!LSM6DSL_ACC_GYRO_ReadReg(handle, LSM6DSL_ACC_GYRO_MD2_CFG, (u8_t *) value, 1))
+   {
+      return MEMS_ERROR;
+   }
+   *value                                                &= LSM6DSL_ACC_GYRO_INT2_IRON_MASK; //mask
 
-  *value &= LSM6DSL_ACC_GYRO_INT2_IRON_MASK; //mask
-
-  return MEMS_SUCCESS;
+   return MEMS_SUCCESS;
 }
 
 /*******************************************************************************
@@ -6298,18 +6318,20 @@ status_t LSM6DSL_ACC_GYRO_R_MagCorrection_Int2(void *handle, LSM6DSL_ACC_GYRO_IN
 *******************************************************************************/
 status_t  LSM6DSL_ACC_GYRO_W_TiltEvOnInt2(void *handle, LSM6DSL_ACC_GYRO_INT2_TILT_t newValue)
 {
-  u8_t value;
+   u8_t value;
 
-  if( !LSM6DSL_ACC_GYRO_ReadReg(handle, LSM6DSL_ACC_GYRO_MD2_CFG, &value, 1) )
-    return MEMS_ERROR;
+   if (!LSM6DSL_ACC_GYRO_ReadReg(handle, LSM6DSL_ACC_GYRO_MD2_CFG, &value, 1))
+   {
+      return MEMS_ERROR;
+   }
+   value                                                 &= ~LSM6DSL_ACC_GYRO_INT2_TILT_MASK;
+   value                                                 |= newValue;
 
-  value &= ~LSM6DSL_ACC_GYRO_INT2_TILT_MASK;
-  value |= newValue;
-
-  if( !LSM6DSL_ACC_GYRO_WriteReg(handle, LSM6DSL_ACC_GYRO_MD2_CFG, &value, 1) )
-    return MEMS_ERROR;
-
-  return MEMS_SUCCESS;
+   if (!LSM6DSL_ACC_GYRO_WriteReg(handle, LSM6DSL_ACC_GYRO_MD2_CFG, &value, 1))
+   {
+      return MEMS_ERROR;
+   }
+   return MEMS_SUCCESS;
 }
 
 /*******************************************************************************
@@ -6321,12 +6343,13 @@ status_t  LSM6DSL_ACC_GYRO_W_TiltEvOnInt2(void *handle, LSM6DSL_ACC_GYRO_INT2_TI
 *******************************************************************************/
 status_t LSM6DSL_ACC_GYRO_R_TiltEvOnInt2(void *handle, LSM6DSL_ACC_GYRO_INT2_TILT_t *value)
 {
-  if( !LSM6DSL_ACC_GYRO_ReadReg(handle, LSM6DSL_ACC_GYRO_MD2_CFG, (u8_t *)value, 1) )
-    return MEMS_ERROR;
+   if (!LSM6DSL_ACC_GYRO_ReadReg(handle, LSM6DSL_ACC_GYRO_MD2_CFG, (u8_t *) value, 1))
+   {
+      return MEMS_ERROR;
+   }
+   *value                                                &= LSM6DSL_ACC_GYRO_INT2_TILT_MASK; //mask
 
-  *value &= LSM6DSL_ACC_GYRO_INT2_TILT_MASK; //mask
-
-  return MEMS_SUCCESS;
+   return MEMS_SUCCESS;
 }
 
 /*******************************************************************************
@@ -6338,18 +6361,21 @@ status_t LSM6DSL_ACC_GYRO_R_TiltEvOnInt2(void *handle, LSM6DSL_ACC_GYRO_INT2_TIL
 *******************************************************************************/
 status_t  LSM6DSL_ACC_GYRO_W_6DEvOnInt2(void *handle, LSM6DSL_ACC_GYRO_INT2_6D_t newValue)
 {
-  u8_t value;
+   u8_t value;
 
-  if( !LSM6DSL_ACC_GYRO_ReadReg(handle, LSM6DSL_ACC_GYRO_MD2_CFG, &value, 1) )
-    return MEMS_ERROR;
+   if (!LSM6DSL_ACC_GYRO_ReadReg(handle, LSM6DSL_ACC_GYRO_MD2_CFG, &value, 1))
+   {
+      return MEMS_ERROR;
+   }
+   value                                                 &= ~LSM6DSL_ACC_GYRO_INT2_6D_MASK;
+   value                                                 |= newValue;
 
-  value &= ~LSM6DSL_ACC_GYRO_INT2_6D_MASK;
-  value |= newValue;
+   if (!LSM6DSL_ACC_GYRO_WriteReg(handle, LSM6DSL_ACC_GYRO_MD2_CFG, &value, 1))
+   {
+      return MEMS_ERROR;
+   }
 
-  if( !LSM6DSL_ACC_GYRO_WriteReg(handle, LSM6DSL_ACC_GYRO_MD2_CFG, &value, 1) )
-    return MEMS_ERROR;
-
-  return MEMS_SUCCESS;
+   return MEMS_SUCCESS;
 }
 
 /*******************************************************************************
@@ -6361,12 +6387,13 @@ status_t  LSM6DSL_ACC_GYRO_W_6DEvOnInt2(void *handle, LSM6DSL_ACC_GYRO_INT2_6D_t
 *******************************************************************************/
 status_t LSM6DSL_ACC_GYRO_R_6DEvOnInt2(void *handle, LSM6DSL_ACC_GYRO_INT2_6D_t *value)
 {
-  if( !LSM6DSL_ACC_GYRO_ReadReg(handle, LSM6DSL_ACC_GYRO_MD2_CFG, (u8_t *)value, 1) )
-    return MEMS_ERROR;
+   if (!LSM6DSL_ACC_GYRO_ReadReg(handle, LSM6DSL_ACC_GYRO_MD2_CFG, (u8_t *) value, 1))
+   {
+      return MEMS_ERROR;
+   }
+   *value                                                &= LSM6DSL_ACC_GYRO_INT2_6D_MASK; //mask
 
-  *value &= LSM6DSL_ACC_GYRO_INT2_6D_MASK; //mask
-
-  return MEMS_SUCCESS;
+   return MEMS_SUCCESS;
 }
 
 /*******************************************************************************
@@ -6378,18 +6405,20 @@ status_t LSM6DSL_ACC_GYRO_R_6DEvOnInt2(void *handle, LSM6DSL_ACC_GYRO_INT2_6D_t 
 *******************************************************************************/
 status_t  LSM6DSL_ACC_GYRO_W_TapEvOnInt2(void *handle, LSM6DSL_ACC_GYRO_INT2_TAP_t newValue)
 {
-  u8_t value;
+   u8_t value;
 
-  if( !LSM6DSL_ACC_GYRO_ReadReg(handle, LSM6DSL_ACC_GYRO_MD2_CFG, &value, 1) )
-    return MEMS_ERROR;
+   if (!LSM6DSL_ACC_GYRO_ReadReg(handle, LSM6DSL_ACC_GYRO_MD2_CFG, &value, 1))
+   {
+      return MEMS_ERROR;
+   }
+   value                                                 &= ~LSM6DSL_ACC_GYRO_INT2_TAP_MASK;
+   value                                                 |= newValue;
 
-  value &= ~LSM6DSL_ACC_GYRO_INT2_TAP_MASK;
-  value |= newValue;
-
-  if( !LSM6DSL_ACC_GYRO_WriteReg(handle, LSM6DSL_ACC_GYRO_MD2_CFG, &value, 1) )
-    return MEMS_ERROR;
-
-  return MEMS_SUCCESS;
+   if (!LSM6DSL_ACC_GYRO_WriteReg(handle, LSM6DSL_ACC_GYRO_MD2_CFG, &value, 1))
+   {
+      return MEMS_ERROR;
+   }
+   return MEMS_SUCCESS;
 }
 
 /*******************************************************************************
@@ -6401,12 +6430,13 @@ status_t  LSM6DSL_ACC_GYRO_W_TapEvOnInt2(void *handle, LSM6DSL_ACC_GYRO_INT2_TAP
 *******************************************************************************/
 status_t LSM6DSL_ACC_GYRO_R_TapEvOnInt2(void *handle, LSM6DSL_ACC_GYRO_INT2_TAP_t *value)
 {
-  if( !LSM6DSL_ACC_GYRO_ReadReg(handle, LSM6DSL_ACC_GYRO_MD2_CFG, (u8_t *)value, 1) )
-    return MEMS_ERROR;
+   if (!LSM6DSL_ACC_GYRO_ReadReg(handle, LSM6DSL_ACC_GYRO_MD2_CFG, (u8_t *) value, 1))
+   {
+      return MEMS_ERROR;
+   }
+   *value                                                &= LSM6DSL_ACC_GYRO_INT2_TAP_MASK; //mask
 
-  *value &= LSM6DSL_ACC_GYRO_INT2_TAP_MASK; //mask
-
-  return MEMS_SUCCESS;
+   return MEMS_SUCCESS;
 }
 
 /*******************************************************************************
@@ -6418,18 +6448,21 @@ status_t LSM6DSL_ACC_GYRO_R_TapEvOnInt2(void *handle, LSM6DSL_ACC_GYRO_INT2_TAP_
 *******************************************************************************/
 status_t  LSM6DSL_ACC_GYRO_W_FFEvOnInt2(void *handle, LSM6DSL_ACC_GYRO_INT2_FF_t newValue)
 {
-  u8_t value;
+   u8_t value;
 
-  if( !LSM6DSL_ACC_GYRO_ReadReg(handle, LSM6DSL_ACC_GYRO_MD2_CFG, &value, 1) )
-    return MEMS_ERROR;
+   if (!LSM6DSL_ACC_GYRO_ReadReg(handle, LSM6DSL_ACC_GYRO_MD2_CFG, &value, 1))
+   {
+      return MEMS_ERROR;
+   }
 
-  value &= ~LSM6DSL_ACC_GYRO_INT2_FF_MASK;
-  value |= newValue;
+   value                                                 &= ~LSM6DSL_ACC_GYRO_INT2_FF_MASK;
+   value                                                 |= newValue;
 
-  if( !LSM6DSL_ACC_GYRO_WriteReg(handle, LSM6DSL_ACC_GYRO_MD2_CFG, &value, 1) )
-    return MEMS_ERROR;
-
-  return MEMS_SUCCESS;
+   if (!LSM6DSL_ACC_GYRO_WriteReg(handle, LSM6DSL_ACC_GYRO_MD2_CFG, &value, 1))
+   {
+      return MEMS_ERROR;
+   }
+   return MEMS_SUCCESS;
 }
 
 /*******************************************************************************
@@ -6441,12 +6474,13 @@ status_t  LSM6DSL_ACC_GYRO_W_FFEvOnInt2(void *handle, LSM6DSL_ACC_GYRO_INT2_FF_t
 *******************************************************************************/
 status_t LSM6DSL_ACC_GYRO_R_FFEvOnInt2(void *handle, LSM6DSL_ACC_GYRO_INT2_FF_t *value)
 {
-  if( !LSM6DSL_ACC_GYRO_ReadReg(handle, LSM6DSL_ACC_GYRO_MD2_CFG, (u8_t *)value, 1) )
-    return MEMS_ERROR;
+   if (!LSM6DSL_ACC_GYRO_ReadReg(handle, LSM6DSL_ACC_GYRO_MD2_CFG, (u8_t *) value, 1))
+   {
+      return MEMS_ERROR;
+   }
+   *value                                                &= LSM6DSL_ACC_GYRO_INT2_FF_MASK; //mask
 
-  *value &= LSM6DSL_ACC_GYRO_INT2_FF_MASK; //mask
-
-  return MEMS_SUCCESS;
+   return MEMS_SUCCESS;
 }
 
 /*******************************************************************************
@@ -6458,18 +6492,20 @@ status_t LSM6DSL_ACC_GYRO_R_FFEvOnInt2(void *handle, LSM6DSL_ACC_GYRO_INT2_FF_t 
 *******************************************************************************/
 status_t  LSM6DSL_ACC_GYRO_W_WUEvOnInt2(void *handle, LSM6DSL_ACC_GYRO_INT2_WU_t newValue)
 {
-  u8_t value;
+   u8_t value;
 
-  if( !LSM6DSL_ACC_GYRO_ReadReg(handle, LSM6DSL_ACC_GYRO_MD2_CFG, &value, 1) )
-    return MEMS_ERROR;
+   if (!LSM6DSL_ACC_GYRO_ReadReg(handle, LSM6DSL_ACC_GYRO_MD2_CFG, &value, 1))
+   {
+      return MEMS_ERROR;
+   }
+   value                                                 &= ~LSM6DSL_ACC_GYRO_INT2_WU_MASK;
+   value                                                 |= newValue;
 
-  value &= ~LSM6DSL_ACC_GYRO_INT2_WU_MASK;
-  value |= newValue;
-
-  if( !LSM6DSL_ACC_GYRO_WriteReg(handle, LSM6DSL_ACC_GYRO_MD2_CFG, &value, 1) )
-    return MEMS_ERROR;
-
-  return MEMS_SUCCESS;
+   if (!LSM6DSL_ACC_GYRO_WriteReg(handle, LSM6DSL_ACC_GYRO_MD2_CFG, &value, 1))
+   {
+      return MEMS_ERROR;
+   }
+   return MEMS_SUCCESS;
 }
 
 /*******************************************************************************
@@ -6481,12 +6517,13 @@ status_t  LSM6DSL_ACC_GYRO_W_WUEvOnInt2(void *handle, LSM6DSL_ACC_GYRO_INT2_WU_t
 *******************************************************************************/
 status_t LSM6DSL_ACC_GYRO_R_WUEvOnInt2(void *handle, LSM6DSL_ACC_GYRO_INT2_WU_t *value)
 {
-  if( !LSM6DSL_ACC_GYRO_ReadReg(handle, LSM6DSL_ACC_GYRO_MD2_CFG, (u8_t *)value, 1) )
-    return MEMS_ERROR;
+   if (!LSM6DSL_ACC_GYRO_ReadReg(handle, LSM6DSL_ACC_GYRO_MD2_CFG, (u8_t *)value, 1))
+   {
+      return MEMS_ERROR;
+   }
+   *value                                                &= LSM6DSL_ACC_GYRO_INT2_WU_MASK; //mask
 
-  *value &= LSM6DSL_ACC_GYRO_INT2_WU_MASK; //mask
-
-  return MEMS_SUCCESS;
+   return MEMS_SUCCESS;
 }
 
 /*******************************************************************************
@@ -6498,18 +6535,20 @@ status_t LSM6DSL_ACC_GYRO_R_WUEvOnInt2(void *handle, LSM6DSL_ACC_GYRO_INT2_WU_t 
 *******************************************************************************/
 status_t  LSM6DSL_ACC_GYRO_W_SingleTapOnInt2(void *handle, LSM6DSL_ACC_GYRO_INT2_SINGLE_TAP_t newValue)
 {
-  u8_t value;
+   u8_t value;
 
-  if( !LSM6DSL_ACC_GYRO_ReadReg(handle, LSM6DSL_ACC_GYRO_MD2_CFG, &value, 1) )
-    return MEMS_ERROR;
+   if (!LSM6DSL_ACC_GYRO_ReadReg(handle, LSM6DSL_ACC_GYRO_MD2_CFG, &value, 1))
+   {
+      return MEMS_ERROR;
+   }
+   value                                                 &= ~LSM6DSL_ACC_GYRO_INT2_SINGLE_TAP_MASK;
+   value                                                 |= newValue;
 
-  value &= ~LSM6DSL_ACC_GYRO_INT2_SINGLE_TAP_MASK;
-  value |= newValue;
-
-  if( !LSM6DSL_ACC_GYRO_WriteReg(handle, LSM6DSL_ACC_GYRO_MD2_CFG, &value, 1) )
-    return MEMS_ERROR;
-
-  return MEMS_SUCCESS;
+   if (!LSM6DSL_ACC_GYRO_WriteReg(handle, LSM6DSL_ACC_GYRO_MD2_CFG, &value, 1))
+   {
+      return MEMS_ERROR;
+   }
+   return MEMS_SUCCESS;
 }
 
 /*******************************************************************************
@@ -6521,12 +6560,13 @@ status_t  LSM6DSL_ACC_GYRO_W_SingleTapOnInt2(void *handle, LSM6DSL_ACC_GYRO_INT2
 *******************************************************************************/
 status_t LSM6DSL_ACC_GYRO_R_SingleTapOnInt2(void *handle, LSM6DSL_ACC_GYRO_INT2_SINGLE_TAP_t *value)
 {
-  if( !LSM6DSL_ACC_GYRO_ReadReg(handle, LSM6DSL_ACC_GYRO_MD2_CFG, (u8_t *)value, 1) )
-    return MEMS_ERROR;
+   if (!LSM6DSL_ACC_GYRO_ReadReg(handle, LSM6DSL_ACC_GYRO_MD2_CFG, (u8_t *) value, 1))
+   {
+      return MEMS_ERROR;
+   }
+   *value                                                &= LSM6DSL_ACC_GYRO_INT2_SINGLE_TAP_MASK; //mask
 
-  *value &= LSM6DSL_ACC_GYRO_INT2_SINGLE_TAP_MASK; //mask
-
-  return MEMS_SUCCESS;
+   return MEMS_SUCCESS;
 }
 
 /*******************************************************************************
@@ -6536,20 +6576,23 @@ status_t LSM6DSL_ACC_GYRO_R_SingleTapOnInt2(void *handle, LSM6DSL_ACC_GYRO_INT2_
 * Output         : None
 * Return         : Status [MEMS_ERROR, MEMS_SUCCESS]
 *******************************************************************************/
-status_t  LSM6DSL_ACC_GYRO_W_SleepEvOnInt2(void *handle, LSM6DSL_ACC_GYRO_INT2_SLEEP_t newValue)
+status_t LSM6DSL_ACC_GYRO_W_SleepEvOnInt2(void *handle, LSM6DSL_ACC_GYRO_INT2_SLEEP_t newValue)
 {
-  u8_t value;
+   u8_t value;
 
-  if( !LSM6DSL_ACC_GYRO_ReadReg(handle, LSM6DSL_ACC_GYRO_MD2_CFG, &value, 1) )
-    return MEMS_ERROR;
+   if (!LSM6DSL_ACC_GYRO_ReadReg(handle, LSM6DSL_ACC_GYRO_MD2_CFG, &value, 1))
+   {
+      return MEMS_ERROR;
+   }
 
-  value &= ~LSM6DSL_ACC_GYRO_INT2_SLEEP_MASK;
-  value |= newValue;
+   value                                                 &= ~LSM6DSL_ACC_GYRO_INT2_SLEEP_MASK;
+   value                                                 |= newValue;
 
-  if( !LSM6DSL_ACC_GYRO_WriteReg(handle, LSM6DSL_ACC_GYRO_MD2_CFG, &value, 1) )
-    return MEMS_ERROR;
-
-  return MEMS_SUCCESS;
+   if (!LSM6DSL_ACC_GYRO_WriteReg(handle, LSM6DSL_ACC_GYRO_MD2_CFG, &value, 1))
+   {
+      return MEMS_ERROR;
+   }
+   return MEMS_SUCCESS;
 }
 
 /*******************************************************************************
@@ -6561,12 +6604,14 @@ status_t  LSM6DSL_ACC_GYRO_W_SleepEvOnInt2(void *handle, LSM6DSL_ACC_GYRO_INT2_S
 *******************************************************************************/
 status_t LSM6DSL_ACC_GYRO_R_SleepEvOnInt2(void *handle, LSM6DSL_ACC_GYRO_INT2_SLEEP_t *value)
 {
-  if( !LSM6DSL_ACC_GYRO_ReadReg(handle, LSM6DSL_ACC_GYRO_MD2_CFG, (u8_t *)value, 1) )
-    return MEMS_ERROR;
+   if (!LSM6DSL_ACC_GYRO_ReadReg(handle, LSM6DSL_ACC_GYRO_MD2_CFG, (u8_t *) value, 1))
+   {
+      return MEMS_ERROR;
+   }
 
-  *value &= LSM6DSL_ACC_GYRO_INT2_SLEEP_MASK; //mask
+   *value                                                &= LSM6DSL_ACC_GYRO_INT2_SLEEP_MASK; //mask
 
-  return MEMS_SUCCESS;
+   return MEMS_SUCCESS;
 }
 
 /*******************************************************************************
@@ -6578,23 +6623,25 @@ status_t LSM6DSL_ACC_GYRO_R_SleepEvOnInt2(void *handle, LSM6DSL_ACC_GYRO_INT2_SL
 *******************************************************************************/
 status_t LSM6DSL_ACC_GYRO_Get_GetFIFOData(void *handle, u8_t *buff)
 {
-  u8_t i, j, k;
-  u8_t numberOfByteForDimension;
+   u8_t i, j, k;
+   u8_t numberOfByteForDimension;
 
-  numberOfByteForDimension = 2 / 1;
+   numberOfByteForDimension                              = 2 / 1;
 
-  k = 0;
-  for (i = 0; i < 1; i++ )
-  {
-    for (j = 0; j < numberOfByteForDimension; j++ )
-    {
-      if( !LSM6DSL_ACC_GYRO_ReadReg(handle, LSM6DSL_ACC_GYRO_FIFO_DATA_OUT_L + k, &buff[k], 1))
-        return MEMS_ERROR;
-      k++;
-    }
-  }
+   k                                                     = 0;
+   for (i = 0; i < 1; i++)
+   {
+      for (j = 0; j < numberOfByteForDimension; j++)
+      {
+         if (!LSM6DSL_ACC_GYRO_ReadReg(handle, LSM6DSL_ACC_GYRO_FIFO_DATA_OUT_L + k, &buff[k], 1))
+         {
+            return MEMS_ERROR;
+         }
+         k++;
+      }
+   }
 
-  return MEMS_SUCCESS;
+   return MEMS_SUCCESS;
 }
 
 /*******************************************************************************
@@ -6606,23 +6653,25 @@ status_t LSM6DSL_ACC_GYRO_Get_GetFIFOData(void *handle, u8_t *buff)
 *******************************************************************************/
 status_t LSM6DSL_ACC_GYRO_Get_GetTimestamp(void *handle, u8_t *buff)
 {
-  u8_t i, j, k;
-  u8_t numberOfByteForDimension;
+   u8_t i, j, k;
+   u8_t numberOfByteForDimension;
 
-  numberOfByteForDimension = 3 / 1;
+   numberOfByteForDimension                              = 3 / 1;
 
-  k = 0;
-  for (i = 0; i < 1; i++ )
-  {
-    for (j = 0; j < numberOfByteForDimension; j++ )
-    {
-      if( !LSM6DSL_ACC_GYRO_ReadReg(handle, LSM6DSL_ACC_GYRO_TIMESTAMP0_REG + k, &buff[k], 1))
-        return MEMS_ERROR;
-      k++;
-    }
-  }
+   k                                                     = 0;
+   for (i = 0; i < 1; i++)
+   {
+      for (j = 0; j < numberOfByteForDimension; j++)
+      {
+         if (!LSM6DSL_ACC_GYRO_ReadReg(handle, LSM6DSL_ACC_GYRO_TIMESTAMP0_REG + k, &buff[k], 1))
+         {
+            return MEMS_ERROR;
+         }
+         k++;
+      }
+   }
 
-  return MEMS_SUCCESS;
+   return MEMS_SUCCESS;
 }
 
 /*******************************************************************************
@@ -6634,23 +6683,25 @@ status_t LSM6DSL_ACC_GYRO_Get_GetTimestamp(void *handle, u8_t *buff)
 *******************************************************************************/
 status_t LSM6DSL_ACC_GYRO_Get_GetStepCounter(void *handle, u8_t *buff)
 {
-  u8_t i, j, k;
-  u8_t numberOfByteForDimension;
+   u8_t i, j, k;
+   u8_t numberOfByteForDimension;
 
-  numberOfByteForDimension = 2 / 1;
+   numberOfByteForDimension                              = 2 / 1;
 
-  k = 0;
-  for (i = 0; i < 1; i++ )
-  {
-    for (j = 0; j < numberOfByteForDimension; j++ )
-    {
-      if( !LSM6DSL_ACC_GYRO_ReadReg(handle, LSM6DSL_ACC_GYRO_STEP_COUNTER_L + k, &buff[k], 1))
-        return MEMS_ERROR;
-      k++;
-    }
-  }
+   k                                                     = 0;
+   for (i = 0; i < 1; i++)
+   {
+      for (j = 0; j < numberOfByteForDimension; j++ )
+      {
+         if (!LSM6DSL_ACC_GYRO_ReadReg(handle, LSM6DSL_ACC_GYRO_STEP_COUNTER_L + k, &buff[k], 1))
+         {
+            return MEMS_ERROR;
+         }
+         k++;
+      }
+   }
 
-  return MEMS_SUCCESS;
+   return MEMS_SUCCESS;
 }
 
 /*******************************************************************************
@@ -6662,25 +6713,26 @@ status_t LSM6DSL_ACC_GYRO_Get_GetStepCounter(void *handle, u8_t *buff)
 *******************************************************************************/
 status_t  LSM6DSL_ACC_GYRO_W_PedoThreshold(void *handle, u8_t newValue)
 {
-  u8_t value;
+   u8_t value;
 
-  /* Open Embedded Function Register page*/
-  LSM6DSL_ACC_GYRO_W_EmbeddedAccess(handle, LSM6DSL_ACC_GYRO_EMBEDDED_ACCESS_ENABLED);
+   /* Open Embedded Function Register page*/
+   LSM6DSL_ACC_GYRO_W_EmbeddedAccess(handle, LSM6DSL_ACC_GYRO_EMBEDDED_ACCESS_ENABLED);
 
-  /* read current value */
-  LSM6DSL_ACC_GYRO_ReadReg(handle, LSM6DSL_ACC_GYRO_CONFIG_PEDO_THS_MIN, &value, 1);
+   /* read current value */
+   LSM6DSL_ACC_GYRO_ReadReg(handle, LSM6DSL_ACC_GYRO_CONFIG_PEDO_THS_MIN, &value, 1);
 
-  value &= ~0x1F;
-  value |= (newValue & 0x1F);
+   value                                                 &= ~0x1F;
+   value                                                 |= (newValue & 0x1F);
 
-  /* write new value */
-  LSM6DSL_ACC_GYRO_WriteReg(handle, LSM6DSL_ACC_GYRO_CONFIG_PEDO_THS_MIN, &value, 1);
+   /* write new value */
+   LSM6DSL_ACC_GYRO_WriteReg(handle, LSM6DSL_ACC_GYRO_CONFIG_PEDO_THS_MIN, &value, 1);
 
-  /* Close Embedded Function Register page*/
-  LSM6DSL_ACC_GYRO_W_EmbeddedAccess(handle, LSM6DSL_ACC_GYRO_EMBEDDED_ACCESS_DISABLED);
+   /* Close Embedded Function Register page*/
+   LSM6DSL_ACC_GYRO_W_EmbeddedAccess(handle, LSM6DSL_ACC_GYRO_EMBEDDED_ACCESS_DISABLED);
 
-  return MEMS_SUCCESS;
+   return MEMS_SUCCESS;
 }
+
 
 /************** Use Sensor Hub  *******************/
 /*
@@ -6690,146 +6742,149 @@ status_t  LSM6DSL_ACC_GYRO_W_PedoThreshold(void *handle, u8_t newValue)
  */
 status_t LSM6DSL_ACC_GYRO_SH_init_SI_Matrix(void *handle, u8_t *SI_matrix)
 {
-  /* Open Embedded Function Register page*/
-  LSM6DSL_ACC_GYRO_W_EmbeddedAccess(handle, LSM6DSL_ACC_GYRO_EMBEDDED_ACCESS_ENABLED);
+   /* Open Embedded Function Register page*/
+   LSM6DSL_ACC_GYRO_W_EmbeddedAccess(handle, LSM6DSL_ACC_GYRO_EMBEDDED_ACCESS_ENABLED);
 
-  /* Write the Soft Iron Matrix coefficients */
-  LSM6DSL_ACC_GYRO_WriteReg(handle, LSM6DSL_ACC_GYRO_MAG_SI_XX, SI_matrix, 9);
+   /* Write the Soft Iron Matrix coefficients */
+   LSM6DSL_ACC_GYRO_WriteReg(handle, LSM6DSL_ACC_GYRO_MAG_SI_XX, SI_matrix, 9);
 
-  /* Close Embedded Function Register page*/
-  LSM6DSL_ACC_GYRO_W_EmbeddedAccess(handle, LSM6DSL_ACC_GYRO_EMBEDDED_ACCESS_DISABLED);
+   /* Close Embedded Function Register page*/
+   LSM6DSL_ACC_GYRO_W_EmbeddedAccess(handle, LSM6DSL_ACC_GYRO_EMBEDDED_ACCESS_DISABLED);
 
-  return MEMS_SUCCESS;
+   return MEMS_SUCCESS;
 }
 
 /* Read a remote device through I2C Sensor Hub Slave 0 */
 status_t LSM6DSL_ACC_GYRO_SH0_Program(void *handle, u8_t SlvAddr, u8_t Reg, u8_t len)
 {
-  /* Open Embedded Function Register page*/
-  LSM6DSL_ACC_GYRO_W_EmbeddedAccess(handle, LSM6DSL_ACC_GYRO_EMBEDDED_ACCESS_ENABLED);
+   u8_t sl0_cfg                                          = 0;
 
-  /* Write remote device I2C slave address */
-  SlvAddr |= 0x1; /* Raise the read op bit */
-  LSM6DSL_ACC_GYRO_WriteReg(handle, LSM6DSL_ACC_GYRO_SLV0_ADD, &SlvAddr, 1);
+   /* Open Embedded Function Register page*/
+   LSM6DSL_ACC_GYRO_W_EmbeddedAccess(handle, LSM6DSL_ACC_GYRO_EMBEDDED_ACCESS_ENABLED);
 
-  /* Write remote device I2C subaddress */
-  LSM6DSL_ACC_GYRO_WriteReg(handle, LSM6DSL_ACC_GYRO_SLV0_SUBADD, &Reg, 1);
+   /* Write remote device I2C slave address */
+   SlvAddr |= 0x1; /* Raise the read op bit */
+   LSM6DSL_ACC_GYRO_WriteReg(handle, LSM6DSL_ACC_GYRO_SLV0_ADD, &SlvAddr, 1);
 
-  /* Write number of bytes to read [SLAVE0_CONFIG - 04h ]*/
-  u8_t sl0_cfg = 0;
-  sl0_cfg |= 0x00;       //00 bit [7-6] : no decimation
-  sl0_cfg |= 0x00;       //00 bit [5-4] : one sensor
-  sl0_cfg |= 0x00;       // 0 bit [3] : source mode read disabled
-  sl0_cfg |= len & 0x07; // bit [2-0] : number of bytes
+   /* Write remote device I2C subaddress */
+   LSM6DSL_ACC_GYRO_WriteReg(handle, LSM6DSL_ACC_GYRO_SLV0_SUBADD, &Reg, 1);
 
-  LSM6DSL_ACC_GYRO_WriteReg(handle, LSM6DSL_ACC_GYRO_SLAVE0_CONFIG, &sl0_cfg, 1);
+   /* Write number of bytes to read [SLAVE0_CONFIG - 04h ]*/
+   sl0_cfg                                               |= 0x00;       // 00 bit [7-6] : no decimation
+   sl0_cfg                                               |= 0x00;       // 00 bit [5-4] : one sensor
+   sl0_cfg                                               |= 0x00;       //  0 bit [3] : source mode read disabled
+   sl0_cfg                                               |= len & 0x07; //  bit [2-0] : number of bytes
 
-  /* Close Embedded Function Register page*/
-  LSM6DSL_ACC_GYRO_W_EmbeddedAccess(handle, LSM6DSL_ACC_GYRO_EMBEDDED_ACCESS_DISABLED);
+   LSM6DSL_ACC_GYRO_WriteReg(handle, LSM6DSL_ACC_GYRO_SLAVE0_CONFIG, &sl0_cfg, 1);
 
-  /* Enable FUNC */
-  LSM6DSL_ACC_GYRO_W_FUNC_EN(handle, LSM6DSL_ACC_GYRO_FUNC_EN_ENABLED);
+   /* Close Embedded Function Register page*/
+   LSM6DSL_ACC_GYRO_W_EmbeddedAccess(handle, LSM6DSL_ACC_GYRO_EMBEDDED_ACCESS_DISABLED);
 
-  /* MASTER_EN */
-  LSM6DSL_ACC_GYRO_W_I2C_MASTER_Enable(handle, LSM6DSL_ACC_GYRO_MASTER_ON_ENABLED);
+   /* Enable FUNC */
+   LSM6DSL_ACC_GYRO_W_FUNC_EN(handle, LSM6DSL_ACC_GYRO_FUNC_EN_ENABLED);
 
-  return MEMS_SUCCESS;
+   /* MASTER_EN */
+   LSM6DSL_ACC_GYRO_W_I2C_MASTER_Enable(handle, LSM6DSL_ACC_GYRO_MASTER_ON_ENABLED);
+
+   return MEMS_SUCCESS;
 }
 
 /* Read a remote device through I2C Sensor Hub Slave 0 */
 status_t LSM6DSL_ACC_GYRO_SH0_ReadMem(void *handle, u8_t SlvAddr, u8_t Reg, u8_t *Bufp, u8_t len, u8_t stop)
 {
-  LSM6DSL_ACC_GYRO_SENS_HUB_END_t op_cmpl = LSM6DSL_ACC_GYRO_SENS_HUB_END_STILL_ONGOING;
-  LSM6DSL_ACC_GYRO_XLDA_t op_update = LSM6DSL_ACC_GYRO_XLDA_NO_DATA_AVAIL;
-  u8_t dummy[6];
+   LSM6DSL_ACC_GYRO_SENS_HUB_END_t op_cmpl               = LSM6DSL_ACC_GYRO_SENS_HUB_END_STILL_ONGOING;
+   LSM6DSL_ACC_GYRO_XLDA_t op_update                     = LSM6DSL_ACC_GYRO_XLDA_NO_DATA_AVAIL;
+   u8_t dummy[6];
 
-  LSM6DSL_ACC_GYRO_W_ODR_XL(handle, LSM6DSL_ACC_GYRO_ODR_XL_POWER_DOWN);
+   LSM6DSL_ACC_GYRO_W_ODR_XL(handle, LSM6DSL_ACC_GYRO_ODR_XL_POWER_DOWN);
+   LSM6DSL_ACC_GYRO_SH0_Program(handle, SlvAddr, Reg, len);
 
-  LSM6DSL_ACC_GYRO_SH0_Program(handle, SlvAddr, Reg, len);
+   /* Syncronize the SH with internal trigger (xl) */
+   LSM6DSL_ACC_GYRO_W_ODR_XL(handle, LSM6DSL_ACC_GYRO_ODR_XL_104Hz);
 
-  /* Syncronize the SH with internal trigger (xl) */
-  LSM6DSL_ACC_GYRO_W_ODR_XL(handle, LSM6DSL_ACC_GYRO_ODR_XL_104Hz);
+   /* Wait until operation is not completed */
+   LSM6DSL_ACC_GYRO_GetRawAccData(handle, dummy);
+   do
+   {
+      LSM6DSL_ACC_GYRO_R_XLDA(handle, &op_update);
+   }
+   while (op_update != LSM6DSL_ACC_GYRO_XLDA_DATA_AVAIL);
 
-  /* Wait until operation is not completed */
-  LSM6DSL_ACC_GYRO_GetRawAccData(handle, dummy);
-  do
-  {
-    LSM6DSL_ACC_GYRO_R_XLDA(handle, &op_update);
-  }
-  while(op_update != LSM6DSL_ACC_GYRO_XLDA_DATA_AVAIL);
-  do
-  {
-    LSM6DSL_ACC_GYRO_R_SENS_HUB_END(handle, &op_cmpl);
-  }
-  while(op_cmpl != LSM6DSL_ACC_GYRO_SENS_HUB_END_OP_COMPLETED);
+   do
+   {
+      LSM6DSL_ACC_GYRO_R_SENS_HUB_END(handle, &op_cmpl);
+   }
+   while (op_cmpl != LSM6DSL_ACC_GYRO_SENS_HUB_END_OP_COMPLETED);
 
 
-  /* Read the result */
-  LSM6DSL_ACC_GYRO_ReadReg(handle, LSM6DSL_ACC_GYRO_SENSORHUB1_REG, Bufp, len);
+   // Read the result 
+   LSM6DSL_ACC_GYRO_ReadReg(handle, LSM6DSL_ACC_GYRO_SENSORHUB1_REG, Bufp, len);
 
-  LSM6DSL_ACC_GYRO_W_ODR_XL(handle, LSM6DSL_ACC_GYRO_ODR_XL_POWER_DOWN);
+   LSM6DSL_ACC_GYRO_W_ODR_XL(handle, LSM6DSL_ACC_GYRO_ODR_XL_POWER_DOWN);
 
-  if (stop)
-  {
-    /* Stop everything */
-    LSM6DSL_ACC_GYRO_W_FUNC_EN(handle, LSM6DSL_ACC_GYRO_FUNC_EN_DISABLED);
-    LSM6DSL_ACC_GYRO_W_I2C_MASTER_Enable(handle, LSM6DSL_ACC_GYRO_MASTER_ON_DISABLED);
-  }
+   if (stop)
+   {
+      /* Stop everything */
+      LSM6DSL_ACC_GYRO_W_FUNC_EN(handle, LSM6DSL_ACC_GYRO_FUNC_EN_DISABLED);
+      LSM6DSL_ACC_GYRO_W_I2C_MASTER_Enable(handle, LSM6DSL_ACC_GYRO_MASTER_ON_DISABLED);
+   }
 
-  return MEMS_SUCCESS;
+   return MEMS_SUCCESS;
 }
 
 /* Write a remote device through I2C Sensor Hub Slave 0 */
 status_t LSM6DSL_ACC_GYRO_SH0_WriteByte(void *handle, u8_t SlvAddr, u8_t Reg, u8_t Bufp)
 {
-  LSM6DSL_ACC_GYRO_SENS_HUB_END_t op_cmpl = LSM6DSL_ACC_GYRO_SENS_HUB_END_STILL_ONGOING;
-  LSM6DSL_ACC_GYRO_XLDA_t op_update = LSM6DSL_ACC_GYRO_XLDA_NO_DATA_AVAIL;
-  u8_t dummy[6];
+   LSM6DSL_ACC_GYRO_SENS_HUB_END_t op_cmpl               = LSM6DSL_ACC_GYRO_SENS_HUB_END_STILL_ONGOING;
+   LSM6DSL_ACC_GYRO_XLDA_t op_update                     = LSM6DSL_ACC_GYRO_XLDA_NO_DATA_AVAIL;
+   u8_t dummy[6];
 
-  /* Open Embedded Function Register page*/
-  LSM6DSL_ACC_GYRO_W_EmbeddedAccess(handle, LSM6DSL_ACC_GYRO_EMBEDDED_ACCESS_ENABLED);
+   // Open Embedded Function Register page
+   LSM6DSL_ACC_GYRO_W_EmbeddedAccess(handle, LSM6DSL_ACC_GYRO_EMBEDDED_ACCESS_ENABLED);
 
-  /* Write remote device I2C slave address */
-  LSM6DSL_ACC_GYRO_WriteReg(handle, LSM6DSL_ACC_GYRO_SLV0_ADD, &SlvAddr, 1);
+   // Write remote device I2C slave address
+   LSM6DSL_ACC_GYRO_WriteReg(handle, LSM6DSL_ACC_GYRO_SLV0_ADD, &SlvAddr, 1);
 
-  /* Write remote device I2C subaddress */
-  LSM6DSL_ACC_GYRO_WriteReg(handle, LSM6DSL_ACC_GYRO_SLV0_SUBADD, &Reg, 1);
+   // Write remote device I2C subaddress
+   LSM6DSL_ACC_GYRO_WriteReg(handle, LSM6DSL_ACC_GYRO_SLV0_SUBADD, &Reg, 1);
 
-  /* Write the data */
-  LSM6DSL_ACC_GYRO_WriteReg(handle, LSM6DSL_ACC_GYRO_DATAWRITE_SRC_MODE_SUB_SLV0, &Bufp, 1);
+   // Write the data
+   LSM6DSL_ACC_GYRO_WriteReg(handle, LSM6DSL_ACC_GYRO_DATAWRITE_SRC_MODE_SUB_SLV0, &Bufp, 1);
 
-  /* Close Embedded Function Register page*/
-  LSM6DSL_ACC_GYRO_W_EmbeddedAccess(handle, LSM6DSL_ACC_GYRO_EMBEDDED_ACCESS_DISABLED);
+   // Close Embedded Function Register page
+   LSM6DSL_ACC_GYRO_W_EmbeddedAccess(handle, LSM6DSL_ACC_GYRO_EMBEDDED_ACCESS_DISABLED);
 
-  /* Enable FUNC */
-  LSM6DSL_ACC_GYRO_W_FUNC_EN(handle, LSM6DSL_ACC_GYRO_FUNC_EN_ENABLED);
+   // Enable FUNC
+   LSM6DSL_ACC_GYRO_W_FUNC_EN(handle, LSM6DSL_ACC_GYRO_FUNC_EN_ENABLED);
 
-  /* Enable PULL_UP_EN and MASTER_EN */
-  //LSM6DSL_ACC_GYRO_W_PULL_UP_EN(handle, LSM6DSL_ACC_GYRO_PULL_UP_EN_ENABLED);
-  LSM6DSL_ACC_GYRO_W_I2C_MASTER_Enable(handle, LSM6DSL_ACC_GYRO_MASTER_ON_ENABLED);
+   // Enable PULL_UP_EN and MASTER_EN
+   // LSM6DSL_ACC_GYRO_W_PULL_UP_EN(handle, LSM6DSL_ACC_GYRO_PULL_UP_EN_ENABLED);
+   LSM6DSL_ACC_GYRO_W_I2C_MASTER_Enable(handle, LSM6DSL_ACC_GYRO_MASTER_ON_ENABLED);
 
-  /* Syncronize the SH with internal trigger (xl) */
-  LSM6DSL_ACC_GYRO_W_ODR_XL(handle, LSM6DSL_ACC_GYRO_ODR_XL_104Hz);
+   // Syncronize the SH with internal trigger (xl)
+   LSM6DSL_ACC_GYRO_W_ODR_XL(handle, LSM6DSL_ACC_GYRO_ODR_XL_104Hz);
 
-  /* Wait until operation is not completed */
-  LSM6DSL_ACC_GYRO_GetRawAccData(handle, dummy);
-  do
-  {
-    LSM6DSL_ACC_GYRO_R_XLDA(handle, &op_update);
-  }
-  while(op_update != LSM6DSL_ACC_GYRO_XLDA_DATA_AVAIL);
-  do
-  {
-    LSM6DSL_ACC_GYRO_R_SENS_HUB_END(handle, &op_cmpl);
-  }
-  while(op_cmpl != LSM6DSL_ACC_GYRO_SENS_HUB_END_OP_COMPLETED);
+   // Wait until operation is not completed
+   LSM6DSL_ACC_GYRO_GetRawAccData(handle, dummy);
+   do
+   {
+      LSM6DSL_ACC_GYRO_R_XLDA(handle, &op_update);
+   }
+   while (op_update != LSM6DSL_ACC_GYRO_XLDA_DATA_AVAIL);
 
-  LSM6DSL_ACC_GYRO_W_ODR_XL(handle, LSM6DSL_ACC_GYRO_ODR_XL_POWER_DOWN);
+   do
+   {
+      LSM6DSL_ACC_GYRO_R_SENS_HUB_END(handle, &op_cmpl);
+   }
+   while (op_cmpl != LSM6DSL_ACC_GYRO_SENS_HUB_END_OP_COMPLETED);
 
-  /* Stop everything */
-  LSM6DSL_ACC_GYRO_W_FUNC_EN(handle, LSM6DSL_ACC_GYRO_FUNC_EN_DISABLED);
-  LSM6DSL_ACC_GYRO_W_I2C_MASTER_Enable(handle, LSM6DSL_ACC_GYRO_MASTER_ON_DISABLED);
+   LSM6DSL_ACC_GYRO_W_ODR_XL(handle, LSM6DSL_ACC_GYRO_ODR_XL_POWER_DOWN);
 
+   /* Stop everything */
+   LSM6DSL_ACC_GYRO_W_FUNC_EN(handle, LSM6DSL_ACC_GYRO_FUNC_EN_DISABLED);
+   LSM6DSL_ACC_GYRO_W_I2C_MASTER_Enable(handle, LSM6DSL_ACC_GYRO_MASTER_ON_DISABLED);
 
-  return MEMS_SUCCESS;
+   return MEMS_SUCCESS;
 }
+
+
