@@ -174,20 +174,20 @@ static DrvStatusTypeDef BSP_LSM6DSL_ACCELERO_Init(void **handle)
 }
 
 
-static DrvStatusTypeDef BSP_LSM303AGR_ACCELERO_Init( void **handle )
+static DrvStatusTypeDef BSP_LSM303AGR_ACCELERO_Init(void **handle)
 {
-  ACCELERO_Drv_t *driver = NULL;
+   ACCELERO_Drv_t *driver                                = NULL;
 
-  if(ACCELERO_SensorHandle[ LSM303AGR_X_0 ].isInitialized == 1)
-  {
-    /* We have reached the max num of instance for this component */
-    return COMPONENT_ERROR;
-  }
+   if (ACCELERO_SensorHandle[ LSM303AGR_X_0 ].isInitialized == 1)
+   {
+      // We have reached the max num of instance for this component
+      return COMPONENT_ERROR;
+   }
 
-  if ( Sensor_IO_Init() == COMPONENT_ERROR )
-  {
-    return COMPONENT_ERROR;
-  }
+   if (Sensor_IO_Init() == COMPONENT_ERROR)
+   {
+      return COMPONENT_ERROR;
+   }
 
   /* Setup sensor handle. */
   ACCELERO_SensorHandle[LSM303AGR_X_0].who_am_i          = LSM303AGR_ACC_WHO_AM_I;

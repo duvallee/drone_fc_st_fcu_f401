@@ -43,37 +43,12 @@
 extern "C" {
 #endif
 
-
-
-/* Includes ------------------------------------------------------------------*/
-
 #include "accelerometer.h"
-
 /* Include accelero sensor component drivers. */
 #include "LSM303AGR_ACC_driver.h"
 
 
-
-/** @addtogroup BSP BSP
- * @{
- */
-
-/** @addtogroup COMPONENTS COMPONENTS
- * @{
- */
-
-/** @addtogroup LSM303AGR_ACC LSM303AGR_ACC
- * @{
- */
-
-/** @addtogroup LSM303AGR_ACC_Public_Constants Public constants
- * @{
- */
-
-/** @addtogroup LSM303AGR_ACC_SENSITIVITY Accelero sensitivity values based on selected full scale
- * @{
- */
-
+// @addtogroup LSM303AGR_ACC_SENSITIVITY Accelero sensitivity values based on selected full scale
 #define LSM303AGR_ACC_SENSITIVITY_FOR_FS_2G_NORMAL_MODE               3.900  /**< Sensitivity value for 2 g full scale and normal mode [mg/LSB] */
 #define LSM303AGR_ACC_SENSITIVITY_FOR_FS_2G_HIGH_RESOLUTION_MODE      0.980  /**< Sensitivity value for 2 g full scale and high resolution mode [mg/LSB] */
 #define LSM303AGR_ACC_SENSITIVITY_FOR_FS_2G_LOW_POWER_MODE           15.630  /**< Sensitivity value for 2 g full scale and low power mode [mg/LSB] */
@@ -86,53 +61,16 @@ extern "C" {
 #define LSM303AGR_ACC_SENSITIVITY_FOR_FS_16G_NORMAL_MODE             46.900  /**< Sensitivity value for 16 g full scale and normal mode [mg/LSB] */
 #define LSM303AGR_ACC_SENSITIVITY_FOR_FS_16G_HIGH_RESOLUTION_MODE    11.720  /**< Sensitivity value for 16 g full scale and high resolution mode [mg/LSB] */
 #define LSM303AGR_ACC_SENSITIVITY_FOR_FS_16G_LOW_POWER_MODE         187.580  /**< Sensitivity value for 16 g full scale and low power mode [mg/LSB] */
-
-/**
- * @}
- */
-
-/**
- * @}
- */
-
-/** @addtogroup LSM303AGR_ACC_Public_Types LSM303AGR_ACC Public Types
- * @{
- */
-
-/**
- * @brief LSM303AGR_ACC accelero specific data internal structure definition
- */
+// @brief LSM303AGR_ACC accelero specific data internal structure definition
 
 typedef struct
 {
-  float Previous_ODR;
+   float Previous_ODR;
 } LSM303AGR_X_Data_t;
 
-/**
- * @}
- */
-
-/** @addtogroup LSM303AGR_ACC_Public_Variables Public variables
- * @{
- */
-
+// @addtogroup LSM303AGR_ACC_Public_Variables Public variables
 extern ACCELERO_Drv_t LSM303AGR_X_Drv;
 
-/**
- * @}
- */
-
-/**
- * @}
- */
-
-/**
- * @}
- */
-
-/**
- * @}
- */
 
 #ifdef __cplusplus
 }
