@@ -70,11 +70,13 @@ void set_irq_as_input(void);
 * @param  None
 * @retval None
 */
-void print_csv_time(void){
-  uint32_t ms = ms_counter;
-  PRINT_CSV("%02d:%02d:%02d.%03d", ms/(60*60*1000)%24, ms/(60*1000)%60, (ms/1000)%60, ms%1000);
+void print_csv_time(void)
+{
+   uint32_t ms                                           = ms_counter;
+   PRINT_CSV("%02d:%02d:%02d.%03d", ms / (60 * 60 * 1000) % 24, ms / (60 * 1000) % 60, (ms / 1000) % 60, ms % 1000);
 }
 #endif /* PRINT_CSV_FORMAT */
+
 /**
  * @brief  EXTI line detection callback.
  * @param  uint16_t GPIO_Pin Specifies the pins connected EXTI line
@@ -86,7 +88,7 @@ void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
    {
       case BNRG_SPI_EXTI_PIN :
          HCI_Isr();
-         HCI_ProcessEvent=1;
+         HCI_ProcessEvent                                = 1;
          break;
    }
 }

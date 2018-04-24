@@ -369,8 +369,8 @@ int main(void)
 
 
    /* Read initial value of Pressure and Temperature for Altitude estimation */ 
-   BSP_PRESSURE_Get_Press(LPS22HB_P_0_handle, &press_zero_level);                               /* Read the Pressure level when arming (0m reference) for altitude calculation */
-   BSP_TEMPERATURE_Get_Temp(LPS22HB_T_0_handle, &temperature);                                  /* Read the Temperature when arming (0m reference) for altitude calculation */
+   BSP_PRESSURE_Get_Press(LPS22HB_P_0_handle, &press_zero_level);                               // Read the Pressure level when arming (0m reference) for altitude calculation
+   BSP_TEMPERATURE_Get_Temp(LPS22HB_T_0_handle, &temperature);                                  // Read the Temperature when arming (0m reference) for altitude calculation
 
    // Infinite loop
    while (1)
@@ -385,7 +385,7 @@ int main(void)
       {
          /* Now update the BLE advertize data and make the Board connectable */
          setConnectable();
-         set_connectable = FALSE;
+         set_connectable                                 = FALSE;
       }  
 
       if (tim9_event_flag == 1)
