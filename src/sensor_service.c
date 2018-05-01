@@ -673,27 +673,27 @@ void setConnectable(void)
    char local_name[8]                                    = {AD_TYPE_COMPLETE_LOCAL_NAME, NAME_DRN};
    uint8_t manuf_data[26]                                =
    {
-   2,
-   0x0A,
-   0x00,                                                             // 0 dBm, Trasmission Power
-   8,
-   0x09,
-   NAME_DRN,                                                         // Complete Name
-   13,
-   0xFF,
-   0x01,                                                             // SKD version
-   0x80,
-   0x00,
-   0xE0,                                                             // ACC + Gyro + Mag
-   0x00,
-   0x00,
-   0x00,                                                             // BLE MAC start
-   0x00,
-   0x00,
-   0x00,
-   0x00,
-   0x00,                                                             // BLE MAC stop
-  };
+      2,
+      0x0A,
+      0x00,                                                             // 0 dBm, Trasmission Power
+      8,
+      0x09,
+      NAME_DRN,                                                         // Complete Name
+      13,
+      0xFF,
+      0x01,                                                             // SKD version
+      0x80,
+      0x00,
+      0xE0,                                                             // ACC + Gyro + Mag
+      0x00,
+      0x00,
+      0x00,                                                             // BLE MAC start
+      0x00,
+      0x00,
+      0x00,
+      0x00,
+      0x00,                                                             // BLE MAC stop
+   };
 
    // BLE MAC
    manuf_data[20]                                        = bdaddr[5];
@@ -796,10 +796,12 @@ void Read_Request_CB(uint16_t handle)
    {
       // Read Request for Pressure,Battery, and Temperatures
       float SensorValue;
-      int32_t PressToSend=0;
-      uint16_t BattToSend=0;
-      int16_t TempToSend=0,RSSIToSend=0;
-      int32_t decPart, intPart;
+      int32_t PressToSend                                = 0;
+      uint16_t BattToSend                                = 0;
+      int16_t TempToSend                                 = 0;
+      int16_t RSSIToSend                                 = 0;
+      int32_t decPart                                    = 0;
+      int32_t intPart                                    = 0;
       if (TargetBoardFeatures.HandlePressSensor)
       {
          if ((TargetBoardFeatures.SnsAltFunc ? BSP_PRESSURE_IsInitialized : BSP_PRESSURE_IsInitialized)(TargetBoardFeatures.HandlePressSensor, &Status) == COMPONENT_OK)
@@ -1058,11 +1060,11 @@ static uint32_t DebugConsoleCommandParsing(uint8_t * att_data, uint8_t data_leng
 #endif /* STM32_NUCLEO */
   }
 #ifndef USE_STM32L0XX_NUCLEO
-  else if (!strncmp("upgradeFw", (char *)(att_data), 9))
+  else if (!strncmp("upgradeFw", (char *) (att_data), 9))
   {
       /* DO nothing, OTA function not integrated */
   }
-  else if (!strncmp("versionBle", (char *)(att_data), 10))
+  else if (!strncmp("versionBle", (char *) (att_data), 10))
   {
       uint8_t hwVersion;
       uint16_t fwVersion;
@@ -1250,7 +1252,6 @@ void HCI_Event_CB(void *pckt)
       break;
    }
 }
-
 
 static void DisableHWFeatures(void)
 {  
