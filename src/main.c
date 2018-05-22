@@ -278,7 +278,7 @@ int main(void)
    MX_USART1_UART_Init();
    //MX_USB_DEVICE_Init();
 
-   PRINTF("\nSTEVAL-FCU001V1 FW rev.1.0 - Sep 2017\n\n");
+   PRINTF("\r\nSTEVAL-FCU001V1 FW rev.1.0 - Sep 2017\r\n\r\n");
 
    // Initialize Onboard LED
    BSP_LED_Init(LED1);
@@ -362,7 +362,7 @@ int main(void)
 
 
    // BLE communication
-   PRINTF("BLE communication initialization...\n\n");
+   PRINTF("BLE communication initialization...\r\n");
    BlueNRG_Init();
    /* Initialize the BlueNRG Custom services */
    Init_BlueNRG_Custom_Services();
@@ -1046,19 +1046,19 @@ static void initializeAllSensors(void)
 void enableAllSensors( void )
 {
    BSP_ACCELERO_Sensor_Enable(LSM6DSL_X_0_handle);
-   PRINTF("LSM6DSL MEMS Accelerometer initialized and enabled \n");
+   PRINTF("LSM6DSL MEMS Accelerometer initialized and enabled \r\n");
 
    BSP_GYRO_Sensor_Enable(LSM6DSL_G_0_handle);
-   PRINTF("LSM6DSL MEMS Gyroscope initialized and enabled \n");
+   PRINTF("LSM6DSL MEMS Gyroscope initialized and enabled \r\n");
 
    BSP_MAGNETO_Sensor_Enable(LIS2MDL_M_0_handle);
-   PRINTF("LIS2MDL Magnetometer initialized and enabled \n");
+   PRINTF("LIS2MDL Magnetometer initialized and enabled \r\n");
 
    BSP_PRESSURE_Sensor_Enable(LPS22HB_P_0_handle);
-   PRINTF("LPS22HB Pressure sensor initialized and enabled \n");
+   PRINTF("LPS22HB Pressure sensor initialized and enabled \r\n");
 
    BSP_TEMPERATURE_Sensor_Enable(LPS22HB_T_0_handle);
-   PRINTF("LPS22HB Temperature sensor initialized and enabled \n");
+   PRINTF("LPS22HB Temperature sensor initialized and enabled \r\n");
 }
 
 
@@ -1068,7 +1068,7 @@ void BlueNRG_Init(void)
    uint8_t hwVersion                                     = 0;
    uint16_t fwVersion                                    = 0;
   
-   PRINTF("****** START BLE TESTS ******\r\n");
+   PRINTF("****** START BLE TESTS ****** \r\n");
    BNRG_SPI_Init();
 
    uint8_t tmp_bdaddr[6]                                 = {MAC_BLUEMS};
