@@ -41,24 +41,8 @@
 #include "LSM6DSL_ACC_GYRO_driver_HL.h"
 #include <math.h>
 
-
-
-/** @addtogroup BSP BSP
- * @{
- */
-
-/** @addtogroup COMPONENTS COMPONENTS
- * @{
- */
-
-/** @addtogroup LSM6DSL LSM6DSL
- * @{
- */
-
-/** @addtogroup LSM6DSL_Callable_Private_Function_Prototypes Callable private function prototypes
- * @{
- */
-
+// LSM6DSL LSM6DSL
+// LSM6DSL_Callable_Private_Function_Prototypes Callable private function prototypes
 static DrvStatusTypeDef LSM6DSL_X_Init( DrvContextTypeDef *handle );
 static DrvStatusTypeDef LSM6DSL_X_DeInit( DrvContextTypeDef *handle );
 static DrvStatusTypeDef LSM6DSL_X_Sensor_Enable( DrvContextTypeDef *handle );
@@ -97,14 +81,7 @@ static DrvStatusTypeDef LSM6DSL_G_Read_Reg( DrvContextTypeDef *handle, uint8_t r
 static DrvStatusTypeDef LSM6DSL_G_Write_Reg( DrvContextTypeDef *handle, uint8_t reg, uint8_t data );
 static DrvStatusTypeDef LSM6DSL_G_Get_DRDY_Status( DrvContextTypeDef *handle, uint8_t *status );
 
-/**
- * @}
- */
-
-/** @addtogroup LSM6DSL_Private_Function_Prototypes Private function prototypes
- * @{
- */
-
+// LSM6DSL_Private_Function_Prototypes Private function prototypes
 static DrvStatusTypeDef LSM6DSL_Get_WhoAmI( DrvContextTypeDef *handle, uint8_t *who_am_i );
 static DrvStatusTypeDef LSM6DSL_Check_WhoAmI( DrvContextTypeDef *handle );
 static DrvStatusTypeDef LSM6DSL_Read_Reg( DrvContextTypeDef *handle, uint8_t reg, uint8_t *data );
@@ -123,14 +100,7 @@ static DrvStatusTypeDef LSM6DSL_G_Set_ODR_When_Disabled( DrvContextTypeDef *hand
 static DrvStatusTypeDef LSM6DSL_G_Set_ODR_Value_When_Enabled( DrvContextTypeDef *handle, float odr );
 static DrvStatusTypeDef LSM6DSL_G_Set_ODR_Value_When_Disabled( DrvContextTypeDef *handle, float odr );
 
-/**
- * @}
- */
-
-/** @addtogroup LSM6DSL_Callable_Private_Function_Ext_Prototypes Callable private function for extended features prototypes
- * @{
- */
-
+// LSM6DSL_Callable_Private_Function_Ext_Prototypes Callable private function for extended features prototypes
 static DrvStatusTypeDef LSM6DSL_X_Enable_Free_Fall_Detection( DrvContextTypeDef *handle );
 static DrvStatusTypeDef LSM6DSL_X_Disable_Free_Fall_Detection( DrvContextTypeDef *handle );
 static DrvStatusTypeDef LSM6DSL_X_Get_Free_Fall_Detection_Status( DrvContextTypeDef *handle, uint8_t *status );
@@ -196,219 +166,193 @@ static DrvStatusTypeDef LSM6DSL_X_Set_SelfTest( DrvContextTypeDef *handle, uint8
 static DrvStatusTypeDef LSM6DSL_G_Set_Interrupt_Latch( DrvContextTypeDef *handle, uint8_t status );
 static DrvStatusTypeDef LSM6DSL_G_Set_SelfTest( DrvContextTypeDef *handle, uint8_t status );
 
-/**
- * @}
- */
 
-/** @addtogroup LSM6DSL_Public_Variables Public variables
- * @{
- */
-
-/**
- * @brief LSM6DSL accelero extended features driver internal structure
- */
-LSM6DSL_X_ExtDrv_t LSM6DSL_X_ExtDrv =
+// LSM6DSL_Public_Variables Public variables
+// LSM6DSL accelero extended features driver internal structure
+LSM6DSL_X_ExtDrv_t LSM6DSL_X_ExtDrv                      =
 {
-  LSM6DSL_X_Enable_Free_Fall_Detection,
-  LSM6DSL_X_Disable_Free_Fall_Detection,
-  LSM6DSL_X_Get_Free_Fall_Detection_Status,
-  LSM6DSL_X_Set_Free_Fall_Threshold,
-  LSM6DSL_X_Enable_Pedometer,
-  LSM6DSL_X_Disable_Pedometer,
-  LSM6DSL_X_Get_Pedometer_Status,
-  LSM6DSL_X_Get_Step_Count,
-  LSM6DSL_X_Enable_Step_Counter_Reset,
-  LSM6DSL_X_Disable_Step_Counter_Reset,
-  LSM6DSL_X_Set_Pedometer_Threshold,
-  LSM6DSL_X_Enable_Tilt_Detection,
-  LSM6DSL_X_Disable_Tilt_Detection,
-  LSM6DSL_X_Get_Tilt_Detection_Status,
-  LSM6DSL_X_Enable_Wake_Up_Detection,
-  LSM6DSL_X_Disable_Wake_Up_Detection,
-  LSM6DSL_X_Get_Wake_Up_Detection_Status,
-  LSM6DSL_X_Set_Wake_Up_Threshold,
-  LSM6DSL_X_Enable_Single_Tap_Detection,
-  LSM6DSL_X_Disable_Single_Tap_Detection,
-  LSM6DSL_X_Get_Single_Tap_Detection_Status,
-  LSM6DSL_X_Enable_Double_Tap_Detection,
-  LSM6DSL_X_Disable_Double_Tap_Detection,
-  LSM6DSL_X_Get_Double_Tap_Detection_Status,
-  LSM6DSL_X_Set_Tap_Threshold,
-  LSM6DSL_X_Set_Tap_Shock_Time,
-  LSM6DSL_X_Set_Tap_Quiet_Time,
-  LSM6DSL_X_Set_Tap_Duration_Time,
-  LSM6DSL_X_Enable_6D_Orientation,
-  LSM6DSL_X_Disable_6D_Orientation,
-  LSM6DSL_X_Get_6D_Orientation_Status,
-  LSM6DSL_X_Get_6D_Orientation_XL,
-  LSM6DSL_X_Get_6D_Orientation_XH,
-  LSM6DSL_X_Get_6D_Orientation_YL,
-  LSM6DSL_X_Get_6D_Orientation_YH,
-  LSM6DSL_X_Get_6D_Orientation_ZL,
-  LSM6DSL_X_Get_6D_Orientation_ZH,
-  LSM6DSL_FIFO_Set_ODR_Value,
-  LSM6DSL_FIFO_Get_Full_Status,
-  LSM6DSL_FIFO_Get_Empty_Status,
-  LSM6DSL_FIFO_Get_Overrun_Status,
-  LSM6DSL_FIFO_Get_Pattern,
-  LSM6DSL_FIFO_Get_Data,
-  LSM6DSL_FIFO_Get_Num_Of_Samples,
-  LSM6DSL_FIFO_X_Set_Decimation,
-  LSM6DSL_FIFO_X_Get_Axis,
-  LSM6DSL_FIFO_Set_Mode,
-  LSM6DSL_FIFO_Set_INT1_FIFO_Full,
-  LSM6DSL_FIFO_Set_Watermark_Level,
-  LSM6DSL_FIFO_Set_Stop_On_Fth,
-  LSM6DSL_X_Set_Interrupt_Latch,
-  LSM6DSL_X_Set_SelfTest
+   LSM6DSL_X_Enable_Free_Fall_Detection,
+   LSM6DSL_X_Disable_Free_Fall_Detection,
+   LSM6DSL_X_Get_Free_Fall_Detection_Status,
+   LSM6DSL_X_Set_Free_Fall_Threshold,
+   LSM6DSL_X_Enable_Pedometer,
+   LSM6DSL_X_Disable_Pedometer,
+   LSM6DSL_X_Get_Pedometer_Status,
+   LSM6DSL_X_Get_Step_Count,
+   LSM6DSL_X_Enable_Step_Counter_Reset,
+   LSM6DSL_X_Disable_Step_Counter_Reset,
+   LSM6DSL_X_Set_Pedometer_Threshold,
+   LSM6DSL_X_Enable_Tilt_Detection,
+   LSM6DSL_X_Disable_Tilt_Detection,
+   LSM6DSL_X_Get_Tilt_Detection_Status,
+   LSM6DSL_X_Enable_Wake_Up_Detection,
+   LSM6DSL_X_Disable_Wake_Up_Detection,
+   LSM6DSL_X_Get_Wake_Up_Detection_Status,
+   LSM6DSL_X_Set_Wake_Up_Threshold,
+   LSM6DSL_X_Enable_Single_Tap_Detection,
+   LSM6DSL_X_Disable_Single_Tap_Detection,
+   LSM6DSL_X_Get_Single_Tap_Detection_Status,
+   LSM6DSL_X_Enable_Double_Tap_Detection,
+   LSM6DSL_X_Disable_Double_Tap_Detection,
+   LSM6DSL_X_Get_Double_Tap_Detection_Status,
+   LSM6DSL_X_Set_Tap_Threshold,
+   LSM6DSL_X_Set_Tap_Shock_Time,
+   LSM6DSL_X_Set_Tap_Quiet_Time,
+   LSM6DSL_X_Set_Tap_Duration_Time,
+   LSM6DSL_X_Enable_6D_Orientation,
+   LSM6DSL_X_Disable_6D_Orientation,
+   LSM6DSL_X_Get_6D_Orientation_Status,
+   LSM6DSL_X_Get_6D_Orientation_XL,
+   LSM6DSL_X_Get_6D_Orientation_XH,
+   LSM6DSL_X_Get_6D_Orientation_YL,
+   LSM6DSL_X_Get_6D_Orientation_YH,
+   LSM6DSL_X_Get_6D_Orientation_ZL,
+   LSM6DSL_X_Get_6D_Orientation_ZH,
+   LSM6DSL_FIFO_Set_ODR_Value,
+   LSM6DSL_FIFO_Get_Full_Status,
+   LSM6DSL_FIFO_Get_Empty_Status,
+   LSM6DSL_FIFO_Get_Overrun_Status,
+   LSM6DSL_FIFO_Get_Pattern,
+   LSM6DSL_FIFO_Get_Data,
+   LSM6DSL_FIFO_Get_Num_Of_Samples,
+   LSM6DSL_FIFO_X_Set_Decimation,
+   LSM6DSL_FIFO_X_Get_Axis,
+   LSM6DSL_FIFO_Set_Mode,
+   LSM6DSL_FIFO_Set_INT1_FIFO_Full,
+   LSM6DSL_FIFO_Set_Watermark_Level,
+   LSM6DSL_FIFO_Set_Stop_On_Fth,
+   LSM6DSL_X_Set_Interrupt_Latch,
+   LSM6DSL_X_Set_SelfTest
 };
 
-/**
- * @brief LSM6DSL gyro extended features driver internal structure
- */
-LSM6DSL_G_ExtDrv_t LSM6DSL_G_ExtDrv =
+// LSM6DSL gyro extended features driver internal structure
+LSM6DSL_G_ExtDrv_t LSM6DSL_G_ExtDrv                      =
 {
-  LSM6DSL_FIFO_Set_ODR_Value,
-  LSM6DSL_FIFO_Get_Full_Status,
-  LSM6DSL_FIFO_Get_Empty_Status,
-  LSM6DSL_FIFO_Get_Overrun_Status,
-  LSM6DSL_FIFO_Get_Pattern,
-  LSM6DSL_FIFO_Get_Data,
-  LSM6DSL_FIFO_Get_Num_Of_Samples,
-  LSM6DSL_FIFO_G_Set_Decimation,
-  LSM6DSL_FIFO_G_Get_Axis,
-  LSM6DSL_FIFO_Set_Mode,
-  LSM6DSL_FIFO_Set_INT1_FIFO_Full,
-  LSM6DSL_FIFO_Set_Watermark_Level,
-  LSM6DSL_FIFO_Set_Stop_On_Fth,
-  LSM6DSL_G_Set_Interrupt_Latch,
-  LSM6DSL_G_Set_SelfTest
+   LSM6DSL_FIFO_Set_ODR_Value,
+   LSM6DSL_FIFO_Get_Full_Status,
+   LSM6DSL_FIFO_Get_Empty_Status,
+   LSM6DSL_FIFO_Get_Overrun_Status,
+   LSM6DSL_FIFO_Get_Pattern,
+   LSM6DSL_FIFO_Get_Data,
+   LSM6DSL_FIFO_Get_Num_Of_Samples,
+   LSM6DSL_FIFO_G_Set_Decimation,
+   LSM6DSL_FIFO_G_Get_Axis,
+   LSM6DSL_FIFO_Set_Mode,
+   LSM6DSL_FIFO_Set_INT1_FIFO_Full,
+   LSM6DSL_FIFO_Set_Watermark_Level,
+   LSM6DSL_FIFO_Set_Stop_On_Fth,
+   LSM6DSL_G_Set_Interrupt_Latch,
+   LSM6DSL_G_Set_SelfTest
 };
 
-/**
- * @brief LSM6DSL accelero driver structure
- */
-ACCELERO_Drv_t LSM6DSL_X_Drv =
+// LSM6DSL accelero driver structure
+ACCELERO_Drv_t LSM6DSL_X_Drv                             =
 {
-  LSM6DSL_X_Init,
-  LSM6DSL_X_DeInit,
-  LSM6DSL_X_Sensor_Enable,
-  LSM6DSL_X_Sensor_Disable,
-  LSM6DSL_X_Get_WhoAmI,
-  LSM6DSL_X_Check_WhoAmI,
-  LSM6DSL_X_Get_Axes,
-  LSM6DSL_X_Get_AxesRaw,
-  LSM6DSL_X_Get_Sensitivity,
-  LSM6DSL_X_Get_ODR,
-  LSM6DSL_X_Set_ODR,
-  LSM6DSL_X_Set_ODR_Value,
-  LSM6DSL_X_Get_FS,
-  LSM6DSL_X_Set_FS,
-  LSM6DSL_X_Set_FS_Value,
-  0,
-  0,
-  LSM6DSL_X_Read_Reg,
-  LSM6DSL_X_Write_Reg,
-  LSM6DSL_X_Get_DRDY_Status
+   LSM6DSL_X_Init,
+   LSM6DSL_X_DeInit,
+   LSM6DSL_X_Sensor_Enable,
+   LSM6DSL_X_Sensor_Disable,
+   LSM6DSL_X_Get_WhoAmI,
+   LSM6DSL_X_Check_WhoAmI,
+   LSM6DSL_X_Get_Axes,
+   LSM6DSL_X_Get_AxesRaw,
+   LSM6DSL_X_Get_Sensitivity,
+   LSM6DSL_X_Get_ODR,
+   LSM6DSL_X_Set_ODR,
+   LSM6DSL_X_Set_ODR_Value,
+   LSM6DSL_X_Get_FS,
+   LSM6DSL_X_Set_FS,
+   LSM6DSL_X_Set_FS_Value,
+   0,
+   0,
+   LSM6DSL_X_Read_Reg,
+   LSM6DSL_X_Write_Reg,
+   LSM6DSL_X_Get_DRDY_Status
 };
 
-/**
- * @brief LSM6DSL gyro driver structure
- */
-GYRO_Drv_t LSM6DSL_G_Drv =
+// LSM6DSL gyro driver structure
+GYRO_Drv_t LSM6DSL_G_Drv                                 =
 {
-  LSM6DSL_G_Init,
-  LSM6DSL_G_DeInit,
-  LSM6DSL_G_Sensor_Enable,
-  LSM6DSL_G_Sensor_Disable,
-  LSM6DSL_G_Get_WhoAmI,
-  LSM6DSL_G_Check_WhoAmI,
-  LSM6DSL_G_Get_Axes,
-  LSM6DSL_G_Get_AxesRaw,
-  LSM6DSL_G_Get_Sensitivity,
-  LSM6DSL_G_Get_ODR,
-  LSM6DSL_G_Set_ODR,
-  LSM6DSL_G_Set_ODR_Value,
-  LSM6DSL_G_Get_FS,
-  LSM6DSL_G_Set_FS,
-  LSM6DSL_G_Set_FS_Value,
-  0,
-  0,
-  LSM6DSL_G_Read_Reg,
-  LSM6DSL_G_Write_Reg,
-  LSM6DSL_G_Get_DRDY_Status
+   LSM6DSL_G_Init,
+   LSM6DSL_G_DeInit,
+   LSM6DSL_G_Sensor_Enable,
+   LSM6DSL_G_Sensor_Disable,
+   LSM6DSL_G_Get_WhoAmI,
+   LSM6DSL_G_Check_WhoAmI,
+   LSM6DSL_G_Get_Axes,
+   LSM6DSL_G_Get_AxesRaw,
+   LSM6DSL_G_Get_Sensitivity,
+   LSM6DSL_G_Get_ODR,
+   LSM6DSL_G_Set_ODR,
+   LSM6DSL_G_Set_ODR_Value,
+   LSM6DSL_G_Get_FS,
+   LSM6DSL_G_Set_FS,
+   LSM6DSL_G_Set_FS_Value,
+   0,
+   0,
+   LSM6DSL_G_Read_Reg,
+   LSM6DSL_G_Write_Reg,
+   LSM6DSL_G_Get_DRDY_Status
 };
 
-/**
- * @brief LSM6DSL combo data structure definition
- */
+// LSM6DSL combo data structure definition
 LSM6DSL_Combo_Data_t LSM6DSL_Combo_Data[LSM6DSL_SENSORS_MAX_NUM];
 
-/**
- * @}
- */
+// LSM6DSL_Callable_Private_Functions Callable private functions
 
-/** @addtogroup LSM6DSL_Callable_Private_Functions Callable private functions
- * @{
- */
-
-/**
- * @brief Initialize the LSM6DSL accelerometer sensor
- * @param handle the device handle
- * @retval COMPONENT_OK in case of success
- * @retval COMPONENT_ERROR in case of failure
- */
+// @brief Initialize the LSM6DSL accelerometer sensor
+// @param handle the device handle
+// @retval COMPONENT_OK in case of success
+// @retval COMPONENT_ERROR in case of failure
 static DrvStatusTypeDef LSM6DSL_X_Init( DrvContextTypeDef *handle )
 {
+   ACCELERO_Data_t *pData                                = (ACCELERO_Data_t *) handle->pData;
+   LSM6DSL_X_Data_t *pComponentData                      = (LSM6DSL_X_Data_t *) pData->pComponentData;
+   LSM6DSL_Combo_Data_t *comboData                       = pComponentData->comboData;
 
-  ACCELERO_Data_t *pData = ( ACCELERO_Data_t * )handle->pData;
-  LSM6DSL_X_Data_t *pComponentData = ( LSM6DSL_X_Data_t * )pData->pComponentData;
-  LSM6DSL_Combo_Data_t *comboData = pComponentData->comboData;
+   if (LSM6DSL_Check_WhoAmI(handle) == COMPONENT_ERROR)
+   {
+      return COMPONENT_ERROR;
+   }
 
-  if ( LSM6DSL_Check_WhoAmI( handle ) == COMPONENT_ERROR )
-  {
-    return COMPONENT_ERROR;
-  }
+   /* Enable register address automatically incremented during a multiple byte
+   access with a serial interface. */
+   if (LSM6DSL_ACC_GYRO_W_IF_Addr_Incr((void *) handle, LSM6DSL_ACC_GYRO_IF_INC_ENABLED ) == MEMS_ERROR)
+   {
+      return COMPONENT_ERROR;
+   }
 
-  /* Enable register address automatically incremented during a multiple byte
-     access with a serial interface. */
-  if ( LSM6DSL_ACC_GYRO_W_IF_Addr_Incr( (void *)handle, LSM6DSL_ACC_GYRO_IF_INC_ENABLED ) == MEMS_ERROR )
-  {
-    return COMPONENT_ERROR;
-  }
+   /* Enable BDU */
+   if (LSM6DSL_ACC_GYRO_W_BDU((void *) handle, LSM6DSL_ACC_GYRO_BDU_BLOCK_UPDATE) == MEMS_ERROR)
+   {
+      return COMPONENT_ERROR;
+   }
 
-  /* Enable BDU */
-  if ( LSM6DSL_ACC_GYRO_W_BDU( (void *)handle, LSM6DSL_ACC_GYRO_BDU_BLOCK_UPDATE ) == MEMS_ERROR )
-  {
-    return COMPONENT_ERROR;
-  }
+   /* FIFO mode selection */
+   if (LSM6DSL_ACC_GYRO_W_FIFO_MODE((void *) handle, LSM6DSL_ACC_GYRO_FIFO_MODE_BYPASS) == MEMS_ERROR)
+   {
+      return COMPONENT_ERROR;
+   }
 
-  /* FIFO mode selection */
-  if ( LSM6DSL_ACC_GYRO_W_FIFO_MODE( (void *)handle, LSM6DSL_ACC_GYRO_FIFO_MODE_BYPASS ) == MEMS_ERROR )
-  {
-    return COMPONENT_ERROR;
-  }
+   /* Select default output data rate. */
+   pComponentData->Previous_ODR                          = 104.0f;
 
-  /* Select default output data rate. */
-  pComponentData->Previous_ODR = 104.0f;
+   /* Output data rate selection - power down. */
+   if (LSM6DSL_ACC_GYRO_W_ODR_XL((void *) handle, LSM6DSL_ACC_GYRO_ODR_XL_POWER_DOWN ) == MEMS_ERROR)
+   {
+      return COMPONENT_ERROR;
+   }
 
-  /* Output data rate selection - power down. */
-  if ( LSM6DSL_ACC_GYRO_W_ODR_XL( (void *)handle, LSM6DSL_ACC_GYRO_ODR_XL_POWER_DOWN ) == MEMS_ERROR )
-  {
-    return COMPONENT_ERROR;
-  }
+   /* Full scale selection. */
+   if (LSM6DSL_X_Set_FS(handle, FS_LOW) == COMPONENT_ERROR)
+   {
+      return COMPONENT_ERROR;
+   }
 
-  /* Full scale selection. */
-  if ( LSM6DSL_X_Set_FS( handle, FS_LOW ) == COMPONENT_ERROR )
-  {
-    return COMPONENT_ERROR;
-  }
+   comboData->isAccInitialized                           = 1;
+   handle->isInitialized                                 = 1;
 
-  comboData->isAccInitialized = 1;
-
-  handle->isInitialized = 1;
-
-  return COMPONENT_OK;
+   return COMPONENT_OK;
 }
 
 
@@ -420,72 +364,69 @@ static DrvStatusTypeDef LSM6DSL_X_Init( DrvContextTypeDef *handle )
  */
 static DrvStatusTypeDef LSM6DSL_X_DeInit( DrvContextTypeDef *handle )
 {
+   ACCELERO_Data_t *pData                                = (ACCELERO_Data_t *) handle->pData;
+   LSM6DSL_X_Data_t *pComponentData                      = (LSM6DSL_X_Data_t *) pData->pComponentData;
+   LSM6DSL_Combo_Data_t *comboData                       = pComponentData->comboData;
 
-  ACCELERO_Data_t *pData = ( ACCELERO_Data_t * )handle->pData;
-  LSM6DSL_X_Data_t *pComponentData = ( LSM6DSL_X_Data_t * )pData->pComponentData;
-  LSM6DSL_Combo_Data_t *comboData = pComponentData->comboData;
+   if (LSM6DSL_Check_WhoAmI(handle) == COMPONENT_ERROR)
+   {
+      return COMPONENT_ERROR;
+   }
 
-  if ( LSM6DSL_Check_WhoAmI( handle ) == COMPONENT_ERROR )
-  {
-    return COMPONENT_ERROR;
-  }
+   /* Try to disable free fall detection */
+   if (LSM6DSL_X_Disable_Free_Fall_Detection(handle) == COMPONENT_ERROR)
+   {
+      return COMPONENT_ERROR;
+   }
 
-  /* Try to disable free fall detection */
-  if( LSM6DSL_X_Disable_Free_Fall_Detection( handle ) == COMPONENT_ERROR )
-  {
-    return COMPONENT_ERROR;
-  }
+   /* Try to disable 6D orientation */
+   if (LSM6DSL_X_Disable_6D_Orientation(handle) == COMPONENT_ERROR)
+   {
+      return COMPONENT_ERROR;
+   }
 
-  /* Try to disable 6D orientation */
-  if( LSM6DSL_X_Disable_6D_Orientation( handle ) == COMPONENT_ERROR )
-  {
-    return COMPONENT_ERROR;
-  }
+   /* Try to disable pedometer */
+   if (LSM6DSL_X_Disable_Pedometer(handle) == COMPONENT_ERROR)
+   {
+      return COMPONENT_ERROR;
+   }
 
-  /* Try to disable pedometer */
-  if( LSM6DSL_X_Disable_Pedometer( handle ) == COMPONENT_ERROR )
-  {
-    return COMPONENT_ERROR;
-  }
+   /* Try to disable single tap detection */
+   if (LSM6DSL_X_Disable_Single_Tap_Detection(handle) == COMPONENT_ERROR)
+   {
+      return COMPONENT_ERROR;
+   }
 
-  /* Try to disable single tap detection */
-  if( LSM6DSL_X_Disable_Single_Tap_Detection( handle ) == COMPONENT_ERROR )
-  {
-    return COMPONENT_ERROR;
-  }
+   /* Try to disable double tap detection */
+   if (LSM6DSL_X_Disable_Double_Tap_Detection(handle) == COMPONENT_ERROR)
+   {
+      return COMPONENT_ERROR;
+   }
 
-  /* Try to disable double tap detection */
-  if( LSM6DSL_X_Disable_Double_Tap_Detection( handle ) == COMPONENT_ERROR )
-  {
-    return COMPONENT_ERROR;
-  }
+   /* Try to disable tilt detection */
+   if (LSM6DSL_X_Disable_Tilt_Detection(handle) == COMPONENT_ERROR)
+   {
+      return COMPONENT_ERROR;
+   }
 
-  /* Try to disable tilt detection */
-  if( LSM6DSL_X_Disable_Tilt_Detection( handle ) == COMPONENT_ERROR )
-  {
-    return COMPONENT_ERROR;
-  }
+   /* Try to disable wake up detection */
+   if (LSM6DSL_X_Disable_Wake_Up_Detection(handle) == COMPONENT_ERROR)
+   {
+      return COMPONENT_ERROR;
+   }
 
-  /* Try to disable wake up detection */
-  if( LSM6DSL_X_Disable_Wake_Up_Detection( handle ) == COMPONENT_ERROR )
-  {
-    return COMPONENT_ERROR;
-  }
+   /* Disable the component */
+   if (LSM6DSL_X_Sensor_Disable(handle) == COMPONENT_ERROR)
+   {
+      return COMPONENT_ERROR;
+   }
 
-  /* Disable the component */
-  if( LSM6DSL_X_Sensor_Disable( handle ) == COMPONENT_ERROR )
-  {
-    return COMPONENT_ERROR;
-  }
+   /* Reset output data rate. */
+   pComponentData->Previous_ODR                          = 0.0f;
+   comboData->isAccInitialized                           = 0;
+   handle->isInitialized                                 = 0;
 
-  /* Reset output data rate. */
-  pComponentData->Previous_ODR = 0.0f;
-
-  comboData->isAccInitialized = 0;
-
-  handle->isInitialized = 0;
-
-  return COMPONENT_OK;
+   return COMPONENT_OK;
 }
 
 
@@ -498,27 +439,24 @@ static DrvStatusTypeDef LSM6DSL_X_DeInit( DrvContextTypeDef *handle )
  */
 static DrvStatusTypeDef LSM6DSL_X_Sensor_Enable( DrvContextTypeDef *handle )
 {
-  ACCELERO_Data_t *pData = ( ACCELERO_Data_t * )handle->pData;
-  LSM6DSL_X_Data_t *pComponentData = ( LSM6DSL_X_Data_t * )pData->pComponentData;
+   ACCELERO_Data_t *pData                                = (ACCELERO_Data_t *) handle->pData;
+   LSM6DSL_X_Data_t *pComponentData                      = (LSM6DSL_X_Data_t *) pData->pComponentData;
 
-  /* Check if the component is already enabled */
-  if ( handle->isEnabled == 1 )
-  {
-    return COMPONENT_OK;
-  }
+   /* Check if the component is already enabled */
+   if (handle->isEnabled == 1)
+   {
+      return COMPONENT_OK;
+   }
 
-  /* Output data rate selection. */
-  if ( LSM6DSL_X_Set_ODR_Value_When_Enabled( handle, pComponentData->Previous_ODR ) == COMPONENT_ERROR )
-  {
-    return COMPONENT_ERROR;
-  }
+   /* Output data rate selection. */
+   if (LSM6DSL_X_Set_ODR_Value_When_Enabled(handle, pComponentData->Previous_ODR) == COMPONENT_ERROR)
+   {
+      return COMPONENT_ERROR;
+   }
+   handle->isEnabled                                     = 1;
 
-  handle->isEnabled = 1;
-
-  return COMPONENT_OK;
+   return COMPONENT_OK;
 }
-
-
 
 /**
  * @brief Disable the LSM6DSL accelerometer sensor
@@ -528,30 +466,29 @@ static DrvStatusTypeDef LSM6DSL_X_Sensor_Enable( DrvContextTypeDef *handle )
  */
 static DrvStatusTypeDef LSM6DSL_X_Sensor_Disable( DrvContextTypeDef *handle )
 {
-  ACCELERO_Data_t *pData = ( ACCELERO_Data_t * )handle->pData;
-  LSM6DSL_X_Data_t *pComponentData = ( LSM6DSL_X_Data_t * )pData->pComponentData;
+   ACCELERO_Data_t *pData                                = (ACCELERO_Data_t *) handle->pData;
+   LSM6DSL_X_Data_t *pComponentData                      = (LSM6DSL_X_Data_t *) pData->pComponentData;
 
-  /* Check if the component is already disabled */
-  if ( handle->isEnabled == 0 )
-  {
-    return COMPONENT_OK;
-  }
+   /* Check if the component is already disabled */
+   if (handle->isEnabled == 0)
+   {
+      return COMPONENT_OK;
+   }
 
-  /* Store actual output data rate. */
-  if ( LSM6DSL_X_Get_ODR( handle, &( pComponentData->Previous_ODR ) ) == COMPONENT_ERROR )
-  {
-    return COMPONENT_ERROR;
-  }
+   /* Store actual output data rate. */
+   if (LSM6DSL_X_Get_ODR(handle, &(pComponentData->Previous_ODR)) == COMPONENT_ERROR)
+   {
+      return COMPONENT_ERROR;
+   }
 
-  /* Output data rate selection - power down. */
-  if ( LSM6DSL_ACC_GYRO_W_ODR_XL( (void *)handle, LSM6DSL_ACC_GYRO_ODR_XL_POWER_DOWN ) == MEMS_ERROR )
-  {
-    return COMPONENT_ERROR;
-  }
+   /* Output data rate selection - power down. */
+   if (LSM6DSL_ACC_GYRO_W_ODR_XL((void *) handle, LSM6DSL_ACC_GYRO_ODR_XL_POWER_DOWN) == MEMS_ERROR)
+   {
+      return COMPONENT_ERROR;
+   }
+   handle->isEnabled                                     = 0;
 
-  handle->isEnabled = 0;
-
-  return COMPONENT_OK;
+   return COMPONENT_OK;
 }
 
 
@@ -564,8 +501,7 @@ static DrvStatusTypeDef LSM6DSL_X_Sensor_Disable( DrvContextTypeDef *handle )
  */
 static DrvStatusTypeDef LSM6DSL_X_Get_WhoAmI( DrvContextTypeDef *handle, uint8_t *who_am_i )
 {
-
-  return LSM6DSL_Get_WhoAmI(handle, who_am_i);
+   return LSM6DSL_Get_WhoAmI(handle, who_am_i);
 }
 
 /**
@@ -576,8 +512,7 @@ static DrvStatusTypeDef LSM6DSL_X_Get_WhoAmI( DrvContextTypeDef *handle, uint8_t
  */
 static DrvStatusTypeDef LSM6DSL_X_Check_WhoAmI( DrvContextTypeDef *handle )
 {
-
-  return LSM6DSL_Check_WhoAmI(handle);
+   return LSM6DSL_Check_WhoAmI(handle);
 }
 
 
@@ -590,28 +525,27 @@ static DrvStatusTypeDef LSM6DSL_X_Check_WhoAmI( DrvContextTypeDef *handle )
  */
 static DrvStatusTypeDef LSM6DSL_X_Get_Axes( DrvContextTypeDef *handle, SensorAxes_t *acceleration )
 {
+   int16_t dataRaw[3];
+   float sensitivity                                     = 0;
 
-  int16_t dataRaw[3];
-  float sensitivity = 0;
+   /* Read raw data from LSM6DSL output register. */
+   if (LSM6DSL_X_Get_Axes_Raw(handle, dataRaw) == COMPONENT_ERROR)
+   {
+      return COMPONENT_ERROR;
+   }
 
-  /* Read raw data from LSM6DSL output register. */
-  if ( LSM6DSL_X_Get_Axes_Raw( handle, dataRaw ) == COMPONENT_ERROR )
-  {
-    return COMPONENT_ERROR;
-  }
+   /* Get LSM6DSL actual sensitivity. */
+   if (LSM6DSL_X_Get_Sensitivity(handle, &sensitivity) == COMPONENT_ERROR)
+   {
+      return COMPONENT_ERROR;
+   }
 
-  /* Get LSM6DSL actual sensitivity. */
-  if ( LSM6DSL_X_Get_Sensitivity( handle, &sensitivity ) == COMPONENT_ERROR )
-  {
-    return COMPONENT_ERROR;
-  }
+   /* Calculate the data. */
+   acceleration->AXIS_X                                  = (int32_t)(dataRaw[0] * sensitivity);
+   acceleration->AXIS_Y                                  = (int32_t)(dataRaw[1] * sensitivity);
+   acceleration->AXIS_Z                                  = (int32_t)(dataRaw[2] * sensitivity);
 
-  /* Calculate the data. */
-  acceleration->AXIS_X = ( int32_t )( dataRaw[0] * sensitivity );
-  acceleration->AXIS_Y = ( int32_t )( dataRaw[1] * sensitivity );
-  acceleration->AXIS_Z = ( int32_t )( dataRaw[2] * sensitivity );
-
-  return COMPONENT_OK;
+   return COMPONENT_OK;
 }
 
 /**
@@ -623,21 +557,20 @@ static DrvStatusTypeDef LSM6DSL_X_Get_Axes( DrvContextTypeDef *handle, SensorAxe
  */
 static DrvStatusTypeDef LSM6DSL_X_Get_AxesRaw( DrvContextTypeDef *handle, SensorAxesRaw_t *value )
 {
+   int16_t dataRaw[3];
 
-  int16_t dataRaw[3];
+   /* Read raw data from LSM6DSL output register. */
+   if (LSM6DSL_X_Get_Axes_Raw(handle, dataRaw) == COMPONENT_ERROR)
+   {
+      return COMPONENT_ERROR;
+   }
 
-  /* Read raw data from LSM6DSL output register. */
-  if ( LSM6DSL_X_Get_Axes_Raw( handle, dataRaw ) == COMPONENT_ERROR )
-  {
-    return COMPONENT_ERROR;
-  }
+   /* Set the raw data. */
+   value->AXIS_X                                         = dataRaw[0];
+   value->AXIS_Y                                         = dataRaw[1];
+   value->AXIS_Z                                         = dataRaw[2];
 
-  /* Set the raw data. */
-  value->AXIS_X = dataRaw[0];
-  value->AXIS_Y = dataRaw[1];
-  value->AXIS_Z = dataRaw[2];
-
-  return COMPONENT_OK;
+   return COMPONENT_OK;
 }
 
 
@@ -651,36 +584,39 @@ static DrvStatusTypeDef LSM6DSL_X_Get_AxesRaw( DrvContextTypeDef *handle, Sensor
  */
 static DrvStatusTypeDef LSM6DSL_X_Get_Sensitivity( DrvContextTypeDef *handle, float *sensitivity )
 {
+   LSM6DSL_ACC_GYRO_FS_XL_t fullScale;
 
-  LSM6DSL_ACC_GYRO_FS_XL_t fullScale;
-
-  /* Read actual full scale selection from sensor. */
-  if ( LSM6DSL_ACC_GYRO_R_FS_XL( (void *)handle, &fullScale ) == MEMS_ERROR )
-  {
-    return COMPONENT_ERROR;
-  }
-
-  /* Store the sensitivity based on actual full scale. */
-  switch( fullScale )
-  {
-    case LSM6DSL_ACC_GYRO_FS_XL_2g:
-      *sensitivity = ( float )LSM6DSL_ACC_SENSITIVITY_FOR_FS_2G;
-      break;
-    case LSM6DSL_ACC_GYRO_FS_XL_4g:
-      *sensitivity = ( float )LSM6DSL_ACC_SENSITIVITY_FOR_FS_4G;
-      break;
-    case LSM6DSL_ACC_GYRO_FS_XL_8g:
-      *sensitivity = ( float )LSM6DSL_ACC_SENSITIVITY_FOR_FS_8G;
-      break;
-    case LSM6DSL_ACC_GYRO_FS_XL_16g:
-      *sensitivity = ( float )LSM6DSL_ACC_SENSITIVITY_FOR_FS_16G;
-      break;
-    default:
-      *sensitivity = -1.0f;
+   /* Read actual full scale selection from sensor. */
+   if (LSM6DSL_ACC_GYRO_R_FS_XL((void *) handle, &fullScale) == MEMS_ERROR)
+   {
       return COMPONENT_ERROR;
-  }
+   }
 
-  return COMPONENT_OK;
+   /* Store the sensitivity based on actual full scale. */
+   switch (fullScale)
+   {
+      case LSM6DSL_ACC_GYRO_FS_XL_2g :
+         *sensitivity                                    = (float) LSM6DSL_ACC_SENSITIVITY_FOR_FS_2G;
+         break;
+
+      case LSM6DSL_ACC_GYRO_FS_XL_4g :
+         *sensitivity                                    = (float) LSM6DSL_ACC_SENSITIVITY_FOR_FS_4G;
+         break;
+
+      case LSM6DSL_ACC_GYRO_FS_XL_8g :
+         *sensitivity                                    = (float) LSM6DSL_ACC_SENSITIVITY_FOR_FS_8G;
+         break;
+
+      case LSM6DSL_ACC_GYRO_FS_XL_16g :
+         *sensitivity                                    = (float) LSM6DSL_ACC_SENSITIVITY_FOR_FS_16G;
+         break;
+
+      default :
+         *sensitivity                                    = -1.0f;
+         return COMPONENT_ERROR;
+   }
+
+   return COMPONENT_OK;
 }
 
 
@@ -694,55 +630,65 @@ static DrvStatusTypeDef LSM6DSL_X_Get_Sensitivity( DrvContextTypeDef *handle, fl
  */
 static DrvStatusTypeDef LSM6DSL_X_Get_ODR( DrvContextTypeDef *handle, float *odr )
 {
+   LSM6DSL_ACC_GYRO_ODR_XL_t odr_low_level;
 
-  LSM6DSL_ACC_GYRO_ODR_XL_t odr_low_level;
-
-  if ( LSM6DSL_ACC_GYRO_R_ODR_XL( (void *)handle, &odr_low_level ) == MEMS_ERROR )
-  {
-    return COMPONENT_ERROR;
-  }
-
-  switch( odr_low_level )
-  {
-    case LSM6DSL_ACC_GYRO_ODR_XL_POWER_DOWN:
-      *odr =     0.0f;
-      break;
-    case LSM6DSL_ACC_GYRO_ODR_XL_13Hz:
-      *odr =    13.0f;
-      break;
-    case LSM6DSL_ACC_GYRO_ODR_XL_26Hz:
-      *odr =    26.0f;
-      break;
-    case LSM6DSL_ACC_GYRO_ODR_XL_52Hz:
-      *odr =    52.0f;
-      break;
-    case LSM6DSL_ACC_GYRO_ODR_XL_104Hz:
-      *odr =   104.0f;
-      break;
-    case LSM6DSL_ACC_GYRO_ODR_XL_208Hz:
-      *odr =   208.0f;
-      break;
-    case LSM6DSL_ACC_GYRO_ODR_XL_416Hz:
-      *odr =   416.0f;
-      break;
-    case LSM6DSL_ACC_GYRO_ODR_XL_833Hz:
-      *odr =   833.0f;
-      break;
-    case LSM6DSL_ACC_GYRO_ODR_XL_1660Hz:
-      *odr =  1660.0f;
-      break;
-    case LSM6DSL_ACC_GYRO_ODR_XL_3330Hz:
-      *odr =  3330.0f;
-      break;
-    case LSM6DSL_ACC_GYRO_ODR_XL_6660Hz:
-      *odr =  6660.0f;
-      break;
-    default:
-      *odr =    -1.0f;
+   if (LSM6DSL_ACC_GYRO_R_ODR_XL((void *) handle, &odr_low_level) == MEMS_ERROR)
+   {
       return COMPONENT_ERROR;
-  }
+   }
 
-  return COMPONENT_OK;
+   switch (odr_low_level)
+   {
+      case LSM6DSL_ACC_GYRO_ODR_XL_POWER_DOWN :
+         *odr                                            = 0.0f;
+         break;
+
+      case LSM6DSL_ACC_GYRO_ODR_XL_13Hz :
+         *odr                                            = 13.0f;
+         break;
+
+      case LSM6DSL_ACC_GYRO_ODR_XL_26Hz :
+         *odr                                            = 26.0f;
+         break;
+
+      case LSM6DSL_ACC_GYRO_ODR_XL_52Hz :
+         *odr                                            = 52.0f;
+         break;
+
+      case LSM6DSL_ACC_GYRO_ODR_XL_104Hz :
+         *odr                                            = 104.0f;
+         break;
+
+      case LSM6DSL_ACC_GYRO_ODR_XL_208Hz :
+         *odr                                            = 208.0f;
+         break;
+
+      case LSM6DSL_ACC_GYRO_ODR_XL_416Hz :
+         *odr                                            = 416.0f;
+         break;
+
+      case LSM6DSL_ACC_GYRO_ODR_XL_833Hz :
+         *odr                                            = 833.0f;
+         break;
+
+      case LSM6DSL_ACC_GYRO_ODR_XL_1660Hz :
+         *odr                                            = 1660.0f;
+         break;
+
+      case LSM6DSL_ACC_GYRO_ODR_XL_3330Hz:
+         *odr                                            = 3330.0f;
+         break;
+
+      case LSM6DSL_ACC_GYRO_ODR_XL_6660Hz :
+         *odr                                            = 6660.0f;
+         break;
+
+      default :
+         *odr                                            = -1.0f;
+         return COMPONENT_ERROR;
+   }
+
+   return COMPONENT_OK;
 }
 
 
@@ -756,23 +702,21 @@ static DrvStatusTypeDef LSM6DSL_X_Get_ODR( DrvContextTypeDef *handle, float *odr
  */
 static DrvStatusTypeDef LSM6DSL_X_Set_ODR( DrvContextTypeDef *handle, SensorOdr_t odr )
 {
-
-  if(handle->isEnabled == 1)
-  {
-    if(LSM6DSL_X_Set_ODR_When_Enabled(handle, odr) == COMPONENT_ERROR)
-    {
-      return COMPONENT_ERROR;
-    }
-  }
-  else
-  {
-    if(LSM6DSL_X_Set_ODR_When_Disabled(handle, odr) == COMPONENT_ERROR)
-    {
-      return COMPONENT_ERROR;
-    }
-  }
-
-  return COMPONENT_OK;
+   if (handle->isEnabled == 1)
+   {
+      if (LSM6DSL_X_Set_ODR_When_Enabled(handle, odr) == COMPONENT_ERROR)
+      {
+         return COMPONENT_ERROR;
+      }
+   }
+   else
+   {
+      if(LSM6DSL_X_Set_ODR_When_Disabled(handle, odr) == COMPONENT_ERROR)
+      {
+         return COMPONENT_ERROR;
+      }
+   }
+   return COMPONENT_OK;
 }
 
 
@@ -786,23 +730,21 @@ static DrvStatusTypeDef LSM6DSL_X_Set_ODR( DrvContextTypeDef *handle, SensorOdr_
  */
 static DrvStatusTypeDef LSM6DSL_X_Set_ODR_Value( DrvContextTypeDef *handle, float odr )
 {
-
-  if(handle->isEnabled == 1)
-  {
-    if(LSM6DSL_X_Set_ODR_Value_When_Enabled(handle, odr) == COMPONENT_ERROR)
-    {
-      return COMPONENT_ERROR;
-    }
-  }
-  else
-  {
-    if(LSM6DSL_X_Set_ODR_Value_When_Disabled(handle, odr) == COMPONENT_ERROR)
-    {
-      return COMPONENT_ERROR;
-    }
-  }
-
-  return COMPONENT_OK;
+   if (handle->isEnabled == 1)
+   {
+      if (LSM6DSL_X_Set_ODR_Value_When_Enabled(handle, odr) == COMPONENT_ERROR)
+      {
+         return COMPONENT_ERROR;
+      }
+   }
+   else
+   {
+      if (LSM6DSL_X_Set_ODR_Value_When_Disabled(handle, odr) == COMPONENT_ERROR)
+      {
+         return COMPONENT_ERROR;
+      }
+   }
+   return COMPONENT_OK;
 }
 
 
@@ -816,34 +758,37 @@ static DrvStatusTypeDef LSM6DSL_X_Set_ODR_Value( DrvContextTypeDef *handle, floa
  */
 static DrvStatusTypeDef LSM6DSL_X_Get_FS( DrvContextTypeDef *handle, float *fullScale )
 {
+   LSM6DSL_ACC_GYRO_FS_XL_t fs_low_level;
 
-  LSM6DSL_ACC_GYRO_FS_XL_t fs_low_level;
-
-  if ( LSM6DSL_ACC_GYRO_R_FS_XL( (void *)handle, &fs_low_level ) == MEMS_ERROR )
-  {
-    return COMPONENT_ERROR;
-  }
-
-  switch( fs_low_level )
-  {
-    case LSM6DSL_ACC_GYRO_FS_XL_2g:
-      *fullScale =  2.0f;
-      break;
-    case LSM6DSL_ACC_GYRO_FS_XL_4g:
-      *fullScale =  4.0f;
-      break;
-    case LSM6DSL_ACC_GYRO_FS_XL_8g:
-      *fullScale =  8.0f;
-      break;
-    case LSM6DSL_ACC_GYRO_FS_XL_16g:
-      *fullScale = 16.0f;
-      break;
-    default:
-      *fullScale = -1.0f;
+   if (LSM6DSL_ACC_GYRO_R_FS_XL((void *)handle, &fs_low_level) == MEMS_ERROR)
+   {
       return COMPONENT_ERROR;
-  }
+   }
 
-  return COMPONENT_OK;
+   switch (fs_low_level)
+   {
+      case LSM6DSL_ACC_GYRO_FS_XL_2g :
+         *fullScale                                      = 2.0f;
+         break;
+
+      case LSM6DSL_ACC_GYRO_FS_XL_4g :
+         *fullScale                                      = 4.0f;
+         break;
+
+      case LSM6DSL_ACC_GYRO_FS_XL_8g :
+         *fullScale                                      = 8.0f;
+         break;
+
+      case LSM6DSL_ACC_GYRO_FS_XL_16g :
+         *fullScale                                      = 16.0f;
+         break;
+
+      default :
+         *fullScale                                      = -1.0f;
+         return COMPONENT_ERROR;
+   }
+
+   return COMPONENT_OK;
 }
 
 
@@ -857,30 +802,32 @@ static DrvStatusTypeDef LSM6DSL_X_Get_FS( DrvContextTypeDef *handle, float *full
  */
 static DrvStatusTypeDef LSM6DSL_X_Set_FS( DrvContextTypeDef *handle, SensorFs_t fullScale )
 {
+   LSM6DSL_ACC_GYRO_FS_XL_t new_fs;
 
-  LSM6DSL_ACC_GYRO_FS_XL_t new_fs;
+   switch (fullScale)
+   {
+      case FS_LOW :
+         new_fs                                          = LSM6DSL_ACC_GYRO_FS_XL_2g;
+         break;
 
-  switch( fullScale )
-  {
-    case FS_LOW:
-      new_fs = LSM6DSL_ACC_GYRO_FS_XL_2g;
-      break;
-    case FS_MID:
-      new_fs = LSM6DSL_ACC_GYRO_FS_XL_4g;
-      break;
-    case FS_HIGH:
-      new_fs = LSM6DSL_ACC_GYRO_FS_XL_8g;
-      break;
-    default:
+      case FS_MID :
+         new_fs                                          = LSM6DSL_ACC_GYRO_FS_XL_4g;
+         break;
+
+      case FS_HIGH :
+         new_fs                                          = LSM6DSL_ACC_GYRO_FS_XL_8g;
+         break;
+
+      default :
+         return COMPONENT_ERROR;
+   }
+
+   if (LSM6DSL_ACC_GYRO_W_FS_XL((void *) handle, new_fs) == MEMS_ERROR)
+   {
       return COMPONENT_ERROR;
-  }
+   }
 
-  if ( LSM6DSL_ACC_GYRO_W_FS_XL( (void *)handle, new_fs ) == MEMS_ERROR )
-  {
-    return COMPONENT_ERROR;
-  }
-
-  return COMPONENT_OK;
+   return COMPONENT_OK;
 }
 
 
@@ -895,19 +842,19 @@ static DrvStatusTypeDef LSM6DSL_X_Set_FS( DrvContextTypeDef *handle, SensorFs_t 
 static DrvStatusTypeDef LSM6DSL_X_Set_FS_Value( DrvContextTypeDef *handle, float fullScale )
 {
 
-  LSM6DSL_ACC_GYRO_FS_XL_t new_fs;
+   LSM6DSL_ACC_GYRO_FS_XL_t new_fs;
 
-  new_fs = ( fullScale <= 2.0f ) ? LSM6DSL_ACC_GYRO_FS_XL_2g
-           : ( fullScale <= 4.0f ) ? LSM6DSL_ACC_GYRO_FS_XL_4g
-           : ( fullScale <= 8.0f ) ? LSM6DSL_ACC_GYRO_FS_XL_8g
-           :                         LSM6DSL_ACC_GYRO_FS_XL_16g;
+   new_fs                                                = (fullScale <= 2.0f) ? LSM6DSL_ACC_GYRO_FS_XL_2g
+                                                                              : ( fullScale <= 4.0f ) ? LSM6DSL_ACC_GYRO_FS_XL_4g
+                                                                              : ( fullScale <= 8.0f ) ? LSM6DSL_ACC_GYRO_FS_XL_8g
+                                                                              :                         LSM6DSL_ACC_GYRO_FS_XL_16g;
 
-  if ( LSM6DSL_ACC_GYRO_W_FS_XL( (void *)handle, new_fs ) == MEMS_ERROR )
-  {
-    return COMPONENT_ERROR;
-  }
+   if (LSM6DSL_ACC_GYRO_W_FS_XL((void *) handle, new_fs) == MEMS_ERROR)
+   {
+      return COMPONENT_ERROR;
+   }
 
-  return COMPONENT_OK;
+   return COMPONENT_OK;
 }
 
 
@@ -921,15 +868,13 @@ static DrvStatusTypeDef LSM6DSL_X_Set_FS_Value( DrvContextTypeDef *handle, float
  */
 static DrvStatusTypeDef LSM6DSL_X_Read_Reg( DrvContextTypeDef *handle, uint8_t reg, uint8_t *data )
 {
+   if (LSM6DSL_Read_Reg(handle, reg, data) == COMPONENT_ERROR)
+   {
+      return COMPONENT_ERROR;
+   }
 
-  if ( LSM6DSL_Read_Reg( handle, reg, data ) == COMPONENT_ERROR )
-  {
-    return COMPONENT_ERROR;
-  }
-
-  return COMPONENT_OK;
+   return COMPONENT_OK;
 }
-
 
 
 /**
@@ -942,15 +887,13 @@ static DrvStatusTypeDef LSM6DSL_X_Read_Reg( DrvContextTypeDef *handle, uint8_t r
  */
 static DrvStatusTypeDef LSM6DSL_X_Write_Reg( DrvContextTypeDef *handle, uint8_t reg, uint8_t data )
 {
+   if (LSM6DSL_Write_Reg(handle, reg, data) == COMPONENT_ERROR)
+   {
+      return COMPONENT_ERROR;
+   }
 
-  if ( LSM6DSL_Write_Reg( handle, reg, data ) == COMPONENT_ERROR )
-  {
-    return COMPONENT_ERROR;
-  }
-
-  return COMPONENT_OK;
+   return COMPONENT_OK;
 }
-
 
 
 /**
@@ -962,27 +905,28 @@ static DrvStatusTypeDef LSM6DSL_X_Write_Reg( DrvContextTypeDef *handle, uint8_t 
  */
 static DrvStatusTypeDef LSM6DSL_X_Get_DRDY_Status( DrvContextTypeDef *handle, uint8_t *status )
 {
+   LSM6DSL_ACC_GYRO_XLDA_t status_raw;
 
-  LSM6DSL_ACC_GYRO_XLDA_t status_raw;
-
-  if ( LSM6DSL_ACC_GYRO_R_XLDA( (void *)handle, &status_raw ) == MEMS_ERROR )
-  {
-    return COMPONENT_ERROR;
-  }
-
-  switch( status_raw )
-  {
-    case LSM6DSL_ACC_GYRO_XLDA_DATA_AVAIL:
-      *status = 1;
-      break;
-    case LSM6DSL_ACC_GYRO_XLDA_NO_DATA_AVAIL:
-      *status = 0;
-      break;
-    default:
+   if (LSM6DSL_ACC_GYRO_R_XLDA((void *) handle, &status_raw) == MEMS_ERROR)
+   {
       return COMPONENT_ERROR;
-  }
+   }
 
-  return COMPONENT_OK;
+   switch (status_raw)
+   {
+      case LSM6DSL_ACC_GYRO_XLDA_DATA_AVAIL :
+         *status                                         = 1;
+         break;
+
+      case LSM6DSL_ACC_GYRO_XLDA_NO_DATA_AVAIL :
+         *status                                         = 0;
+         break;
+
+      default :
+         return COMPONENT_ERROR;
+   }
+
+   return COMPONENT_OK;
 }
 
 

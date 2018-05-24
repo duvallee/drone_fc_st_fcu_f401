@@ -698,7 +698,7 @@ DrvStatusTypeDef BSP_ACCELERO_Set_ODR_Value(void *handle, float odr)
    {
       return COMPONENT_ERROR;
    }
-   if (driver->Set_ODR_Value( ctx, odr ) == COMPONENT_ERROR)
+   if (driver->Set_ODR_Value(ctx, odr) == COMPONENT_ERROR)
    {
       return COMPONENT_ERROR;
    }
