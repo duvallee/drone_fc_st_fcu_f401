@@ -364,7 +364,7 @@ int main(void)
    // BLE communication
    PRINTF("BLE communication initialization...\r\n");
    BlueNRG_Init();
-   /. Initialize the BlueNRG Custom services
+   // Initialize the BlueNRG Custom services
    Init_BlueNRG_Custom_Services();
 
 
@@ -533,19 +533,19 @@ int main(void)
 
          // Added for debug on UART
          // Remocon ELE, AIL, RUD, THR, AHRS Euler angle x and y axis, Remocon Euler angle x and y axis 
-         // PRINTF("%d\t%d\t%d\t%d\t%f\t%f\t%f\t%f\n", gELE, gAIL, gRUD, gTHR, euler_ahrs.thx * 57.3f, euler_ahrs.thy * 57.3f, euler_rc.thx * 57.3f, euler_rc.thy * 57.3f);
+         PRINTF("%d\t%d\t%d\t%d\t%f\t%f\t%f\t%f \r\n", gELE, gAIL, gRUD, gTHR, euler_ahrs.thx * 57.3f, euler_ahrs.thy * 57.3f, euler_rc.thx * 57.3f, euler_rc.thy * 57.3f);
          // Remocon ELE, AIL, RUD, THR, Motor1_pwm, AHRS Euler angle x and y axis
-         // PRINTF("%d\t%d\t%d\t%d\t%f\t%f\t%f\t%f\t%f\n", gELE, gAIL, gRUD, gTHR, motor_pwm.motor1_pwm, euler_ahrs.thx * 57.3f, euler_ahrs.thy * 57.3f, euler_rc.thx * 57.3f, euler_rc.thy * 57.3f);
-         // PRINTF("%d\t%d\t%d\t%d\n", gELE, gAIL, gRUD, gTHR);
+         PRINTF("%d\t%d\t%d\t%d\t%f\t%f\t%f\t%f\t%f \r\n", gELE, gAIL, gRUD, gTHR, motor_pwm.motor1_pwm, euler_ahrs.thx * 57.3f, euler_ahrs.thy * 57.3f, euler_rc.thx * 57.3f, euler_rc.thy * 57.3f);
+         PRINTF("%d\t%d\t%d\t%d \r\n", gELE, gAIL, gRUD, gTHR);
          // Remocon THR, Acc and Gyro FIFO data x and y axis, AHRS Euler angle x and y axis, Remocon Euler angle x and y axis
-         // PRINTF("%d\t%f\t%f\t%f\t%f\t%f\t%f\t%f\t%f\n", gTHR, acc_ahrs.AXIS_X, acc_ahrs.AXIS_Y, gyro_ahrs.AXIS_X, gyro_ahrs.AXIS_Y, euler_ahrs.thx * 57.3f, euler_ahrs.thy * 57.3f, euler_rc.thx * 57.3f, euler_rc.thy * 57.3f);
+         PRINTF("%d\t%f\t%f\t%f\t%f\t%f\t%f\t%f\t%f \r\n", gTHR, acc_ahrs.AXIS_X, acc_ahrs.AXIS_Y, gyro_ahrs.AXIS_X, gyro_ahrs.AXIS_Y, euler_ahrs.thx * 57.3f, euler_ahrs.thy * 57.3f, euler_rc.thx * 57.3f, euler_rc.thy * 57.3f);
          // MEMS Accelerometer RAW data 
-         // PRINTF("%d\t%d\t%d\t\n", acc.AXIS_X, acc.AXIS_Y, acc.AXIS_Z);
+         PRINTF("%d\t%d\t%d\t \r\n", acc.AXIS_X, acc.AXIS_Y, acc.AXIS_Z);
 
          // Pressure data on UART for debug
-         // PRINTF("Pressure [atm] = %f\n\n",pre);  
+         // PRINTF("Pressure [atm] = %f\n\n", pre);  
          // Magnetometer data on UART for debug
-         // PRINTF("Magnetometer X = %d\tY = %d\tZ = %d\n\n", mag.AXIS_X, mag.AXIS_Y, mag.AXIS_Z);  
+         PRINTF("Magnetometer X = %d\tY = %d\tZ = %d \r\n", mag.AXIS_X, mag.AXIS_Y, mag.AXIS_Z);  
       }
 
       if (HAL_GPIO_ReadPin(GPIOA, GPIO_PIN_1) == GPIO_PIN_SET)
