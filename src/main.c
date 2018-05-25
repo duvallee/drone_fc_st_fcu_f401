@@ -364,7 +364,7 @@ int main(void)
    // BLE communication
    PRINTF("BLE communication initialization...\r\n");
    BlueNRG_Init();
-   /* Initialize the BlueNRG Custom services */
+   /. Initialize the BlueNRG Custom services
    Init_BlueNRG_Custom_Services();
 
 
@@ -437,21 +437,21 @@ int main(void)
          // BSP_LED_Toggle(LED1);
 
 #ifdef REMOCON_BLE
-         // gRUD = (joydata[3]-128)*(-13);
-         // gTHR = joydata[4]*13;
-         // gAIL = (joydata[5]-128)*(-13);
-         // gELE = (joydata[6]-128)*13;
+         // gRUD                                         = (joydata[3] - 128) * (-13);
+         // gTHR                                         = joydata[4] * 13;
+         // gAIL                                         = (joydata[5] - 128) * (-13);
+         // gELE                                         = (joydata[6] - 128) * 13;
 
          gRUD                                            = (joydata[2] - 128) * (-13);
          gTHR                                            = joydata[3] * 13;
          gAIL                                            = (joydata[4] - 128) * (-13);
          gELE                                            = (joydata[5] - 128) * 13;
 
-         /* joydata[6]: seek bar data*/
-         /* joydata[7]: additional button data
-               first bit: Takeoff (0 = Land,  1 = Takeoff)
-               second bit: Calibration When it changes status is active
-               third bit: Arming (0 = Disarmed,  1 = Armed) */
+         // joydata[6]: seek bar data
+         // joydata[7]: additional button data
+         //      first bit  : Takeoff (0 = Land, 1 = Takeoff)
+         //      second bit : Calibration When it changes status is active
+         //      third bit  : Arming (0 = Disarmed, 1 = Armed)
 
          gJoystick_status                                = joydata[7];
          if ((gJoystick_status & 0x04) == 0x04)
@@ -531,20 +531,20 @@ int main(void)
 
          FlightControlPID_OuterLoop(&euler_rc_fil, &euler_ahrs, &ahrs, &pid);
 
-         /* Added for debug on UART*/
-         /* Remocon ELE, AIL, RUD, THR, AHRS Euler angle x and y axis, Remocon Euler angle x and y axis */
+         // Added for debug on UART
+         // Remocon ELE, AIL, RUD, THR, AHRS Euler angle x and y axis, Remocon Euler angle x and y axis 
          // PRINTF("%d\t%d\t%d\t%d\t%f\t%f\t%f\t%f\n", gELE, gAIL, gRUD, gTHR, euler_ahrs.thx * 57.3f, euler_ahrs.thy * 57.3f, euler_rc.thx * 57.3f, euler_rc.thy * 57.3f);
-         /* Remocon ELE, AIL, RUD, THR, Motor1_pwm, AHRS Euler angle x and y axis */
+         // Remocon ELE, AIL, RUD, THR, Motor1_pwm, AHRS Euler angle x and y axis
          // PRINTF("%d\t%d\t%d\t%d\t%f\t%f\t%f\t%f\t%f\n", gELE, gAIL, gRUD, gTHR, motor_pwm.motor1_pwm, euler_ahrs.thx * 57.3f, euler_ahrs.thy * 57.3f, euler_rc.thx * 57.3f, euler_rc.thy * 57.3f);
          // PRINTF("%d\t%d\t%d\t%d\n", gELE, gAIL, gRUD, gTHR);
-         /* Remocon THR, Acc and Gyro FIFO data x and y axis, AHRS Euler angle x and y axis, Remocon Euler angle x and y axis*/
+         // Remocon THR, Acc and Gyro FIFO data x and y axis, AHRS Euler angle x and y axis, Remocon Euler angle x and y axis
          // PRINTF("%d\t%f\t%f\t%f\t%f\t%f\t%f\t%f\t%f\n", gTHR, acc_ahrs.AXIS_X, acc_ahrs.AXIS_Y, gyro_ahrs.AXIS_X, gyro_ahrs.AXIS_Y, euler_ahrs.thx * 57.3f, euler_ahrs.thy * 57.3f, euler_rc.thx * 57.3f, euler_rc.thy * 57.3f);
-         /* MEMS Accelerometer RAW data */
+         // MEMS Accelerometer RAW data 
          // PRINTF("%d\t%d\t%d\t\n", acc.AXIS_X, acc.AXIS_Y, acc.AXIS_Z);
 
-         /* Pressure data on UART for debug*/
+         // Pressure data on UART for debug
          // PRINTF("Pressure [atm] = %f\n\n",pre);  
-         /* Magnetometer data on UART for debug*/
+         // Magnetometer data on UART for debug
          // PRINTF("Magnetometer X = %d\tY = %d\tZ = %d\n\n", mag.AXIS_X, mag.AXIS_Y, mag.AXIS_Z);  
       }
 
