@@ -816,11 +816,8 @@ void MX_GPIO_Init(void)
    HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
 }
 
-/* USER CODE BEGIN 4 */
-/*
- *  Handle Timer9 interrupt @ 800Hz
- *  Set the event flag and increase time index
- */
+//  Handle Timer9 interrupt @ 800Hz
+//  Set the event flag and increase time index
 void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 {
    if (sensor_init_cali == 0)
