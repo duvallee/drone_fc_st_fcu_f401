@@ -272,7 +272,9 @@ int main(void)
    // Initialize all configured peripherals
    MX_GPIO_Init();
    MX_ADC1_Init();  
+#if 0
    MX_TIM2_Init();
+#endif
    MX_TIM4_Init();
    MX_TIM9_Init();
    MX_USART1_UART_Init();
@@ -332,11 +334,13 @@ int main(void)
    // Initialize Remote control
    init_remote_control();
 
+#if 0
    // Initialize TIM2 for External Remocon RF receiver PWM Input
    HAL_TIM_IC_Start_IT(&htim2, TIM_CHANNEL_1);
    HAL_TIM_IC_Start_IT(&htim2, TIM_CHANNEL_2);
    HAL_TIM_IC_Start_IT(&htim2, TIM_CHANNEL_3);
    HAL_TIM_IC_Start_IT(&htim2, TIM_CHANNEL_4);
+#endif
 
    // Initialize TIM4 for Motors PWM Output
    HAL_TIM_PWM_Start(&htim4, TIM_CHANNEL_1);
