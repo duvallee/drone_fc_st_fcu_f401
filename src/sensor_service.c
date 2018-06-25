@@ -1241,9 +1241,9 @@ void HCI_Event_CB(void *pckt)
 #ifdef MOTENV_DEBUG_CONNECTION
                   {
                      PRINTF("[%d] : ", evt->data_length);
-                     for (int i = 0; i < evt->data_length)
+                     for (int i = 0; i < evt->data_length; i++)
                      {
-                        PRINTF(" [0x%02x]", evt->data[i]);
+                        PRINTF(" [0x%02x]", evt->att_data[i]);
                      }
                      PRINTF("\r\n");
                   }
