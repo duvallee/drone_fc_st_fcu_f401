@@ -1238,6 +1238,16 @@ void HCI_Event_CB(void *pckt)
                if (TargetBoardFeatures.bnrg_expansion_board == IDB05A1)
                {
                   evt_gatt_attr_modified_IDB05A1 *evt    = (evt_gatt_attr_modified_IDB05A1*) blue_evt->data;
+#ifdef MOTENV_DEBUG_CONNECTION
+                  {
+                     PRINTF("[%d] : ", evt->data_length);
+                     for (int i = 0; i < evt->data_length)
+                     {
+                        PRINTF(" [0x%02x]", evt->data[i]);
+                     }
+                     PRINTF("\r\n");
+                  }
+#endif      // MOTENV_DEBUG_CONNECTION
                   Attribute_Modified_CB(evt->attr_handle, evt->att_data, evt->data_length);
                }
                else
