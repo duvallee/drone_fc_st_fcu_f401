@@ -69,6 +69,9 @@ uint32_t uhCCR4_Val                                      = 500;
 uint32_t uhCCR1_Val                                      = 5000;
 
 
+#define DEBUG_OUTPUT_CSV_AHRS
+
+
 ADC_HandleTypeDef hadc1;
 
 SPI_HandleTypeDef hspi1;
@@ -362,7 +365,7 @@ int main(void)
 
 
    // BLE communication
-   PRINTF("BLE communication initialization...\r\n");
+   // PRINTF("BLE communication initialization...\r\n");
    BlueNRG_Init();
    // Initialize the BlueNRG Custom services
    Init_BlueNRG_Custom_Services();
@@ -372,6 +375,10 @@ int main(void)
    BSP_PRESSURE_Get_Press(LPS22HB_P_0_handle, &press_zero_level);                               // Read the Pressure level when arming (0m reference) for altitude calculation
    BSP_TEMPERATURE_Get_Temp(LPS22HB_T_0_handle, &temperature);                                  // Read the Temperature when arming (0m reference) for altitude calculation
 
+#if defined(DEBUG_OUTPUT_CSV_AHRS)
+   PRINTF("e = euler \r\n");
+   PRINTF("acc_x, acc_y, acc_z, gyro_x, gyro_y, gyro_z, ahrs.q0, ahrs.q1, ahrs.q2, ahrs.q3, ahrs.x, ahrs.y, ahrs.z, e_ahrs_x, e_ahrs_y, e_ahrs_z, rc_t, rc_roll, rc_pitch, rc_yaw, e_rc_x, e_rc_y, e_rc_z \r\n");
+#endif
    // Infinite loop
    while (1)
    {
@@ -508,6 +515,15 @@ int main(void)
          // Get target euler angle from remote control
          GetTargetEulerAngle(&euler_rc, &euler_ahrs);
 
+#if defined(DEBUG_OUTPUT_CSV_AHRS)
+         PRINTF("%f, %f, %f, %f, %f, %f, %f, %f, %f, %f, %f, %f, %f, %f, %f, %f, %d, %d, %d, %d, %f, %f, %f \r\n",
+                 acc_ahrs.AXIS_X, acc_ahrs.AXIS_Y, acc_ahrs.AXIS_Z,
+                 gyro_ahrs.AXIS_X, gyro_ahrs.AXIS_Y, gyro_ahrs.AXIS_Z,
+                 ahrs.q.q0, ahrs.q.q1, ahrs.q.q2, ahrs.q.q3,
+                 euler_ahrs.thx, euler_ahrs.thy, euler_ahrs.thz,
+                 gTHR, gAIL, gELE, gRUD,
+                 euler_rc.thx, euler_rc.thy, euler_rc.thz);
+#endif
          if (gTHR < MIN_THR)
          {
             euler_ahrs_offset.thx                        = 0;
