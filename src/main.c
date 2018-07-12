@@ -376,8 +376,13 @@ int main(void)
    BSP_TEMPERATURE_Get_Temp(LPS22HB_T_0_handle, &temperature);                                  // Read the Temperature when arming (0m reference) for altitude calculation
 
 #if defined(DEBUG_OUTPUT_CSV_AHRS)
-   PRINTF("e = euler \r\n");
-   PRINTF("acc_x, acc_y, acc_z, gyro_x, gyro_y, gyro_z, ahrs.q0, ahrs.q1, ahrs.q2, ahrs.q3, ahrs.x, ahrs.y, ahrs.z, e_ahrs_x, e_ahrs_y, e_ahrs_z, rc_t, rc_roll, rc_pitch, rc_yaw, e_rc_x, e_rc_y, e_rc_z \r\n");
+   PRINTF("acc_x, acc_y, acc_z, ");
+   PRINTF("gyro_x, gyro_y, gyro_z, ");
+   PRINTF("ahrs.q0, ahrs.q1, ahrs.q2, ahrs.q3,");
+   PRINTF("euler_ahrs_x, euler_ahrs_y, euler_ahrs_z, ");
+   PRINTF("rc_throttle, rc_roll, rc_pitch, rc_yaw, ");
+   PRINTF("euler_rc_thx, euler_rc_thy, euler_rc_thz ");
+   PRINTF("\r\n");
 #endif
    // Infinite loop
    while (1)
