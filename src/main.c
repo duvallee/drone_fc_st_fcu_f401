@@ -516,13 +516,13 @@ int main(void)
          GetTargetEulerAngle(&euler_rc, &euler_ahrs);
 
 #if defined(DEBUG_OUTPUT_CSV_AHRS)
-         PRINTF("%f, %f, %f, %f, %f, %f, %f, %f, %f, %f, %f, %f, %f, %f, %f, %f, %d, %d, %d, %d, %f, %f, %f \r\n",
-                 acc_ahrs.AXIS_X, acc_ahrs.AXIS_Y, acc_ahrs.AXIS_Z,
-                 gyro_ahrs.AXIS_X, gyro_ahrs.AXIS_Y, gyro_ahrs.AXIS_Z,
-                 ahrs.q.q0, ahrs.q.q1, ahrs.q.q2, ahrs.q.q3,
-                 euler_ahrs.thx, euler_ahrs.thy, euler_ahrs.thz,
-                 gTHR, gAIL, gELE, gRUD,
-                 euler_rc.thx, euler_rc.thy, euler_rc.thz);
+         PRINTF("%.3f, %.3f, %.3f, ", acc_ahrs.AXIS_X, acc_ahrs.AXIS_Y, acc_ahrs.AXIS_Z);
+         PRINTF("%.3f, %.3f, %.3f, ", gyro_ahrs.AXIS_X, gyro_ahrs.AXIS_Y, gyro_ahrs.AXIS_Z);
+         PRINTF("%.3f, %.3f, %.3f, %.3f, ", ahrs.q.q0, ahrs.q.q1, ahrs.q.q2, ahrs.q.q3);
+         PRINTF("%.3f, %.3f, %.3f, ", euler_ahrs.thx, euler_ahrs.thy, euler_ahrs.thz);
+         PRINTF("%d, %d, %d, %d, ", gTHR, gAIL, gELE, gRUD);
+         PRINTF("%.3f, %.3f, %.3f ", euler_rc.thx, euler_rc.thy, euler_rc.thz);
+         PRINTF("\r\n");
 #endif
          if (gTHR < MIN_THR)
          {

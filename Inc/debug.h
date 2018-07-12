@@ -50,9 +50,16 @@
 //#define DEBUG
 #ifdef DEBUG
 #include <stdio.h>
-#define PRINTF(...) myprintf(__VA_ARGS__)
+
+#define PRINTF(...)                                      myprintf(__VA_ARGS__)
 int myprintf(const char *format, ...);
-int usart_puts(const char *str, int len) ;
+
+#if 0
+#define PRINTF(...)                                      myprintf(__VA_ARGS__)
+int myprintf(const char *format, ...);
+int usart_puts(const char *str, int len);
+#endif
+
 #else
 #define PRINTF(...)
 #endif
