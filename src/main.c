@@ -65,6 +65,20 @@
 volatile uint32_t HCI_ProcessEvent                       = 0;
 uint8_t joydata[8]                                       = {0, 0, 0, 0, 0, 0, 0, 0};
 
+#if 1
+#define RC_CHANNEL_THROTTLE                              0
+#define RC_CHANNEL_ROLL                                  1
+#define RC_CHANNEL_PITCH                                 2
+#define RC_CHANNEL_YAW                                   3
+#define RC_CHANNEL_ARMING                                4
+#define RC_CHANNEL_USER_1                                5
+#define RC_CHANNEL_USER_2                                6
+#define RC_CHANNEL_USER_3                                7
+#define RC_CHANNEL_MAX                                   8
+
+uint16_t g_rc_remote[RC_CHANNEL_MAX]                     = {0, 0, 0, 0, 0, 0, 0, 0};
+#endif
+
 uint32_t uhCCR4_Val                                      = 500;
 uint32_t uhCCR1_Val                                      = 5000;
 
@@ -367,9 +381,11 @@ int main(void)
    // BLE communication
    // PRINTF("BLE communication initialization...\r\n");
    BlueNRG_Init();
+
+#if 1
    // Initialize the BlueNRG Custom services
    Init_BlueNRG_Custom_Services();
-
+#endif
 
    /* Read initial value of Pressure and Temperature for Altitude estimation */ 
    BSP_PRESSURE_Get_Press(LPS22HB_P_0_handle, &press_zero_level);                               // Read the Pressure level when arming (0m reference) for altitude calculation
@@ -482,9 +498,11 @@ int main(void)
          if (connected)
          {
             rc_connection_flag                           = 1;                                   /* BLE Remocon connected flag for enabling motor output */
+#if 0
             SendMotionData();
             SendBattEnvData();
             SendArmingData();            
+#endif
          }
          else
          {
@@ -1176,6 +1194,7 @@ void BlueNRG_Init(void)
          testStatus                                      = COMPONENT_ERROR;
       }
 
+#if 0
       ret                                                = Add_ConfigW2ST_Service();
       if (ret == BLE_STATUS_SUCCESS)
       {
@@ -1187,7 +1206,7 @@ void BlueNRG_Init(void)
          testStatus                                      = COMPONENT_ERROR;
          return;
       }
-
+#endif
       PRINTF("\r\nAll test passed!\r\n");
    }
    else
@@ -1207,6 +1226,7 @@ static void Init_BlueNRG_Custom_Services(void)
 {
    int ret;
 
+#if 0
    ret                                                   = Add_HWServW2ST_Service();
    if (ret == BLE_STATUS_SUCCESS)
    {
@@ -1216,7 +1236,7 @@ static void Init_BlueNRG_Custom_Services(void)
    {
       PRINTF("\r\nError while adding HW Service W2ST\r\n");
    }
-
+#endif
    ret                                                   = Add_ConsoleW2ST_Service();
    if (ret == BLE_STATUS_SUCCESS)
    {
@@ -1226,7 +1246,7 @@ static void Init_BlueNRG_Custom_Services(void)
    {
       PRINTF("\r\nError while adding Console Service W2ST\r\n");
    }
-
+#if 0
    ret                                                   = Add_ConfigW2ST_Service();
    if (ret == BLE_STATUS_SUCCESS)
    {
@@ -1236,6 +1256,7 @@ static void Init_BlueNRG_Custom_Services(void)
    {
       PRINTF("\r\nError while adding Config Service W2ST\r\n");
    }
+#endif
 }
 
 /**

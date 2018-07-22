@@ -60,6 +60,21 @@ extern uint32_t ConnectionBleStatus;
 extern uint8_t bdaddr[6];
 extern uint8_t joydata[];
 
+#if 1
+#define RC_CHANNEL_THROTTLE                              0
+#define RC_CHANNEL_ROLL                                  1
+#define RC_CHANNEL_PITCH                                 2
+#define RC_CHANNEL_YAW                                   3
+#define RC_CHANNEL_ARMING                                4
+#define RC_CHANNEL_USER_1                                5
+#define RC_CHANNEL_USER_2                                6
+#define RC_CHANNEL_USER_3                                7
+#define RC_CHANNEL_MAX                                   8
+
+extern uint16_t g_rc_remote[];
+#endif
+
+
 // Private variables ---------------------------------------------------------
 static uint16_t HWServW2STHandle;
 static uint16_t EnvironmentalCharHandle;
@@ -179,7 +194,7 @@ tBleStatus Add_ConsoleW2ST_Service(void)
    uint8_t uuid[16];
 
    COPY_CONSOLE_SERVICE_UUID(uuid);
-   ret                                                   = aci_gatt_add_serv(UUID_TYPE_128,  uuid, PRIMARY_SERVICE, 1+3*2,&ConsoleW2STHandle);
+   ret                                                   = aci_gatt_add_serv(UUID_TYPE_128,  uuid, PRIMARY_SERVICE, 1 + 3 * 2, &ConsoleW2STHandle);
 
    if (ret != BLE_STATUS_SUCCESS)
    {
@@ -856,7 +871,20 @@ void Read_Request_CB(uint16_t handle)
  */
 void Attribute_Modified_CB(uint16_t attr_handle, uint8_t * att_data, uint8_t data_length) 
 {
-   if (attr_handle == ConfigCharHandle + 2) 
+   PRINTF("[%d] %d \r\n ", attr_handle, data_length);
+
+   if (data_length == 20)        // I do not know why ...
+   {
+      g_rc_remote[RC_CHANNEL_THROTTLE]                   = (((att_data[4] & 0x0F) << 8) | att_data[5]);
+      g_rc_remote[RC_CHANNEL_ROLL]                       = (((att_data[6] & 0x0F) << 8) | att_data[7]);
+      g_rc_remote[RC_CHANNEL_PITCH]                      = (((att_data[8] & 0x0F) << 8) | att_data[9]);
+      g_rc_remote[RC_CHANNEL_YAW]                        = (((att_data[10] & 0x0F) << 8) | att_data[11]);
+      g_rc_remote[RC_CHANNEL_ARMING]                     = (((att_data[12] & 0x0F) << 8) | att_data[13]);
+      g_rc_remote[RC_CHANNEL_USER_1]                     = (((att_data[14] & 0x0F) << 8) | att_data[15]);
+      g_rc_remote[RC_CHANNEL_USER_2]                     = (((att_data[16] & 0x0F) << 8) | att_data[17]);
+      g_rc_remote[RC_CHANNEL_USER_3]                     = (((att_data[18] & 0x0F) << 8) | att_data[19]);
+   }
+   else if (attr_handle == ConfigCharHandle + 2) 
    {
       ;  // do nothing... only for removing the message "Notification UNKNOW handle"
    } 
@@ -936,7 +964,7 @@ void Attribute_Modified_CB(uint16_t attr_handle, uint8_t * att_data, uint8_t dat
       joydata[5]                                         = att_data[6];
       joydata[6]                                         = att_data[7];
       joydata[7]                                         = att_data[8];
-   } 
+   }
    else 
    {
       if (W2ST_CHECK_CONNECTION(W2ST_CONNECT_STD_ERR))
